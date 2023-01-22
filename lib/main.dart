@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/page_router.dart';
+import 'package:maropook_neon2/ui/pages/page_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Admin NFTApp',
+        title: 'neon',
         theme: ThemeData(primarySwatch: Colors.blue),
         routerConfig: PageRouter.router);
   }

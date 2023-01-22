@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:maropook_neon2/each_screen.dart';
+import 'package:maropook_neon2/ui/pages/avatar_detail_page/avatar_detail_page.dart';
+import 'package:maropook_neon2/ui/pages/avatar_list_page/avatar_list_page.dart';
+import 'package:maropook_neon2/ui/pages/complete_page/complete_page.dart';
+import 'package:maropook_neon2/ui/pages/edit_page/edit_page.dart';
+import 'package:maropook_neon2/ui/pages/encoding_page/encoding_page.dart';
+import 'package:maropook_neon2/ui/pages/import_page/import_page.dart';
+import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 
 class PageRouter {
   static final GoRouter router =
