@@ -10,15 +10,21 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('エディット'),
+        actions: [
+          IconButton(
+              onPressed: () => context.go('/encoding'),
+              icon: const Icon(Icons.chevron_right)),
+        ],
+        leading: IconButton(
+            onPressed: () => context.go('/'),
+            icon: const Icon(Icons.chevron_left)),
+      ),
       backgroundColor: Colors.black,
       body:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        ElevatedButton(
-          onPressed: () {
-            context.go('/');
-          },
-          child: const Text('edit(ホームへ)'),
-        ),
+        Center(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

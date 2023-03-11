@@ -18,7 +18,7 @@ class PageRouter {
       },
       routes: [
         GoRoute(
-            path: 'avatar/list', //頭に?入れないように注意する
+            path: 'avatar/list', //頭に/入れないように注意する
             builder: (BuildContext context, GoRouterState state) {
               return const AvatarListPage();
             },
