@@ -12,16 +12,35 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/add_bgm_icon.svg
+  String get addBgmIcon => 'assets/images/add_bgm_icon.svg';
+
+  /// File path: assets/images/artificial_voice_icon.svg
+  String get artificialVoiceIcon => 'assets/images/artificial_voice_icon.svg';
+
   /// File path: assets/images/background_sea.png
   AssetGenImage get backgroundSea =>
       const AssetGenImage('assets/images/background_sea.png');
+
+  /// File path: assets/images/change_avatar_icon.svg
+  String get changeAvatarIcon => 'assets/images/change_avatar_icon.svg';
 
   /// File path: assets/images/test_woman.png
   AssetGenImage get testWoman =>
       const AssetGenImage('assets/images/test_woman.png');
 
+  /// File path: assets/images/text_edit_icon.svg
+  String get textEditIcon => 'assets/images/text_edit_icon.svg';
+
   /// List of all assets
-  List<AssetGenImage> get values => [backgroundSea, testWoman];
+  List<dynamic> get values => [
+        addBgmIcon,
+        artificialVoiceIcon,
+        backgroundSea,
+        changeAvatarIcon,
+        testWoman,
+        textEditIcon
+      ];
 }
 
 class Assets {
