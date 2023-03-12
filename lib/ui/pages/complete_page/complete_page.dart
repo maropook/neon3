@@ -7,14 +7,18 @@ class CompletePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.go('/');
-          },
-          child: const Text('complete(ホームへ)'),
-        ),
+      appBar: AppBar(
+        title: const Text('コンプリート'),
+        actions: [
+          IconButton(
+              onPressed: () => context.go('/'),
+              icon: const Icon(Icons.chevron_right)),
+        ],
+        leading: IconButton(
+            onPressed: () => context.go('/encoding'),
+            icon: const Icon(Icons.chevron_left)),
       ),
+      body: Center(),
     );
   }
 }

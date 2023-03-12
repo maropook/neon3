@@ -7,18 +7,13 @@ class ImportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                context.go('/');
-              },
-              child: const Text('importページ(ホームへ))'),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text('インポート'),
+        leading: IconButton(
+            onPressed: () => context.go('/'),
+            icon: const Icon(Icons.chevron_left)),
       ),
+      body: Center(),
     );
   }
 }

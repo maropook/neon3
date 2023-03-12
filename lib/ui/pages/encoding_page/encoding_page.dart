@@ -7,14 +7,18 @@ class EncodingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.go('/');
-          },
-          child: const Text('encoding(ホームへ)'),
-        ),
+      appBar: AppBar(
+        title: const Text('エンコーディング'),
+        actions: [
+          IconButton(
+              onPressed: () => context.go('/complete'),
+              icon: const Icon(Icons.chevron_right)),
+        ],
+        leading: IconButton(
+            onPressed: () => context.go('/edit'),
+            icon: const Icon(Icons.chevron_left)),
       ),
+      body: Center(),
     );
   }
 }
