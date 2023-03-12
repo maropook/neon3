@@ -7,14 +7,13 @@ class AvatarDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.go('/avatar/list');
-          },
-          child: const Text('avatar/list/detail(listへ)'),
-        ),
+      appBar: AppBar(
+        title: const Text('アバター詳細'),
+        leading: IconButton(
+            onPressed: () => context.go('/avatar/list'),
+            icon: const Icon(Icons.chevron_left)),
       ),
+      body: Center(),
     );
   }
 }
