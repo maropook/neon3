@@ -39,7 +39,7 @@ class PageRouter {
       ],
     ),
     GoRoute(
-      path: '/edit',
+      path: '/edit/:path',
       builder: (BuildContext context, GoRouterState state) {
         return const EditPage();
       },
