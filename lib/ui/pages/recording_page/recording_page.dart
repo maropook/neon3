@@ -7,35 +7,24 @@ class RecordingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('レコーディング'),
+        actions: [
+          IconButton(
+              onPressed: () => context.go('/import'),
+              icon: const Icon(Icons.download_rounded)),
+          IconButton(
+              onPressed: () => context.go('/edit'),
+              icon: const Icon(Icons.chevron_right)),
+        ],
+        leading: IconButton(
+            onPressed: () => context.go('/avatar/list'),
+            icon: const Icon(Icons.face)),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                context.go('/edit');
-              },
-              child: const Text('ホーム(edit)'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/encoding');
-              },
-              child: const Text('ホーム(encoding)'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/complete');
-              },
-              child: const Text('ホーム(complete)'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/avatar/list');
-              },
-              child: const Text('ホーム(avatar/list)'),
-            ),
-          ],
+          children: [],
         ),
       ),
     );
