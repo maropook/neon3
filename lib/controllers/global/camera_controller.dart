@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/services/logger.dart';
 
 part 'camera_controller.freezed.dart';
 
@@ -38,7 +39,25 @@ class CameraProviderController extends StateNotifier<CameraState> {
       cameraController = controller;
       state = state.copyWith(cameras: cameras, controller: controller);
     } catch (e) {
-      debugPrint('$e');
+      Logger.logError('camera_provider_controller', e.hashCode.toString());
+    }
+  }
+
+  Future<void> startVideoRecording() async {
+    try {
+      await cameraController?.startVideoRecording();
+    } on CameraException catch (e) {
+      Logger.logError('camera_provider_controller', e.hashCode.toString());
+    }
+  }
+
+  Future<String?> stopVideoRecording() async {
+    try {
+      final file = await cameraController?.stopVideoRecording();
+      return file?.path;
+    } on CameraException catch (e) {
+      Logger.logError('camera_provider_controller', e.hashCode.toString());
+      return null;
     }
   }
 }
