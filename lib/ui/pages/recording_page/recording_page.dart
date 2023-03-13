@@ -13,6 +13,7 @@ class RecordingPage extends ConsumerWidget {
         ref.watch(cameraProvider.select((s) => s.controller));
 
     return Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
           title: const Text('レコーディング'),
           actions: [
@@ -28,7 +29,51 @@ class RecordingPage extends ConsumerWidget {
               icon: const Icon(Icons.face)),
         ),
         body: cameraController != null
-            ? CameraPreview(cameraController!)
+            ? _buildBody(cameraController)
             : const Center(child: CircularProgressIndicator()));
+  }
+
+  Widget _buildBody(CameraController cameraController) {
+    return Consumer(builder: (context, ref, _) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [CameraPreview(cameraController), _buildButton()],
+      );
+    });
+  }
+
+  Widget _buildButton() {
+    return Consumer(builder: (context, ref, _) {
+      final bool isRecording =
+          ref.watch(cameraProvider.select((s) => s.isRecordingVideo));
+
+      return GestureDetector(
+        onTap: () {
+          if (isRecording) {
+            ref.read(cameraProvider.notifier).stopVideoRecording();
+            return;
+          }
+          ref.read(cameraProvider.notifier).startVideoRecording();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+            border: Border.all(
+              color: Colors.white,
+              width: 5.0,
+            ),
+          ),
+          child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                shape: isRecording ? BoxShape.rectangle : BoxShape.circle,
+                color: Colors.red,
+              )),
+        ),
+      );
+    });
   }
 }

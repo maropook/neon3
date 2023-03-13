@@ -8,3 +8,6 @@
 
 ### stateNotifierProviderでonDisposeを使う
 [FlutterでQRコードを読み込む（riverpod 2)](https://qiita.com/t-yasukawa/items/897b1114b228844bf324)
+
+
+match_review_pageでhookConsumerWidgetで_watchMethod()でConsumer使ってる

@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CameraState {
   List<CameraDescription> get cameras => throw _privateConstructorUsedError;
   CameraController? get controller => throw _privateConstructorUsedError;
+  bool get isRecordingVideo => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CameraStateCopyWith<CameraState> get copyWith =>
@@ -30,7 +31,10 @@ abstract class $CameraStateCopyWith<$Res> {
           CameraState value, $Res Function(CameraState) then) =
       _$CameraStateCopyWithImpl<$Res, CameraState>;
   @useResult
-  $Res call({List<CameraDescription> cameras, CameraController? controller});
+  $Res call(
+      {List<CameraDescription> cameras,
+      CameraController? controller,
+      bool isRecordingVideo});
 }
 
 /// @nodoc
@@ -48,6 +52,7 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
   $Res call({
     Object? cameras = null,
     Object? controller = freezed,
+    Object? isRecordingVideo = null,
   }) {
     return _then(_value.copyWith(
       cameras: null == cameras
@@ -58,6 +63,10 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
               as CameraController?,
+      isRecordingVideo: null == isRecordingVideo
+          ? _value.isRecordingVideo
+          : isRecordingVideo // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -70,7 +79,10 @@ abstract class _$$_CameraStateCopyWith<$Res>
       __$$_CameraStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<CameraDescription> cameras, CameraController? controller});
+  $Res call(
+      {List<CameraDescription> cameras,
+      CameraController? controller,
+      bool isRecordingVideo});
 }
 
 /// @nodoc
@@ -86,6 +98,7 @@ class __$$_CameraStateCopyWithImpl<$Res>
   $Res call({
     Object? cameras = null,
     Object? controller = freezed,
+    Object? isRecordingVideo = null,
   }) {
     return _then(_$_CameraState(
       cameras: null == cameras
@@ -96,6 +109,10 @@ class __$$_CameraStateCopyWithImpl<$Res>
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
               as CameraController?,
+      isRecordingVideo: null == isRecordingVideo
+          ? _value.isRecordingVideo
+          : isRecordingVideo // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -105,7 +122,8 @@ class __$$_CameraStateCopyWithImpl<$Res>
 class _$_CameraState implements _CameraState {
   const _$_CameraState(
       {final List<CameraDescription> cameras = const [],
-      this.controller = null})
+      this.controller = null,
+      this.isRecordingVideo = false})
       : _cameras = cameras;
 
   final List<CameraDescription> _cameras;
@@ -120,10 +138,13 @@ class _$_CameraState implements _CameraState {
   @override
   @JsonKey()
   final CameraController? controller;
+  @override
+  @JsonKey()
+  final bool isRecordingVideo;
 
   @override
   String toString() {
-    return 'CameraState(cameras: $cameras, controller: $controller)';
+    return 'CameraState(cameras: $cameras, controller: $controller, isRecordingVideo: $isRecordingVideo)';
   }
 
   @override
@@ -133,12 +154,17 @@ class _$_CameraState implements _CameraState {
             other is _$_CameraState &&
             const DeepCollectionEquality().equals(other._cameras, _cameras) &&
             (identical(other.controller, controller) ||
-                other.controller == controller));
+                other.controller == controller) &&
+            (identical(other.isRecordingVideo, isRecordingVideo) ||
+                other.isRecordingVideo == isRecordingVideo));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_cameras), controller);
+      runtimeType,
+      const DeepCollectionEquality().hash(_cameras),
+      controller,
+      isRecordingVideo);
 
   @JsonKey(ignore: true)
   @override
@@ -150,12 +176,15 @@ class _$_CameraState implements _CameraState {
 abstract class _CameraState implements CameraState {
   const factory _CameraState(
       {final List<CameraDescription> cameras,
-      final CameraController? controller}) = _$_CameraState;
+      final CameraController? controller,
+      final bool isRecordingVideo}) = _$_CameraState;
 
   @override
   List<CameraDescription> get cameras;
   @override
   CameraController? get controller;
+  @override
+  bool get isRecordingVideo;
   @override
   @JsonKey(ignore: true)
   _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>

@@ -11,6 +11,7 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default([]) List<CameraDescription> cameras,
     @Default(null) CameraController? controller,
+    @Default(false) bool isRecordingVideo,
   }) = _CameraState;
 }
 
@@ -37,17 +38,25 @@ class CameraProviderController extends StateNotifier<CameraState> {
           CameraController(selectedCamera, ResolutionPreset.medium);
       await controller.initialize();
       cameraController = controller;
+      addControllerListener(cameraController!);
       state = state.copyWith(cameras: cameras, controller: controller);
     } catch (e) {
       Logger.logError('camera_provider_controller', e.hashCode.toString());
     }
   }
 
+  void addControllerListener(CameraController controller) {
+    controller.addListener(() {
+      state = state.copyWith(
+          isRecordingVideo: cameraController!.value.isRecordingVideo);
+    });
+  }
+
   Future<void> startVideoRecording() async {
     try {
       await cameraController?.startVideoRecording();
     } on CameraException catch (e) {
-      Logger.logError('camera_provider_controller', e.hashCode.toString());
+      Logger.logError('camera_provider_controller', e.toString());
     }
   }
 
@@ -56,7 +65,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
       final file = await cameraController?.stopVideoRecording();
       return file?.path;
     } on CameraException catch (e) {
-      Logger.logError('camera_provider_controller', e.hashCode.toString());
+      Logger.logError('camera_provider_controller', e.toString());
       return null;
     }
   }
