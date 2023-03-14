@@ -33,9 +33,11 @@ class EditController extends StateNotifier<EditPageState> {
   Future<void> init() async {
     try {
       // _videoPlayerController = VideoPlayerController.asset(_videoFilePath);
-      // await _videoPlayerController!.initialize();
-      // state = state.copyWith(controller: _videoPlayerController);
-      // _videoPlayerController!.play();
+      _videoPlayerController =
+          VideoPlayerController.asset("assets/movies/sample.mp4");
+      await _videoPlayerController!.initialize();
+      state = state.copyWith(controller: _videoPlayerController);
+      await _videoPlayerController!.play();
     } catch (e) {
       Logger.logError('edit_controller', e.toString());
     }
