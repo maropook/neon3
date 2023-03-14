@@ -15,7 +15,7 @@ class EncodingPage extends StatelessWidget {
               icon: const Icon(Icons.chevron_right)),
         ],
         leading: IconButton(
-            onPressed: () => context.go('/edit/path'),
+            onPressed: () => context.go('/edit'),
             icon: const Icon(Icons.chevron_left)),
       ),
       body: Center(),
