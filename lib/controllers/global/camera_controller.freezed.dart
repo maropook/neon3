@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CameraState {
-  List<CameraDescription> get cameras => throw _privateConstructorUsedError;
   CameraController? get controller => throw _privateConstructorUsedError;
   bool get isRecordingVideo => throw _privateConstructorUsedError;
 
@@ -31,10 +30,7 @@ abstract class $CameraStateCopyWith<$Res> {
           CameraState value, $Res Function(CameraState) then) =
       _$CameraStateCopyWithImpl<$Res, CameraState>;
   @useResult
-  $Res call(
-      {List<CameraDescription> cameras,
-      CameraController? controller,
-      bool isRecordingVideo});
+  $Res call({CameraController? controller, bool isRecordingVideo});
 }
 
 /// @nodoc
@@ -50,15 +46,10 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? cameras = null,
     Object? controller = freezed,
     Object? isRecordingVideo = null,
   }) {
     return _then(_value.copyWith(
-      cameras: null == cameras
-          ? _value.cameras
-          : cameras // ignore: cast_nullable_to_non_nullable
-              as List<CameraDescription>,
       controller: freezed == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
@@ -79,10 +70,7 @@ abstract class _$$_CameraStateCopyWith<$Res>
       __$$_CameraStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<CameraDescription> cameras,
-      CameraController? controller,
-      bool isRecordingVideo});
+  $Res call({CameraController? controller, bool isRecordingVideo});
 }
 
 /// @nodoc
@@ -96,15 +84,10 @@ class __$$_CameraStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? cameras = null,
     Object? controller = freezed,
     Object? isRecordingVideo = null,
   }) {
     return _then(_$_CameraState(
-      cameras: null == cameras
-          ? _value._cameras
-          : cameras // ignore: cast_nullable_to_non_nullable
-              as List<CameraDescription>,
       controller: freezed == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
@@ -120,20 +103,7 @@ class __$$_CameraStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CameraState implements _CameraState {
-  const _$_CameraState(
-      {final List<CameraDescription> cameras = const [],
-      this.controller = null,
-      this.isRecordingVideo = false})
-      : _cameras = cameras;
-
-  final List<CameraDescription> _cameras;
-  @override
-  @JsonKey()
-  List<CameraDescription> get cameras {
-    if (_cameras is EqualUnmodifiableListView) return _cameras;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_cameras);
-  }
+  const _$_CameraState({this.controller = null, this.isRecordingVideo = false});
 
   @override
   @JsonKey()
@@ -144,7 +114,7 @@ class _$_CameraState implements _CameraState {
 
   @override
   String toString() {
-    return 'CameraState(cameras: $cameras, controller: $controller, isRecordingVideo: $isRecordingVideo)';
+    return 'CameraState(controller: $controller, isRecordingVideo: $isRecordingVideo)';
   }
 
   @override
@@ -152,7 +122,6 @@ class _$_CameraState implements _CameraState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CameraState &&
-            const DeepCollectionEquality().equals(other._cameras, _cameras) &&
             (identical(other.controller, controller) ||
                 other.controller == controller) &&
             (identical(other.isRecordingVideo, isRecordingVideo) ||
@@ -160,11 +129,7 @@ class _$_CameraState implements _CameraState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_cameras),
-      controller,
-      isRecordingVideo);
+  int get hashCode => Object.hash(runtimeType, controller, isRecordingVideo);
 
   @JsonKey(ignore: true)
   @override
@@ -175,12 +140,9 @@ class _$_CameraState implements _CameraState {
 
 abstract class _CameraState implements CameraState {
   const factory _CameraState(
-      {final List<CameraDescription> cameras,
-      final CameraController? controller,
+      {final CameraController? controller,
       final bool isRecordingVideo}) = _$_CameraState;
 
-  @override
-  List<CameraDescription> get cameras;
   @override
   CameraController? get controller;
   @override

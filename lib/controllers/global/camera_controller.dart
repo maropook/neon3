@@ -9,7 +9,6 @@ part 'camera_controller.freezed.dart';
 @freezed
 class CameraState with _$CameraState {
   const factory CameraState({
-    @Default([]) List<CameraDescription> cameras,
     @Default(null) CameraController? controller,
     @Default(false) bool isRecordingVideo,
   }) = _CameraState;
@@ -37,7 +36,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
       await controller.initialize();
       cameraController = controller;
       addControllerListener(cameraController!);
-      state = state.copyWith(cameras: cameras, controller: controller);
+      state = state.copyWith(controller: controller);
     } catch (e) {
       Logger.logError('camera_provider_controller', e.toString());
     }
