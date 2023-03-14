@@ -5,8 +5,9 @@ import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/themes/styles.dart';
 
 class EditPage extends StatelessWidget {
-  const EditPage({super.key});
+  const EditPage({required this.filePath, super.key});
 
+  final String filePath;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +22,10 @@ class EditPage extends StatelessWidget {
             onPressed: () => context.go('/'),
             icon: const Icon(Icons.chevron_left)),
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Center(),
+        Center(child: Text(filePath)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
