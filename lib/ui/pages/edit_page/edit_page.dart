@@ -39,15 +39,25 @@ class EditPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final editController =
           ref.watch(editPageProvider.select((s) => s.controller));
+      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Center(child: Text(filePath)),
             editController != null
-                ? AspectRatio(
-                    aspectRatio: editController.value.aspectRatio,
-                    child: VideoPlayer(editController),
+                ? SizedBox(
+                    height: 300,
+                    child: GestureDetector(
+                      onTap: () {
+                        isPlaying
+                            ? editController.pause()
+                            : editController.play();
+                      },
+                      child: AspectRatio(
+                        aspectRatio: editController.value.aspectRatio,
+                        child: VideoPlayer(editController),
+                      ),
+                    ),
                   )
                 : const CircularProgressIndicator(),
             Row(

@@ -16,8 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EditPageState {
-  bool get isInitialized => throw _privateConstructorUsedError;
-  String? get videoFilePath => throw _privateConstructorUsedError;
+  bool get isPlaying => throw _privateConstructorUsedError;
   VideoPlayerController? get controller => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,10 +30,7 @@ abstract class $EditPageStateCopyWith<$Res> {
           EditPageState value, $Res Function(EditPageState) then) =
       _$EditPageStateCopyWithImpl<$Res, EditPageState>;
   @useResult
-  $Res call(
-      {bool isInitialized,
-      String? videoFilePath,
-      VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerController? controller});
 }
 
 /// @nodoc
@@ -50,19 +46,14 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isInitialized = null,
-    Object? videoFilePath = freezed,
+    Object? isPlaying = null,
     Object? controller = freezed,
   }) {
     return _then(_value.copyWith(
-      isInitialized: null == isInitialized
-          ? _value.isInitialized
-          : isInitialized // ignore: cast_nullable_to_non_nullable
+      isPlaying: null == isPlaying
+          ? _value.isPlaying
+          : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      videoFilePath: freezed == videoFilePath
-          ? _value.videoFilePath
-          : videoFilePath // ignore: cast_nullable_to_non_nullable
-              as String?,
       controller: freezed == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
@@ -79,10 +70,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       __$$_EditPageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool isInitialized,
-      String? videoFilePath,
-      VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerController? controller});
 }
 
 /// @nodoc
@@ -96,19 +84,14 @@ class __$$_EditPageStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isInitialized = null,
-    Object? videoFilePath = freezed,
+    Object? isPlaying = null,
     Object? controller = freezed,
   }) {
     return _then(_$_EditPageState(
-      isInitialized: null == isInitialized
-          ? _value.isInitialized
-          : isInitialized // ignore: cast_nullable_to_non_nullable
+      isPlaying: null == isPlaying
+          ? _value.isPlaying
+          : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      videoFilePath: freezed == videoFilePath
-          ? _value.videoFilePath
-          : videoFilePath // ignore: cast_nullable_to_non_nullable
-              as String?,
       controller: freezed == controller
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
@@ -120,24 +103,18 @@ class __$$_EditPageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_EditPageState implements _EditPageState {
-  const _$_EditPageState(
-      {this.isInitialized = false,
-      this.videoFilePath = null,
-      this.controller = null});
+  const _$_EditPageState({this.isPlaying = false, this.controller = null});
 
   @override
   @JsonKey()
-  final bool isInitialized;
-  @override
-  @JsonKey()
-  final String? videoFilePath;
+  final bool isPlaying;
   @override
   @JsonKey()
   final VideoPlayerController? controller;
 
   @override
   String toString() {
-    return 'EditPageState(isInitialized: $isInitialized, videoFilePath: $videoFilePath, controller: $controller)';
+    return 'EditPageState(isPlaying: $isPlaying, controller: $controller)';
   }
 
   @override
@@ -145,17 +122,14 @@ class _$_EditPageState implements _EditPageState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EditPageState &&
-            (identical(other.isInitialized, isInitialized) ||
-                other.isInitialized == isInitialized) &&
-            (identical(other.videoFilePath, videoFilePath) ||
-                other.videoFilePath == videoFilePath) &&
+            (identical(other.isPlaying, isPlaying) ||
+                other.isPlaying == isPlaying) &&
             (identical(other.controller, controller) ||
                 other.controller == controller));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, isInitialized, videoFilePath, controller);
+  int get hashCode => Object.hash(runtimeType, isPlaying, controller);
 
   @JsonKey(ignore: true)
   @override
@@ -166,14 +140,11 @@ class _$_EditPageState implements _EditPageState {
 
 abstract class _EditPageState implements EditPageState {
   const factory _EditPageState(
-      {final bool isInitialized,
-      final String? videoFilePath,
+      {final bool isPlaying,
       final VideoPlayerController? controller}) = _$_EditPageState;
 
   @override
-  bool get isInitialized;
-  @override
-  String? get videoFilePath;
+  bool get isPlaying;
   @override
   VideoPlayerController? get controller;
   @override

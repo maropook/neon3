@@ -12,8 +12,7 @@ part 'edit_page_controller.freezed.dart';
 @freezed
 class EditPageState with _$EditPageState {
   const factory EditPageState({
-    @Default(false) bool isInitialized,
-    @Default(null) String? videoFilePath,
+    @Default(false) bool isPlaying,
     @Default(null) VideoPlayerController? controller,
   }) = _EditPageState;
 }
@@ -37,6 +36,7 @@ class EditController extends StateNotifier<EditPageState> {
       _videoPlayerController = VideoPlayerController.file(File(_videoFilePath));
       await _videoPlayerController!.initialize();
       await _videoPlayerController!.setLooping(true);
+      addVideoPlayerControllerListener(_videoPlayerController!);
       state = state.copyWith(controller: _videoPlayerController);
       await _videoPlayerController!.play();
     } catch (e) {
@@ -45,7 +45,9 @@ class EditController extends StateNotifier<EditPageState> {
   }
 
   void addVideoPlayerControllerListener(VideoPlayerController controller) {
-    controller.addListener(() {});
+    controller.addListener(() {
+      state = state.copyWith(isPlaying: controller.value.isPlaying);
+    });
   }
 
   @override

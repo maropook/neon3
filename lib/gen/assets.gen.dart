@@ -43,10 +43,21 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsMoviesGen {
+  const $AssetsMoviesGen();
+
+  /// File path: assets/movies/sample.mp4
+  String get sample => 'assets/movies/sample.mp4';
+
+  /// List of all assets
+  List<String> get values => [sample];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsMoviesGen movies = $AssetsMoviesGen();
 }
 
 class AssetGenImage {
