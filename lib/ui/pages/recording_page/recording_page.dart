@@ -61,6 +61,8 @@ class RecordingPage extends ConsumerWidget {
           ref.read(cameraProvider.notifier).startVideoRecording();
         },
         child: Container(
+          width: 65,
+          height: 65,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.transparent,
@@ -69,20 +71,31 @@ class RecordingPage extends ConsumerWidget {
               width: 5.0,
             ),
           ),
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.black,
-            ),
-            child: Container(
-                width: isRecording ? 50 : 50,
-                height: isRecording ? 50 : 50,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+              ),
+              AnimatedContainer(
+                width: isRecording ? 30 : 50,
+                height: isRecording ? 30 : 50,
                 decoration: BoxDecoration(
-                  shape: isRecording ? BoxShape.rectangle : BoxShape.circle,
+                  shape: isRecording ? BoxShape.rectangle : BoxShape.rectangle,
+                  borderRadius: isRecording
+                      ? BorderRadius.circular(4)
+                      : BorderRadius.circular(25),
                   color: Colors.red,
-                )),
+                ),
+                curve: Curves.linear,
+                duration: const Duration(milliseconds: 100),
+              ),
+            ],
           ),
         ),
       );
