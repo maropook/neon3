@@ -39,9 +39,9 @@ class PageRouter {
       ],
     ),
     GoRoute(
-      path: '/edit/:path',
+      path: '/edit',
       builder: (BuildContext context, GoRouterState state) {
-        return const EditPage();
+        return EditPage(filePath: state.extra.toString());
       },
     ),
     GoRoute(

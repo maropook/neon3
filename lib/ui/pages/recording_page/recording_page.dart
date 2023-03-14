@@ -49,9 +49,13 @@ class RecordingPage extends ConsumerWidget {
           ref.watch(cameraProvider.select((s) => s.isRecordingVideo));
 
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (isRecording) {
-            ref.read(cameraProvider.notifier).stopVideoRecording();
+            final filePath =
+                await ref.read(cameraProvider.notifier).stopVideoRecording();
+            if (filePath != null) {
+              context.go('/edit', extra: filePath);
+            }
             return;
           }
           ref.read(cameraProvider.notifier).startVideoRecording();
@@ -66,12 +70,20 @@ class RecordingPage extends ConsumerWidget {
             ),
           ),
           child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: isRecording ? BoxShape.rectangle : BoxShape.circle,
-                color: Colors.red,
-              )),
+            width: 50,
+            height: 50,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black,
+            ),
+            child: Container(
+                width: isRecording ? 50 : 50,
+                height: isRecording ? 50 : 50,
+                decoration: BoxDecoration(
+                  shape: isRecording ? BoxShape.rectangle : BoxShape.circle,
+                  color: Colors.red,
+                )),
+          ),
         ),
       );
     });
