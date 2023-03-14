@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +34,9 @@ class EditController extends StateNotifier<EditPageState> {
 
   Future<void> init() async {
     try {
-      // _videoPlayerController = VideoPlayerController.asset(_videoFilePath);
-      _videoPlayerController =
-          VideoPlayerController.asset("assets/movies/sample.mp4");
+      _videoPlayerController = VideoPlayerController.file(File(_videoFilePath));
       await _videoPlayerController!.initialize();
+      await _videoPlayerController!.setLooping(true);
       state = state.copyWith(controller: _videoPlayerController);
       await _videoPlayerController!.play();
     } catch (e) {
