@@ -18,9 +18,7 @@ class CameraState with _$CameraState {
 final cameraProvider =
     StateNotifierProvider.autoDispose<CameraProviderController, CameraState>(
         (ref) {
-  final cameraProviderController = CameraProviderController();
-  ref.onDispose((() => cameraProviderController.cameraController?.dispose()));
-  return cameraProviderController;
+  return CameraProviderController();
 });
 
 class CameraProviderController extends StateNotifier<CameraState> {
@@ -41,7 +39,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
       addControllerListener(cameraController!);
       state = state.copyWith(cameras: cameras, controller: controller);
     } catch (e) {
-      Logger.logError('camera_provider_controller', e.hashCode.toString());
+      Logger.logError('camera_provider_controller', e.toString());
     }
   }
 
@@ -68,5 +66,11 @@ class CameraProviderController extends StateNotifier<CameraState> {
       Logger.logError('camera_provider_controller', e.toString());
       return null;
     }
+  }
+
+  @override
+  void dispose() {
+    cameraController?.dispose();
+    super.dispose();
   }
 }
