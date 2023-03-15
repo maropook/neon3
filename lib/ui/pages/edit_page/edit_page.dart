@@ -23,7 +23,7 @@ class EditPage extends ConsumerWidget {
             title: const Text('エディット'),
             actions: [
               IconButton(
-                  onPressed: () => context.go('/encoding'),
+                  onPressed: () => context.go('/encoding', extra: filePath),
                   icon: const Icon(Icons.chevron_right)),
             ],
             leading: IconButton(

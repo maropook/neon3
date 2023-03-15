@@ -47,13 +47,13 @@ class PageRouter {
     GoRoute(
       path: '/encoding',
       builder: (BuildContext context, GoRouterState state) {
-        return const EncodingPage();
+        return EncodingPage(filePath: state.extra.toString());
       },
     ),
     GoRoute(
       path: '/complete',
       builder: (BuildContext context, GoRouterState state) {
-        return const CompletePage();
+        return CompletePage(filePath: state.extra.toString());
       },
     ),
   ]);
