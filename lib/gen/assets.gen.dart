@@ -18,12 +18,28 @@ class $AssetsImagesGen {
   /// File path: assets/images/artificial_voice_icon.svg
   String get artificialVoiceIcon => 'assets/images/artificial_voice_icon.svg';
 
+  /// File path: assets/images/avatar_active.png
+  AssetGenImage get avatarActive =>
+      const AssetGenImage('assets/images/avatar_active.png');
+
+  /// File path: assets/images/avatar_stop.png
+  AssetGenImage get avatarStop =>
+      const AssetGenImage('assets/images/avatar_stop.png');
+
   /// File path: assets/images/background_sea.png
   AssetGenImage get backgroundSea =>
       const AssetGenImage('assets/images/background_sea.png');
 
   /// File path: assets/images/change_avatar_icon.svg
   String get changeAvatarIcon => 'assets/images/change_avatar_icon.svg';
+
+  /// File path: assets/images/encoding.png
+  AssetGenImage get encoding =>
+      const AssetGenImage('assets/images/encoding.png');
+
+  /// File path: assets/images/test_background.png
+  AssetGenImage get testBackground =>
+      const AssetGenImage('assets/images/test_background.png');
 
   /// File path: assets/images/test_woman.png
   AssetGenImage get testWoman =>
@@ -36,8 +52,12 @@ class $AssetsImagesGen {
   List<dynamic> get values => [
         addBgmIcon,
         artificialVoiceIcon,
+        avatarActive,
+        avatarStop,
         backgroundSea,
         changeAvatarIcon,
+        encoding,
+        testBackground,
         testWoman,
         textEditIcon
       ];
