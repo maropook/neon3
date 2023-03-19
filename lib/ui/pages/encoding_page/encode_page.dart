@@ -18,6 +18,7 @@ class EncodePage extends ConsumerWidget {
             .overrideWith((ref) => EncodeController(videoFilePath: filePath))
       ],
       child: Scaffold(
+          backgroundColor: Colors.black,
           appBar: AppBar(
             title: const Text('エンコーディング'),
             actions: [
@@ -50,39 +51,34 @@ class EncodePage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Center(
-                child: Container(
-                    color: Colors.black,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Advertisement(
-                          MediaQuery.of(context).size.shortestSide,
-                        ),
-                        _buildProgressBar(progressRate),
-                      ],
-                    ))),
-            // IconButton(
-            //     onPressed: () async {
-            //       final videoFilePath =
-            //           await ref.read(encodePageProvider.notifier).encode();
-            //       context.go('/complete', extra: videoFilePath);
-            //     },
-            //     icon: const Icon(Icons.start)),
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 310,
+                ),
+                const Text(
+                  'エンコーディング中',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+                _buildProgressBar(progressRate),
+              ],
+            )),
           ]);
     });
   }
 
   Widget _buildProgressBar(double progressRate) {
     return Padding(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.all(20),
       child: FAProgressBar(
         currentValue: progressRate,
-        size: 50,
+        size: 36,
         borderRadius:
             BorderRadiusGeometry.lerp(BorderRadius.zero, BorderRadius.zero, 0),
-        border: Border.all(color: Colors.white, width: 10),
-        backgroundColor: Colors.black,
-        progressColor: Colors.white,
+        border: Border.all(color: Colors.white, width: 3),
+        backgroundColor: Colors.white,
+        progressColor: Colors.black,
       ),
     );
   }
