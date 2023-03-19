@@ -13,8 +13,8 @@ class EncodePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        encodePageProvider
-            .overrideWith((ref) => EncodeController(videoFilePath: filePath))
+        encodePageProvider.overrideWith((ref) =>
+            EncodeController(videoFilePath: filePath, audioFilePath: ''))
       ],
       child: Scaffold(
           backgroundColor: Colors.black,

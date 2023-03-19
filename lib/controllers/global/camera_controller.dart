@@ -33,7 +33,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
       final selectedCamera = cameras[0]; //0:外カメ 1:内カメ
       final controller = CameraController(
           selectedCamera, ResolutionPreset.medium,
-          imageFormatGroup: ImageFormatGroup.bgra8888);
+          enableAudio: false, imageFormatGroup: ImageFormatGroup.bgra8888);
       await controller.initialize();
       cameraController = controller;
       addControllerListener(cameraController!);

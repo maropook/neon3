@@ -28,12 +28,15 @@ final encodePageProvider =
 });
 
 class EncodeController extends StateNotifier<EncodePageState> {
-  EncodeController({required String videoFilePath})
+  EncodeController(
+      {required String videoFilePath, required String audioFilePath})
       : _videoFilePath = videoFilePath,
+        _audioFilePath = audioFilePath,
         super(const EncodePageState()) {
     init();
   }
   final String _videoFilePath;
+  final String _audioFilePath;
 
   Future<void> init() async {
     await encode();
@@ -167,7 +170,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
         isMutedDefaultAudio: true,
         // defaultAudioPath: await getTempFilePath('merge-audio.m4a'),
         // isMutedDefaultAudio: false
-        //     false, //true:artifical voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
+        //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
         backgroundAudioPath: musicFilePath,
         backgroundAudioVolume: 0.1);
 
@@ -184,7 +187,8 @@ class EncodeController extends StateNotifier<EncodePageState> {
 
     final encodedVideoFilePath = await neonVideoEncoder.encode(
       encodeArgs: encodeArgs,
-      inputFilePath: await imageToVideo(),
+      // inputFilePath: await imageToVideo(),
+      inputFilePath: _videoFilePath,
       outputFilePath: await getTempFilePath('video-with-audio.mp4'),
     );
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
