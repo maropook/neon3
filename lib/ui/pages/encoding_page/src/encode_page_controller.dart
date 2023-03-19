@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/services/logger.dart';
-import 'package:maropook_neon2/ui/pages/encoding_page/src/progress.dart';
 import 'package:neon_video_encoder/neon_video_encoder.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 import 'package:neon_video_encoder/avatar_animation.dart';
@@ -10,12 +9,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:neon_video_encoder/audio_setting.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'dart:io';
-
-import 'package:video_player/video_player.dart';
+import 'package:path/path.dart';
 
 part 'encode_page_controller.freezed.dart';
 
@@ -23,6 +18,7 @@ part 'encode_page_controller.freezed.dart';
 class EncodePageState with _$EncodePageState {
   const factory EncodePageState({
     @Default(0.0) double progressRate,
+    @Default('') String encodedVideoFilePath,
   }) = _EncodePageState;
 }
 
@@ -40,6 +36,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
   final String _videoFilePath;
 
   Future<void> init() async {
+    await encode();
     Logger.log('encode_controller', 'init');
   }
 
@@ -65,11 +62,11 @@ class EncodeController extends StateNotifier<EncodePageState> {
   Future<void> mergeAudio() async {
     NeonVoiceFileList neonVoiceFileList = NeonVoiceFileList();
     String voiceFilePath1 = (await saveFile(
-            inputFilePath: "assets/audio/voice_file_1.mp3",
+            inputFilePath: Assets.audio.voiceFile1,
             outputFilePath: "audio1.mp3"))
         .path;
     String voiceFilePath2 = (await saveFile(
-            inputFilePath: "assets/audio/voice_file_2.mp3",
+            inputFilePath: Assets.audio.voiceFile2,
             outputFilePath: "audio2.mp3"))
         .path;
 
@@ -114,11 +111,11 @@ class EncodeController extends StateNotifier<EncodePageState> {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
     String voiceFilePath1 = (await saveFile(
-            inputFilePath: "assets/audio/voice_file_1.mp3",
+            inputFilePath: Assets.audio.voiceFile1,
             outputFilePath: "audio1.mp3"))
         .path;
     String voiceFilePath2 = (await saveFile(
-            inputFilePath: "assets/audio/voice_file_2.mp3",
+            inputFilePath: Assets.audio.voiceFile2,
             outputFilePath: "audio2.mp3"))
         .path;
 
@@ -161,7 +158,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
 
     //AudioSetting
     final musicFilePath = (await saveFile(
-            inputFilePath: "assets/audio/music_file.mp3",
+            inputFilePath: Assets.audio.musicFile,
             outputFilePath: "music_file.mp3"))
         .path;
 
@@ -182,7 +179,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
 
     neonVideoEncoder.getProgressStatus.listen((dynamic value) {
       state = state.copyWith(progressRate: value as double);
-      Logger.log('encode', 'enode =>  $value %');
+      Logger.log('encode', 'encode =>  $value %');
     });
 
     final encodedVideoFilePath = await neonVideoEncoder.encode(
@@ -190,6 +187,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
       inputFilePath: await imageToVideo(),
       outputFilePath: await getTempFilePath('video-with-audio.mp4'),
     );
+    state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
 
     return encodedVideoFilePath;
   }

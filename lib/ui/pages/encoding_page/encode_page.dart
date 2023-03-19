@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/ui/pages/encoding_page/src/advertisement.dart';
 import 'package:maropook_neon2/ui/pages/encoding_page/src/encode_page_controller.dart';
-import 'package:maropook_neon2/ui/pages/encoding_page/src/progress.dart';
-import 'package:maropook_neon2/ui/pages/encoding_page/src/progress_bar.dart';
-import 'package:video_player/video_player.dart';
 
 class EncodePage extends ConsumerWidget {
   const EncodePage({required this.filePath, super.key});
 
   final String filePath;
-  final Progress progress = const Progress();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,31 +38,52 @@ class EncodePage extends ConsumerWidget {
       final double progressRate =
           ref.watch(encodePageProvider.select((s) => s.progressRate));
 
+      ref.listen<String>(
+          encodePageProvider.select((s) => s.encodedVideoFilePath),
+          (_, encodedVideoFilePath) {
+        if (encodedVideoFilePath != '') {
+          context.go('/complete', extra: encodedVideoFilePath);
+        }
+      });
+
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                onPressed: () async {
-                  final videoFilePath =
-                      await ref.read(encodePageProvider.notifier).encode();
-                  context.go('/complete', extra: videoFilePath);
-                },
-                icon: const Icon(Icons.chevron_left)),
-            false != null
-                ? Center(
-                    child: Container(
-                        color: Colors.black,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Advertisement(
-                              MediaQuery.of(context).size.shortestSide,
-                            ),
-                            ProgressBar(ref.watch(progressRateProvider)),
-                          ],
-                        )))
-                : const CircularProgressIndicator(),
+            Center(
+                child: Container(
+                    color: Colors.black,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Advertisement(
+                          MediaQuery.of(context).size.shortestSide,
+                        ),
+                        _buildProgressBar(progressRate),
+                      ],
+                    ))),
+            // IconButton(
+            //     onPressed: () async {
+            //       final videoFilePath =
+            //           await ref.read(encodePageProvider.notifier).encode();
+            //       context.go('/complete', extra: videoFilePath);
+            //     },
+            //     icon: const Icon(Icons.start)),
           ]);
     });
+  }
+
+  Widget _buildProgressBar(double progressRate) {
+    return Padding(
+      padding: const EdgeInsets.all(40),
+      child: FAProgressBar(
+        currentValue: progressRate,
+        size: 50,
+        borderRadius:
+            BorderRadiusGeometry.lerp(BorderRadius.zero, BorderRadius.zero, 0),
+        border: Border.all(color: Colors.white, width: 10),
+        backgroundColor: Colors.black,
+        progressColor: Colors.white,
+      ),
+    );
   }
 }

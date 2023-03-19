@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EncodePageState {
   double get progressRate => throw _privateConstructorUsedError;
+  String get encodedVideoFilePath => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EncodePageStateCopyWith<EncodePageState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $EncodePageStateCopyWith<$Res> {
           EncodePageState value, $Res Function(EncodePageState) then) =
       _$EncodePageStateCopyWithImpl<$Res, EncodePageState>;
   @useResult
-  $Res call({double progressRate});
+  $Res call({double progressRate, String encodedVideoFilePath});
 }
 
 /// @nodoc
@@ -46,12 +47,17 @@ class _$EncodePageStateCopyWithImpl<$Res, $Val extends EncodePageState>
   @override
   $Res call({
     Object? progressRate = null,
+    Object? encodedVideoFilePath = null,
   }) {
     return _then(_value.copyWith(
       progressRate: null == progressRate
           ? _value.progressRate
           : progressRate // ignore: cast_nullable_to_non_nullable
               as double,
+      encodedVideoFilePath: null == encodedVideoFilePath
+          ? _value.encodedVideoFilePath
+          : encodedVideoFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -64,7 +70,7 @@ abstract class _$$_EncodePageStateCopyWith<$Res>
       __$$_EncodePageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double progressRate});
+  $Res call({double progressRate, String encodedVideoFilePath});
 }
 
 /// @nodoc
@@ -79,12 +85,17 @@ class __$$_EncodePageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? progressRate = null,
+    Object? encodedVideoFilePath = null,
   }) {
     return _then(_$_EncodePageState(
       progressRate: null == progressRate
           ? _value.progressRate
           : progressRate // ignore: cast_nullable_to_non_nullable
               as double,
+      encodedVideoFilePath: null == encodedVideoFilePath
+          ? _value.encodedVideoFilePath
+          : encodedVideoFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -92,15 +103,19 @@ class __$$_EncodePageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_EncodePageState implements _EncodePageState {
-  const _$_EncodePageState({this.progressRate = 0.0});
+  const _$_EncodePageState(
+      {this.progressRate = 0.0, this.encodedVideoFilePath = ''});
 
   @override
   @JsonKey()
   final double progressRate;
+  @override
+  @JsonKey()
+  final String encodedVideoFilePath;
 
   @override
   String toString() {
-    return 'EncodePageState(progressRate: $progressRate)';
+    return 'EncodePageState(progressRate: $progressRate, encodedVideoFilePath: $encodedVideoFilePath)';
   }
 
   @override
@@ -109,11 +124,14 @@ class _$_EncodePageState implements _EncodePageState {
         (other.runtimeType == runtimeType &&
             other is _$_EncodePageState &&
             (identical(other.progressRate, progressRate) ||
-                other.progressRate == progressRate));
+                other.progressRate == progressRate) &&
+            (identical(other.encodedVideoFilePath, encodedVideoFilePath) ||
+                other.encodedVideoFilePath == encodedVideoFilePath));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progressRate);
+  int get hashCode =>
+      Object.hash(runtimeType, progressRate, encodedVideoFilePath);
 
   @JsonKey(ignore: true)
   @override
@@ -123,11 +141,14 @@ class _$_EncodePageState implements _EncodePageState {
 }
 
 abstract class _EncodePageState implements EncodePageState {
-  const factory _EncodePageState({final double progressRate}) =
-      _$_EncodePageState;
+  const factory _EncodePageState(
+      {final double progressRate,
+      final String encodedVideoFilePath}) = _$_EncodePageState;
 
   @override
   double get progressRate;
+  @override
+  String get encodedVideoFilePath;
   @override
   @JsonKey(ignore: true)
   _$$_EncodePageStateCopyWith<_$_EncodePageState> get copyWith =>
