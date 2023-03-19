@@ -23,6 +23,9 @@ dependencies:
   image_size_getter: ^2.1.2
   path_provider: ^2.0.13
   flutter_animation_progress_bar: ^2.0.1
+  flutter_sound: ^9.2.13
+  assets_audio_player: ^3.0.6
+
   neon_video_encoder:
     git:
       url: https://github.com/ini-siro/neon_video_encoder.git
