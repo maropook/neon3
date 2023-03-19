@@ -286,6 +286,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animation_progress_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_animation_progress_bar
+      sha256: "85f05404faeef7141b1c5b53571293fc19359c120c4aea4430b2b7d808461d09"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   flutter_gen_core:
     dependency: transitive
     description:
@@ -303,7 +311,7 @@ packages:
     source: hosted
     version: "5.1.0+1"
   flutter_hooks:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_hooks
       sha256: "2b202559a4ed3656bbb7aae9d8b335fb0037b23acc7ae3f377d1ba0b95c21aec"
@@ -528,6 +536,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  neon_video_encoder:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "refs/heads/fix/move_logic_plugin"
+      resolved-ref: "64a0061c2d38cc03a3d7ec69d9d7bc7fd58ca93c"
+      url: "https://github.com/ini-siro/neon_video_encoder.git"
+    source: git
+    version: "0.0.8"
   package_config:
     dependency: transitive
     description:

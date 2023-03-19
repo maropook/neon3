@@ -4,7 +4,7 @@ import 'package:maropook_neon2/ui/pages/avatar_detail_page/avatar_detail_page.da
 import 'package:maropook_neon2/ui/pages/avatar_list_page/avatar_list_page.dart';
 import 'package:maropook_neon2/ui/pages/complete_page/complete_page.dart';
 import 'package:maropook_neon2/ui/pages/edit_page/edit_page.dart';
-import 'package:maropook_neon2/ui/pages/encoding_page/encoding_page.dart';
+import 'package:maropook_neon2/ui/pages/encoding_page/encode_page.dart';
 import 'package:maropook_neon2/ui/pages/import_page/import_page.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 
@@ -47,7 +47,7 @@ class PageRouter {
     GoRoute(
       path: '/encoding',
       builder: (BuildContext context, GoRouterState state) {
-        return EncodingPage(filePath: state.extra.toString());
+        return EncodePage(filePath: state.extra.toString());
       },
     ),
     GoRoute(

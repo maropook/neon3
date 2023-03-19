@@ -14,6 +14,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.1.6
+  flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.1.1
   go_router: ^5.2.2
   url_strategy: ^0.2.0
@@ -21,6 +22,11 @@ dependencies:
   video_player: ^2.6.0
   image_size_getter: ^2.1.2
   path_provider: ^2.0.13
+  flutter_animation_progress_bar: ^2.0.1
+  neon_video_encoder:
+    git:
+      url: https://github.com/ini-siro/neon_video_encoder.git
+      ref: refs/heads/fix/move_logic_plugin
 
 dev_dependencies:
   flutter_gen_runner: ^5.1.0+1
@@ -40,6 +46,7 @@ flutter:
   assets:
     - assets/images/
     - assets/movies/
+    - assets/audio/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -56,7 +63,7 @@ flutter:
     - family: YasashisaGothicBoldV2-bold
       fonts:
         - asset: assets/fonts/YasashisaGothicBold.otf
-    - family: 07AkazukinPop
+    - family: AkazukinPop
       fonts:
         - asset: assets/fonts/AkazukiPOP.otf
     - family: SoukouMincho
