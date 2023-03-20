@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
+import 'package:record/record.dart';
 
 part 'camera_controller.freezed.dart';
 
@@ -11,6 +13,8 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default(null) CameraController? controller,
     @Default(false) bool isRecordingVideo,
+    @Default(null) String? videoFilePath,
+    @Default(null) String? audioFilePath,
   }) = _CameraState;
 }
 
@@ -26,6 +30,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
   }
 
   CameraController? cameraController;
+  final Record record = Record();
 
   Future<void> init() async {
     try {
@@ -52,19 +57,25 @@ class CameraProviderController extends StateNotifier<CameraState> {
 
   Future<void> startVideoRecording() async {
     try {
+      if (await record.hasPermission()) {
+        await record.start(
+          path: 'audio_file.m4a',
+        );
+      }
       await cameraController?.startVideoRecording();
     } on CameraException catch (e) {
       Logger.logError('camera_provider_controller', e.toString());
     }
   }
 
-  Future<String?> stopVideoRecording() async {
+  Future<void> stopVideoRecording() async {
     try {
-      final file = await cameraController?.stopVideoRecording();
-      return file?.path;
+      final audioFilePath = await record.stop();
+      final videoFile = await cameraController?.stopVideoRecording();
+      state = state.copyWith(
+          audioFilePath: audioFilePath, videoFilePath: videoFile?.path);
     } on CameraException catch (e) {
       Logger.logError('camera_provider_controller', e.toString());
-      return null;
     }
   }
 

@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CameraState {
   CameraController? get controller => throw _privateConstructorUsedError;
   bool get isRecordingVideo => throw _privateConstructorUsedError;
+  String? get videoFilePath => throw _privateConstructorUsedError;
+  String? get audioFilePath => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CameraStateCopyWith<CameraState> get copyWith =>
@@ -30,7 +32,11 @@ abstract class $CameraStateCopyWith<$Res> {
           CameraState value, $Res Function(CameraState) then) =
       _$CameraStateCopyWithImpl<$Res, CameraState>;
   @useResult
-  $Res call({CameraController? controller, bool isRecordingVideo});
+  $Res call(
+      {CameraController? controller,
+      bool isRecordingVideo,
+      String? videoFilePath,
+      String? audioFilePath});
 }
 
 /// @nodoc
@@ -48,6 +54,8 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
   $Res call({
     Object? controller = freezed,
     Object? isRecordingVideo = null,
+    Object? videoFilePath = freezed,
+    Object? audioFilePath = freezed,
   }) {
     return _then(_value.copyWith(
       controller: freezed == controller
@@ -58,6 +66,14 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
           ? _value.isRecordingVideo
           : isRecordingVideo // ignore: cast_nullable_to_non_nullable
               as bool,
+      videoFilePath: freezed == videoFilePath
+          ? _value.videoFilePath
+          : videoFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      audioFilePath: freezed == audioFilePath
+          ? _value.audioFilePath
+          : audioFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -70,7 +86,11 @@ abstract class _$$_CameraStateCopyWith<$Res>
       __$$_CameraStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CameraController? controller, bool isRecordingVideo});
+  $Res call(
+      {CameraController? controller,
+      bool isRecordingVideo,
+      String? videoFilePath,
+      String? audioFilePath});
 }
 
 /// @nodoc
@@ -86,6 +106,8 @@ class __$$_CameraStateCopyWithImpl<$Res>
   $Res call({
     Object? controller = freezed,
     Object? isRecordingVideo = null,
+    Object? videoFilePath = freezed,
+    Object? audioFilePath = freezed,
   }) {
     return _then(_$_CameraState(
       controller: freezed == controller
@@ -96,6 +118,14 @@ class __$$_CameraStateCopyWithImpl<$Res>
           ? _value.isRecordingVideo
           : isRecordingVideo // ignore: cast_nullable_to_non_nullable
               as bool,
+      videoFilePath: freezed == videoFilePath
+          ? _value.videoFilePath
+          : videoFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      audioFilePath: freezed == audioFilePath
+          ? _value.audioFilePath
+          : audioFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -103,7 +133,11 @@ class __$$_CameraStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CameraState implements _CameraState {
-  const _$_CameraState({this.controller = null, this.isRecordingVideo = false});
+  const _$_CameraState(
+      {this.controller = null,
+      this.isRecordingVideo = false,
+      this.videoFilePath = null,
+      this.audioFilePath = null});
 
   @override
   @JsonKey()
@@ -111,10 +145,16 @@ class _$_CameraState implements _CameraState {
   @override
   @JsonKey()
   final bool isRecordingVideo;
+  @override
+  @JsonKey()
+  final String? videoFilePath;
+  @override
+  @JsonKey()
+  final String? audioFilePath;
 
   @override
   String toString() {
-    return 'CameraState(controller: $controller, isRecordingVideo: $isRecordingVideo)';
+    return 'CameraState(controller: $controller, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
   }
 
   @override
@@ -125,11 +165,16 @@ class _$_CameraState implements _CameraState {
             (identical(other.controller, controller) ||
                 other.controller == controller) &&
             (identical(other.isRecordingVideo, isRecordingVideo) ||
-                other.isRecordingVideo == isRecordingVideo));
+                other.isRecordingVideo == isRecordingVideo) &&
+            (identical(other.videoFilePath, videoFilePath) ||
+                other.videoFilePath == videoFilePath) &&
+            (identical(other.audioFilePath, audioFilePath) ||
+                other.audioFilePath == audioFilePath));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, controller, isRecordingVideo);
+  int get hashCode => Object.hash(
+      runtimeType, controller, isRecordingVideo, videoFilePath, audioFilePath);
 
   @JsonKey(ignore: true)
   @override
@@ -141,12 +186,18 @@ class _$_CameraState implements _CameraState {
 abstract class _CameraState implements CameraState {
   const factory _CameraState(
       {final CameraController? controller,
-      final bool isRecordingVideo}) = _$_CameraState;
+      final bool isRecordingVideo,
+      final String? videoFilePath,
+      final String? audioFilePath}) = _$_CameraState;
 
   @override
   CameraController? get controller;
   @override
   bool get isRecordingVideo;
+  @override
+  String? get videoFilePath;
+  @override
+  String? get audioFilePath;
   @override
   @JsonKey(ignore: true)
   _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>

@@ -51,10 +51,14 @@ class RecordingPage extends ConsumerWidget {
       return GestureDetector(
         onTap: () async {
           if (isRecording) {
-            final filePath =
-                await ref.read(cameraProvider.notifier).stopVideoRecording();
-            if (filePath != null) {
-              context.go('/edit', extra: filePath);
+            await ref.read(cameraProvider.notifier).stopVideoRecording();
+            final videoFilePath = ref.read(cameraProvider).videoFilePath;
+            final audioFilePath = ref.read(cameraProvider).audioFilePath;
+            if (audioFilePath != null && videoFilePath != null) {
+              context.go('/edit',
+                  extra: EditPageArgs(
+                      audioFilePath: audioFilePath,
+                      videoFilePath: videoFilePath));
             }
             return;
           }
@@ -101,4 +105,14 @@ class RecordingPage extends ConsumerWidget {
       );
     });
   }
+}
+
+class EditPageArgs {
+  EditPageArgs({
+    required this.audioFilePath,
+    required this.videoFilePath,
+  });
+
+  String audioFilePath;
+  String videoFilePath;
 }

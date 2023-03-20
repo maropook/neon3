@@ -41,7 +41,7 @@ class PageRouter {
     GoRoute(
       path: '/edit',
       builder: (BuildContext context, GoRouterState state) {
-        return EditPage(filePath: state.extra.toString());
+        return EditPage(editPageArgs: state.extra as EditPageArgs);
       },
     ),
     GoRoute(
