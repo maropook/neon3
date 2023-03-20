@@ -25,6 +25,7 @@ dependencies:
   flutter_animation_progress_bar: ^2.0.1
   flutter_sound: ^9.2.13
   assets_audio_player: ^3.0.6
+  record: ^4.4.4
 
   neon_video_encoder:
     git:
@@ -32,7 +33,7 @@ dependencies:
       ref: refs/heads/fix/move_logic_plugin
 
 dev_dependencies:
-  flutter_gen_runner: ^5.1.0+1
+  flutter_gen_runner: ^5.2.0
   build_runner: ^2.3.3
   freezed: ^2.3.2
   json_serializable: ^6.5.4
