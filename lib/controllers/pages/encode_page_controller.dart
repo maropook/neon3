@@ -40,7 +40,6 @@ class EncodeController extends StateNotifier<EncodePageState> {
 
   Future<void> init() async {
     await encode();
-    Logger.log('encode_controller', 'init');
   }
 
   late String audioPath;
@@ -123,7 +122,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
         .path;
 
     //SubtitleText
-    List<SubtitleText> subtitle_texts = [
+    final List<SubtitleText> subtitleTexts = [
       SubtitleText(
           startTime: 1.0,
           endTime: 2.0,
@@ -166,13 +165,14 @@ class EncodeController extends StateNotifier<EncodePageState> {
         .path;
 
     AudioSetting audioSetting = AudioSetting(
-        // defaultAudioPath: '',
-        // isMutedDefaultAudio: true,
+        defaultAudioPath: _audioFilePath,
+        isMutedDefaultAudio:
+            true, //この場合は、voiceFileにある音声たちより、動画が短かったらExport failed: Operation Stoppedになる
 
         // defaultAudioPath: await getTempFilePath('merge-audio.m4a'),
 
-        defaultAudioPath: _audioFilePath,
-        isMutedDefaultAudio: false,
+        // defaultAudioPath: _audioFilePath,
+        // isMutedDefaultAudio: false,
 
         //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
         backgroundAudioPath: musicFilePath,
@@ -180,7 +180,7 @@ class EncodeController extends StateNotifier<EncodePageState> {
 
     // Encode
     EncodeArgs encodeArgs = EncodeArgs(
-        subtitleTexts: subtitle_texts,
+        subtitleTexts: subtitleTexts,
         avatarAnimation: avatarAnimation,
         audioSetting: audioSetting);
 
