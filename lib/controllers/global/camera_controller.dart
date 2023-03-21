@@ -47,20 +47,6 @@ class CameraProviderController extends StateNotifier<CameraState> {
     }
   }
 
-  Future<void> startRecording(String audioPath) async {
-    try {
-      if (await _audioRecorder.hasPermission()) {
-        await _audioRecorder.start();
-      }
-    } catch (e) {
-      Logger.logError('camera_controller', e.toString());
-    }
-  }
-
-  Future<String?> stopRecording() async {
-    return await _audioRecorder.stop();
-  }
-
   void addControllerListener(CameraController controller) {
     controller.addListener(() {
       state = state.copyWith(
@@ -68,20 +54,33 @@ class CameraProviderController extends StateNotifier<CameraState> {
     });
   }
 
-  Future<void> startVideoRecording() async {
+  Future<void> startAudioRecording(String audioPath) async {
     try {
-      startRecording(
-          '${(await getApplicationDocumentsDirectory()).path}/audio_file.m4a');
-      await cameraController?.startVideoRecording();
-    } on CameraException catch (e) {
-      Logger.logError('camera_provider_controller', e.toString());
+      if (await _audioRecorder.hasPermission()) {
+        await _audioRecorder.start();
+      }
+    } catch (e) {
+      Logger.logError(
+          'camera_provider_controller:start_audio_recording', e.toString());
     }
   }
 
-  Future<void> stopVideoRecording() async {
+  Future<void> startRecording() async {
     try {
-      final audioFilePath = await stopRecording();
+      await startAudioRecording(
+          '${(await getApplicationDocumentsDirectory()).path}/audio_file.m4a');
+      await cameraController?.startVideoRecording();
+    } on CameraException catch (e) {
+      Logger.logError(
+          'camera_provider_controller:start_recording', e.toString());
+    }
+  }
+
+  Future<void> stopRecording() async {
+    try {
+      final audioFilePath = await _audioRecorder.stop();
       final videoFile = await cameraController?.stopVideoRecording();
+
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFile?.path);
     } on CameraException catch (e) {

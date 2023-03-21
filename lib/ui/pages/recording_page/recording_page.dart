@@ -51,7 +51,7 @@ class RecordingPage extends ConsumerWidget {
       return GestureDetector(
         onTap: () async {
           if (isRecording) {
-            await ref.read(cameraProvider.notifier).stopVideoRecording();
+            await ref.read(cameraProvider.notifier).stopRecording();
             final videoFilePath = ref.read(cameraProvider).videoFilePath;
             final audioFilePath = ref.read(cameraProvider).audioFilePath;
             if (audioFilePath != null && videoFilePath != null) {
@@ -62,7 +62,7 @@ class RecordingPage extends ConsumerWidget {
             }
             return;
           }
-          ref.read(cameraProvider.notifier).startVideoRecording();
+          ref.read(cameraProvider.notifier).startRecording();
         },
         child: Container(
           width: 65,
