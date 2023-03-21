@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'camera_controller.dart';
+part of 'recording_page_controller.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,22 +15,22 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$CameraState {
+mixin _$RecordingPageState {
   CameraController? get controller => throw _privateConstructorUsedError;
   bool get isRecordingVideo => throw _privateConstructorUsedError;
   String? get videoFilePath => throw _privateConstructorUsedError;
   String? get audioFilePath => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $CameraStateCopyWith<CameraState> get copyWith =>
+  $RecordingPageStateCopyWith<RecordingPageState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CameraStateCopyWith<$Res> {
-  factory $CameraStateCopyWith(
-          CameraState value, $Res Function(CameraState) then) =
-      _$CameraStateCopyWithImpl<$Res, CameraState>;
+abstract class $RecordingPageStateCopyWith<$Res> {
+  factory $RecordingPageStateCopyWith(
+          RecordingPageState value, $Res Function(RecordingPageState) then) =
+      _$RecordingPageStateCopyWithImpl<$Res, RecordingPageState>;
   @useResult
   $Res call(
       {CameraController? controller,
@@ -40,9 +40,9 @@ abstract class $CameraStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
-    implements $CameraStateCopyWith<$Res> {
-  _$CameraStateCopyWithImpl(this._value, this._then);
+class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
+    implements $RecordingPageStateCopyWith<$Res> {
+  _$RecordingPageStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -80,7 +80,7 @@ class _$CameraStateCopyWithImpl<$Res, $Val extends CameraState>
 
 /// @nodoc
 abstract class _$$_CameraStateCopyWith<$Res>
-    implements $CameraStateCopyWith<$Res> {
+    implements $RecordingPageStateCopyWith<$Res> {
   factory _$$_CameraStateCopyWith(
           _$_CameraState value, $Res Function(_$_CameraState) then) =
       __$$_CameraStateCopyWithImpl<$Res>;
@@ -95,7 +95,7 @@ abstract class _$$_CameraStateCopyWith<$Res>
 
 /// @nodoc
 class __$$_CameraStateCopyWithImpl<$Res>
-    extends _$CameraStateCopyWithImpl<$Res, _$_CameraState>
+    extends _$RecordingPageStateCopyWithImpl<$Res, _$_CameraState>
     implements _$$_CameraStateCopyWith<$Res> {
   __$$_CameraStateCopyWithImpl(
       _$_CameraState _value, $Res Function(_$_CameraState) _then)
@@ -154,7 +154,7 @@ class _$_CameraState implements _CameraState {
 
   @override
   String toString() {
-    return 'CameraState(controller: $controller, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
+    return 'RecordingPageState(controller: $controller, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
   }
 
   @override
@@ -183,7 +183,7 @@ class _$_CameraState implements _CameraState {
       __$$_CameraStateCopyWithImpl<_$_CameraState>(this, _$identity);
 }
 
-abstract class _CameraState implements CameraState {
+abstract class _CameraState implements RecordingPageState {
   const factory _CameraState(
       {final CameraController? controller,
       final bool isRecordingVideo,
