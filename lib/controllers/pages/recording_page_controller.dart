@@ -5,11 +5,11 @@ import 'package:maropook_neon2/services/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
-part 'camera_controller.freezed.dart';
+part 'recording_page_controller.freezed.dart';
 
 @freezed
-class CameraState with _$CameraState {
-  const factory CameraState({
+class RecordingPageState with _$RecordingPageState {
+  const factory RecordingPageState({
     @Default(null) CameraController? controller,
     @Default(false) bool isRecordingVideo,
     @Default(null) String? videoFilePath,
@@ -17,14 +17,13 @@ class CameraState with _$CameraState {
   }) = _CameraState;
 }
 
-final cameraProvider =
-    StateNotifierProvider.autoDispose<CameraProviderController, CameraState>(
-        (ref) {
-  return CameraProviderController();
+final recordingPageProvider = StateNotifierProvider.autoDispose<
+    RecordingPageController, RecordingPageState>((ref) {
+  return RecordingPageController();
 });
 
-class CameraProviderController extends StateNotifier<CameraState> {
-  CameraProviderController() : super(const CameraState()) {
+class RecordingPageController extends StateNotifier<RecordingPageState> {
+  RecordingPageController() : super(const RecordingPageState()) {
     init();
   }
 

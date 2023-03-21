@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/global/camera_controller.dart';
+import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -10,7 +10,7 @@ class RecordingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cameraController =
-        ref.watch(cameraProvider.select((s) => s.controller));
+        ref.watch(recordingPageProvider.select((s) => s.controller));
 
     return Scaffold(
         backgroundColor: Colors.black,
@@ -46,14 +46,14 @@ class RecordingPage extends ConsumerWidget {
   Widget _buildButton() {
     return Consumer(builder: (context, ref, _) {
       final bool isRecording =
-          ref.watch(cameraProvider.select((s) => s.isRecordingVideo));
+          ref.watch(recordingPageProvider.select((s) => s.isRecordingVideo));
 
       return GestureDetector(
         onTap: () async {
           if (isRecording) {
-            await ref.read(cameraProvider.notifier).stopRecording();
-            final videoFilePath = ref.read(cameraProvider).videoFilePath;
-            final audioFilePath = ref.read(cameraProvider).audioFilePath;
+            await ref.read(recordingPageProvider.notifier).stopRecording();
+            final videoFilePath = ref.read(recordingPageProvider).videoFilePath;
+            final audioFilePath = ref.read(recordingPageProvider).audioFilePath;
             if (audioFilePath != null && videoFilePath != null) {
               context.go('/edit',
                   extra: EditPageArgs(
@@ -62,7 +62,7 @@ class RecordingPage extends ConsumerWidget {
             }
             return;
           }
-          ref.read(cameraProvider.notifier).startRecording();
+          ref.read(recordingPageProvider.notifier).startRecording();
         },
         child: Container(
           width: 65,
