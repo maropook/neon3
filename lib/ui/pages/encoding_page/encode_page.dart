@@ -3,18 +3,20 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/encode_page_controller.dart';
+import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 
 class EncodePage extends ConsumerWidget {
-  const EncodePage({required this.filePath, super.key});
+  const EncodePage({required this.editPageArgs, super.key});
 
-  final String filePath;
+  final EditPageArgs editPageArgs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        encodePageProvider.overrideWith((ref) =>
-            EncodeController(videoFilePath: filePath, audioFilePath: ''))
+        encodePageProvider.overrideWith((ref) => EncodeController(
+            videoFilePath: editPageArgs.videoFilePath,
+            audioFilePath: editPageArgs.audioFilePath))
       ],
       child: Scaffold(
           backgroundColor: Colors.black,
@@ -22,11 +24,17 @@ class EncodePage extends ConsumerWidget {
             title: const Text('エンコーディング'),
             actions: [
               IconButton(
-                  onPressed: () => context.go('/complete', extra: filePath),
+                  onPressed: () => context.go(
+                        '/complete',
+                        extra: editPageArgs.videoFilePath,
+                      ),
                   icon: const Icon(Icons.chevron_right)),
             ],
             leading: IconButton(
-                onPressed: () => context.go('/edit', extra: filePath),
+                onPressed: () => context.go(
+                      '/edit',
+                      extra: editPageArgs,
+                    ),
                 icon: const Icon(Icons.chevron_left)),
           ),
           body: _buildBody()),

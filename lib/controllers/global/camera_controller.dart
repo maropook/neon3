@@ -1,9 +1,8 @@
 import 'package:camera/camera.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
 part 'camera_controller.freezed.dart';
@@ -30,12 +29,12 @@ class CameraProviderController extends StateNotifier<CameraState> {
   }
 
   CameraController? cameraController;
-  final Record record = Record();
+  final Record _audioRecorder = Record();
 
   Future<void> init() async {
     try {
       final cameras = await availableCameras();
-      final selectedCamera = cameras[0]; //0:外カメ 1:内カメ
+      final selectedCamera = cameras[0];
       final controller = CameraController(
           selectedCamera, ResolutionPreset.medium,
           enableAudio: false, imageFormatGroup: ImageFormatGroup.bgra8888);
@@ -48,6 +47,20 @@ class CameraProviderController extends StateNotifier<CameraState> {
     }
   }
 
+  Future<void> startRecording(String audioPath) async {
+    try {
+      if (await _audioRecorder.hasPermission()) {
+        await _audioRecorder.start();
+      }
+    } catch (e) {
+      Logger.logError('camera_controller', e.toString());
+    }
+  }
+
+  Future<String?> stopRecording() async {
+    return await _audioRecorder.stop();
+  }
+
   void addControllerListener(CameraController controller) {
     controller.addListener(() {
       state = state.copyWith(
@@ -57,11 +70,8 @@ class CameraProviderController extends StateNotifier<CameraState> {
 
   Future<void> startVideoRecording() async {
     try {
-      if (await record.hasPermission()) {
-        await record.start(
-          path: 'audio_file.m4a',
-        );
-      }
+      startRecording(
+          '${(await getApplicationDocumentsDirectory()).path}/audio_file.m4a');
       await cameraController?.startVideoRecording();
     } on CameraException catch (e) {
       Logger.logError('camera_provider_controller', e.toString());
@@ -70,7 +80,7 @@ class CameraProviderController extends StateNotifier<CameraState> {
 
   Future<void> stopVideoRecording() async {
     try {
-      final audioFilePath = await record.stop();
+      final audioFilePath = await stopRecording();
       final videoFile = await cameraController?.stopVideoRecording();
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFile?.path);

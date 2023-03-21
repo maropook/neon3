@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:video_player/video_player.dart';
+import 'package:audioplayers/audioplayers.dart' as ap;
 
 part 'edit_page_controller.freezed.dart';
 
@@ -23,13 +24,18 @@ final editPageProvider =
 });
 
 class EditController extends StateNotifier<EditPageState> {
-  EditController({required String videoFilePath})
-      : _videoFilePath = videoFilePath,
+  EditController({
+    required String videoFilePath,
+    required String audioFilePath,
+  })  : _videoFilePath = videoFilePath,
+        _audioFilePath = audioFilePath,
         super(const EditPageState()) {
     init();
   }
   VideoPlayerController? _videoPlayerController;
   final String _videoFilePath;
+  final String _audioFilePath;
+  final ap.AudioPlayer _audioPlayer = ap.AudioPlayer();
 
   Future<void> init() async {
     try {
@@ -37,8 +43,9 @@ class EditController extends StateNotifier<EditPageState> {
       await _videoPlayerController!.initialize();
       await _videoPlayerController!.setLooping(true);
       addVideoPlayerControllerListener(_videoPlayerController!);
+
       state = state.copyWith(controller: _videoPlayerController);
-      await _videoPlayerController!.play();
+      await play();
     } catch (e) {
       Logger.logError('edit_controller', e.toString());
     }
@@ -50,8 +57,19 @@ class EditController extends StateNotifier<EditPageState> {
     });
   }
 
+  Future<void> play() async {
+    await _audioPlayer.play(ap.UrlSource(_audioFilePath));
+    await _videoPlayerController!.play();
+  }
+
+  Future<void> pause() async {
+    await _audioPlayer.pause();
+    await _videoPlayerController!.pause();
+  }
+
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _videoPlayerController?.dispose();
     super.dispose();
   }

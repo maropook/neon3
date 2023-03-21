@@ -168,6 +168,9 @@ class EncodeController extends StateNotifier<EncodePageState> {
     AudioSetting audioSetting = AudioSetting(
         // defaultAudioPath: "",
         // isMutedDefaultAudio: true,
+
+        // defaultAudioPath: _audioFilePath,
+
         defaultAudioPath: await getTempFilePath('merge-audio.m4a'),
         isMutedDefaultAudio: false,
         //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます

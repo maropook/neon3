@@ -16,16 +16,16 @@ class EditPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        editPageProvider.overrideWith(
-            (ref) => EditController(videoFilePath: editPageArgs.videoFilePath))
+        editPageProvider.overrideWith((ref) => EditController(
+            videoFilePath: editPageArgs.videoFilePath,
+            audioFilePath: editPageArgs.audioFilePath))
       ],
       child: Scaffold(
           appBar: AppBar(
             title: const Text('エディット'),
             actions: [
               IconButton(
-                  onPressed: () => context.go('/encoding',
-                      extra: editPageArgs.videoFilePath),
+                  onPressed: () => context.go('/encoding', extra: editPageArgs),
                   icon: const Icon(Icons.chevron_right)),
             ],
             leading: IconButton(
@@ -39,25 +39,26 @@ class EditPage extends ConsumerWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final editController =
+      final videoController =
           ref.watch(editPageProvider.select((s) => s.controller));
+      final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            editController != null
+            videoController != null
                 ? SizedBox(
                     height: 300,
                     child: GestureDetector(
                       onTap: () {
                         isPlaying
-                            ? editController.pause()
-                            : editController.play();
+                            ? editPageController.pause()
+                            : editPageController.play();
                       },
                       child: AspectRatio(
-                        aspectRatio: editController.value.aspectRatio,
-                        child: VideoPlayer(editController),
+                        aspectRatio: videoController.value.aspectRatio,
+                        child: VideoPlayer(videoController),
                       ),
                     ),
                   )
