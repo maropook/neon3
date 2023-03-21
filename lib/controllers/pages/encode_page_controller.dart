@@ -162,17 +162,18 @@ class EncodeController extends StateNotifier<EncodePageState> {
     //AudioSetting
     final musicFilePath = (await saveFile(
             inputFilePath: Assets.audio.musicFile,
-            outputFilePath: "music_file.mp3"))
+            outputFilePath: 'music_file.mp3'))
         .path;
 
     AudioSetting audioSetting = AudioSetting(
-        // defaultAudioPath: "",
-        // isMutedDefaultAudio: true,
+        defaultAudioPath: '',
+        isMutedDefaultAudio: true,
+
+        // defaultAudioPath: await getTempFilePath('merge-audio.m4a'),
 
         // defaultAudioPath: _audioFilePath,
+        // isMutedDefaultAudio: false,
 
-        defaultAudioPath: await getTempFilePath('merge-audio.m4a'),
-        isMutedDefaultAudio: false,
         //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
         backgroundAudioPath: musicFilePath,
         backgroundAudioVolume: 0.1);
