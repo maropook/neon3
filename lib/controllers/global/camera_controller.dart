@@ -1,8 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 
 part 'camera_controller.freezed.dart';
 
@@ -11,6 +12,8 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default(null) CameraController? controller,
     @Default(false) bool isRecordingVideo,
+    @Default(null) String? videoFilePath,
+    @Default(null) String? audioFilePath,
   }) = _CameraState;
 }
 
@@ -26,14 +29,15 @@ class CameraProviderController extends StateNotifier<CameraState> {
   }
 
   CameraController? cameraController;
+  final Record _audioRecorder = Record();
 
   Future<void> init() async {
     try {
       final cameras = await availableCameras();
-      final selectedCamera = cameras[0]; //0:外カメ 1:内カメ
+      final selectedCamera = cameras[0];
       final controller = CameraController(
           selectedCamera, ResolutionPreset.medium,
-          imageFormatGroup: ImageFormatGroup.bgra8888);
+          enableAudio: false, imageFormatGroup: ImageFormatGroup.bgra8888);
       await controller.initialize();
       cameraController = controller;
       addControllerListener(cameraController!);
@@ -50,21 +54,37 @@ class CameraProviderController extends StateNotifier<CameraState> {
     });
   }
 
-  Future<void> startVideoRecording() async {
+  Future<void> startAudioRecording(String audioPath) async {
     try {
-      await cameraController?.startVideoRecording();
-    } on CameraException catch (e) {
-      Logger.logError('camera_provider_controller', e.toString());
+      if (await _audioRecorder.hasPermission()) {
+        await _audioRecorder.start();
+      }
+    } catch (e) {
+      Logger.logError(
+          'camera_provider_controller:start_audio_recording', e.toString());
     }
   }
 
-  Future<String?> stopVideoRecording() async {
+  Future<void> startRecording() async {
     try {
-      final file = await cameraController?.stopVideoRecording();
-      return file?.path;
+      await startAudioRecording(
+          '${(await getApplicationDocumentsDirectory()).path}/audio_file.m4a');
+      await cameraController?.startVideoRecording();
+    } on CameraException catch (e) {
+      Logger.logError(
+          'camera_provider_controller:start_recording', e.toString());
+    }
+  }
+
+  Future<void> stopRecording() async {
+    try {
+      final audioFilePath = await _audioRecorder.stop();
+      final videoFile = await cameraController?.stopVideoRecording();
+
+      state = state.copyWith(
+          audioFilePath: audioFilePath, videoFilePath: videoFile?.path);
     } on CameraException catch (e) {
       Logger.logError('camera_provider_controller', e.toString());
-      return null;
     }
   }
 

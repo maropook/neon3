@@ -1,4 +1,6 @@
 PODS:
+  - audioplayers_darwin (0.0.1):
+    - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -7,17 +9,26 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - "permission_handler (5.1.0+2)":
+    - Flutter
+  - record (0.0.1):
+    - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - Flutter (from `Flutter`)
   - neon_video_encoder (from `.symlinks/plugins/neon_video_encoder/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - record (from `.symlinks/plugins/record/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
 
 EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   Flutter:
@@ -26,14 +37,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/neon_video_encoder/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
+  record:
+    :path: ".symlinks/plugins/record/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
 
 SPEC CHECKSUMS:
+  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   neon_video_encoder: d30c03b76c6394a8c3d5209f7082067d11b63ed1
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  record: cae05d8dd3cdb1dea3511b20e5a5811a1ae00d0d
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3

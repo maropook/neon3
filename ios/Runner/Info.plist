@@ -56,7 +56,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires to add file to your camera</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Can I use the mic please?</string>
+	<string>We need to access to the microphone to record audio file</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

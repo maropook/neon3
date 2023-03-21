@@ -5,25 +5,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/edit_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/themes/styles.dart';
+import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 import 'package:video_player/video_player.dart';
 
 class EditPage extends ConsumerWidget {
-  const EditPage({required this.filePath, super.key});
+  const EditPage({required this.editPageArgs, super.key});
 
-  final String filePath;
+  final EditPageArgs editPageArgs;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        editPageProvider
-            .overrideWith((ref) => EditController(videoFilePath: filePath))
+        editPageProvider.overrideWith((ref) => EditController(
+            videoFilePath: editPageArgs.videoFilePath,
+            audioFilePath: editPageArgs.audioFilePath))
       ],
       child: Scaffold(
           appBar: AppBar(
             title: const Text('エディット'),
             actions: [
               IconButton(
-                  onPressed: () => context.go('/encoding', extra: filePath),
+                  onPressed: () => context.go('/encoding', extra: editPageArgs),
                   icon: const Icon(Icons.chevron_right)),
             ],
             leading: IconButton(
@@ -37,25 +39,26 @@ class EditPage extends ConsumerWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final editController =
+      final videoController =
           ref.watch(editPageProvider.select((s) => s.controller));
+      final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            editController != null
+            videoController != null
                 ? SizedBox(
                     height: 300,
                     child: GestureDetector(
                       onTap: () {
                         isPlaying
-                            ? editController.pause()
-                            : editController.play();
+                            ? editPageController.pause()
+                            : editPageController.play();
                       },
                       child: AspectRatio(
-                        aspectRatio: editController.value.aspectRatio,
-                        child: VideoPlayer(editController),
+                        aspectRatio: videoController.value.aspectRatio,
+                        child: VideoPlayer(videoController),
                       ),
                     ),
                   )

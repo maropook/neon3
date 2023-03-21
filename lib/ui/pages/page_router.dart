@@ -41,13 +41,13 @@ class PageRouter {
     GoRoute(
       path: '/edit',
       builder: (BuildContext context, GoRouterState state) {
-        return EditPage(filePath: state.extra.toString());
+        return EditPage(editPageArgs: state.extra as EditPageArgs);
       },
     ),
     GoRoute(
       path: '/encoding',
       builder: (BuildContext context, GoRouterState state) {
-        return EncodePage(filePath: state.extra.toString());
+        return EncodePage(editPageArgs: state.extra as EditPageArgs);
       },
     ),
     GoRoute(
