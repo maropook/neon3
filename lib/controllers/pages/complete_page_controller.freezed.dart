@@ -17,7 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CompletePageState {
   bool get isPlaying => throw _privateConstructorUsedError;
-  VideoPlayerController? get controller => throw _privateConstructorUsedError;
+  VideoPlayerService? get videoPlayerService =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CompletePageStateCopyWith<CompletePageState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $CompletePageStateCopyWith<$Res> {
           CompletePageState value, $Res Function(CompletePageState) then) =
       _$CompletePageStateCopyWithImpl<$Res, CompletePageState>;
   @useResult
-  $Res call({bool isPlaying, VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
 }
 
 /// @nodoc
@@ -47,17 +48,17 @@ class _$CompletePageStateCopyWithImpl<$Res, $Val extends CompletePageState>
   @override
   $Res call({
     Object? isPlaying = null,
-    Object? controller = freezed,
+    Object? videoPlayerService = freezed,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+      videoPlayerService: freezed == videoPlayerService
+          ? _value.videoPlayerService
+          : videoPlayerService // ignore: cast_nullable_to_non_nullable
+              as VideoPlayerService?,
     ) as $Val);
   }
 }
@@ -70,7 +71,7 @@ abstract class _$$_CompletePageStateCopyWith<$Res>
       __$$_CompletePageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isPlaying, VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
 }
 
 /// @nodoc
@@ -85,17 +86,17 @@ class __$$_CompletePageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isPlaying = null,
-    Object? controller = freezed,
+    Object? videoPlayerService = freezed,
   }) {
     return _then(_$_CompletePageState(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+      videoPlayerService: freezed == videoPlayerService
+          ? _value.videoPlayerService
+          : videoPlayerService // ignore: cast_nullable_to_non_nullable
+              as VideoPlayerService?,
     ));
   }
 }
@@ -103,18 +104,19 @@ class __$$_CompletePageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CompletePageState implements _CompletePageState {
-  const _$_CompletePageState({this.isPlaying = false, this.controller = null});
+  const _$_CompletePageState(
+      {this.isPlaying = false, this.videoPlayerService = null});
 
   @override
   @JsonKey()
   final bool isPlaying;
   @override
   @JsonKey()
-  final VideoPlayerController? controller;
+  final VideoPlayerService? videoPlayerService;
 
   @override
   String toString() {
-    return 'CompletePageState(isPlaying: $isPlaying, controller: $controller)';
+    return 'CompletePageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService)';
   }
 
   @override
@@ -124,12 +126,12 @@ class _$_CompletePageState implements _CompletePageState {
             other is _$_CompletePageState &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
-            (identical(other.controller, controller) ||
-                other.controller == controller));
+            (identical(other.videoPlayerService, videoPlayerService) ||
+                other.videoPlayerService == videoPlayerService));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isPlaying, controller);
+  int get hashCode => Object.hash(runtimeType, isPlaying, videoPlayerService);
 
   @JsonKey(ignore: true)
   @override
@@ -142,12 +144,12 @@ class _$_CompletePageState implements _CompletePageState {
 abstract class _CompletePageState implements CompletePageState {
   const factory _CompletePageState(
       {final bool isPlaying,
-      final VideoPlayerController? controller}) = _$_CompletePageState;
+      final VideoPlayerService? videoPlayerService}) = _$_CompletePageState;
 
   @override
   bool get isPlaying;
   @override
-  VideoPlayerController? get controller;
+  VideoPlayerService? get videoPlayerService;
   @override
   @JsonKey(ignore: true)
   _$$_CompletePageStateCopyWith<_$_CompletePageState> get copyWith =>

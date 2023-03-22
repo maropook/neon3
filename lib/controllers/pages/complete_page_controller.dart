@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
-import 'package:video_player/video_player.dart';
+import 'package:maropook_neon2/services/video_player_service.dart';
 
 part 'complete_page_controller.freezed.dart';
 
@@ -13,47 +11,49 @@ part 'complete_page_controller.freezed.dart';
 class CompletePageState with _$CompletePageState {
   const factory CompletePageState({
     @Default(false) bool isPlaying,
-    @Default(null) VideoPlayerController? controller,
+    @Default(null) VideoPlayerService? videoPlayerService,
   }) = _CompletePageState;
 }
 
-final completePageProvider =
-    StateNotifierProvider.autoDispose<CompleteController, CompletePageState>(
-        (ref) {
+final completePageProvider = StateNotifierProvider.autoDispose<
+    CompletePageController, CompletePageState>((ref) {
   return throw UnimplementedError();
 });
 
-class CompleteController extends StateNotifier<CompletePageState> {
-  CompleteController({required String videoFilePath})
+class CompletePageController extends StateNotifier<CompletePageState> {
+  CompletePageController({required String videoFilePath})
       : _videoFilePath = videoFilePath,
         super(const CompletePageState()) {
     init();
   }
-  VideoPlayerController? _videoPlayerController;
   final String _videoFilePath;
+  VideoPlayerService? _videoPlayerService;
 
   Future<void> init() async {
     try {
-      _videoPlayerController = VideoPlayerController.file(File(_videoFilePath));
-      await _videoPlayerController!.initialize();
-      await _videoPlayerController!.setLooping(true);
-      addVideoPlayerControllerListener(_videoPlayerController!);
-      state = state.copyWith(controller: _videoPlayerController);
-      await _videoPlayerController!.play();
+      _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
+      await _videoPlayerService!.init(addListenersFunction: () {
+        state = state.copyWith(isPlaying: _videoPlayerService!.isPlaying);
+      });
+
+      state = state.copyWith(videoPlayerService: _videoPlayerService);
+      await play();
     } catch (e) {
-      Logger.logError('complete_controller', e.toString());
+      Logger.logError('complete_page_controller:init', e.toString());
     }
   }
 
-  void addVideoPlayerControllerListener(VideoPlayerController controller) {
-    controller.addListener(() {
-      state = state.copyWith(isPlaying: controller.value.isPlaying);
-    });
+  Future<void> play() async {
+    await _videoPlayerService!.play();
+  }
+
+  Future<void> pause() async {
+    await _videoPlayerService!.pause();
   }
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
+    _videoPlayerService!.dispose();
     super.dispose();
   }
 }

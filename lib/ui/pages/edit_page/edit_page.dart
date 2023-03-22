@@ -16,7 +16,7 @@ class EditPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        editPageProvider.overrideWith((ref) => EditController(
+        editPageProvider.overrideWith((ref) => EditPageController(
             videoFilePath: editPageArgs.videoFilePath,
             audioFilePath: editPageArgs.audioFilePath))
       ],
@@ -40,7 +40,7 @@ class EditPage extends ConsumerWidget {
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
       final videoController =
-          ref.watch(editPageProvider.select((s) => s.controller));
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
       final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
 
@@ -56,10 +56,7 @@ class EditPage extends ConsumerWidget {
                             ? editPageController.pause()
                             : editPageController.play();
                       },
-                      child: AspectRatio(
-                        aspectRatio: videoController.value.aspectRatio,
-                        child: VideoPlayer(videoController),
-                      ),
+                      child: videoController.buildVideoPlayer(),
                     ),
                   )
                 : const CircularProgressIndicator(),

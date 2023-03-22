@@ -13,8 +13,8 @@ class CompletePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        completePageProvider
-            .overrideWith((ref) => CompleteController(videoFilePath: filePath))
+        completePageProvider.overrideWith(
+            (ref) => CompletePageController(videoFilePath: filePath))
       ],
       child: Scaffold(
           appBar: AppBar(
@@ -34,8 +34,9 @@ class CompletePage extends StatelessWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final completeController =
-          ref.watch(completePageProvider.select((s) => s.controller));
+      final videoController =
+          ref.watch(completePageProvider.select((s) => s.videoPlayerService));
+      final completePageController = ref.read(completePageProvider.notifier);
       final isPlaying =
           ref.watch(completePageProvider.select((s) => s.isPlaying));
 
@@ -44,19 +45,16 @@ class CompletePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              completeController != null
+              videoController != null
                   ? SizedBox(
                       height: 300,
                       child: GestureDetector(
                         onTap: () {
                           isPlaying
-                              ? completeController.pause()
-                              : completeController.play();
+                              ? completePageController.pause()
+                              : completePageController.play();
                         },
-                        child: AspectRatio(
-                          aspectRatio: completeController.value.aspectRatio,
-                          child: VideoPlayer(completeController),
-                        ),
+                        child: videoController.buildVideoPlayer(),
                       ),
                     )
                   : const CircularProgressIndicator(),
