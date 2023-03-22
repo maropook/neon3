@@ -9,37 +9,38 @@ class RecordingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cameraController =
-        ref.watch(recordingPageProvider.select((s) => s.controller));
-
     return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          title: const Text('レコーディング'),
-          actions: [
-            IconButton(
-                onPressed: () => context.go('/import'),
-                icon: const Icon(Icons.download_rounded)),
-            IconButton(
-                onPressed: () => context.go('/edit/path'),
-                icon: const Icon(Icons.chevron_right)),
-          ],
-          leading: IconButton(
-              onPressed: () => context.go('/avatar/list'),
-              icon: const Icon(Icons.face)),
-        ),
-        body: cameraController != null
-            ? _buildBody(cameraController)
-            : const Center(child: CircularProgressIndicator()));
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('レコーディング'),
+        actions: [
+          IconButton(
+              onPressed: () => context.go('/import'),
+              icon: const Icon(Icons.download_rounded)),
+          IconButton(
+              onPressed: () => context.go('/edit/path'),
+              icon: const Icon(Icons.chevron_right)),
+        ],
+        leading: IconButton(
+            onPressed: () => context.go('/avatar/list'),
+            icon: const Icon(Icons.face)),
+      ),
+      body: _buildBody(),
+    );
   }
 
-  Widget _buildBody(CameraController cameraController) {
+  Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [CameraPreview(cameraController), _buildButton()],
-      );
+      final cameraService =
+          ref.watch(recordingPageProvider.select((s) => s.cameraService));
+
+      return cameraService != null
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [cameraService.buildCameraPreview(), _buildButton()],
+            )
+          : const CircularProgressIndicator();
     });
   }
 

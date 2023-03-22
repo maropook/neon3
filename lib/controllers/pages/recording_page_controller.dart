@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/services/camera_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
@@ -10,7 +11,7 @@ part 'recording_page_controller.freezed.dart';
 @freezed
 class RecordingPageState with _$RecordingPageState {
   const factory RecordingPageState({
-    @Default(null) CameraController? controller,
+    @Default(null) CameraService? cameraService,
     @Default(false) bool isRecordingVideo,
     @Default(null) String? videoFilePath,
     @Default(null) String? audioFilePath,
@@ -27,30 +28,19 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     init();
   }
 
-  CameraController? cameraController;
+  final CameraService _cameraService = CameraService();
   final Record _audioRecorder = Record();
 
   Future<void> init() async {
     try {
-      final cameras = await availableCameras();
-      final selectedCamera = cameras[0];
-      final controller = CameraController(
-          selectedCamera, ResolutionPreset.medium,
-          enableAudio: false, imageFormatGroup: ImageFormatGroup.bgra8888);
-      await controller.initialize();
-      cameraController = controller;
-      addControllerListener(cameraController!);
-      state = state.copyWith(controller: controller);
+      await _cameraService.init(addListenersFunction: () {
+        state =
+            state.copyWith(isRecordingVideo: _cameraService.isRecordingVideo);
+      });
+      state = state.copyWith(cameraService: _cameraService);
     } catch (e) {
       Logger.logError('recording_page_controller:init', e.toString());
     }
-  }
-
-  void addControllerListener(CameraController controller) {
-    controller.addListener(() {
-      state = state.copyWith(
-          isRecordingVideo: cameraController!.value.isRecordingVideo);
-    });
   }
 
   Future<void> startAudioRecording(String audioPath) async {
@@ -68,7 +58,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     try {
       await startAudioRecording(
           '${(await getApplicationDocumentsDirectory()).path}/audio_file.m4a');
-      await cameraController?.startVideoRecording();
+      await _cameraService.startRecording();
     } on CameraException catch (e) {
       Logger.logError(
           'recording_page_controller:start_recording', e.toString());
@@ -78,10 +68,10 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   Future<void> stopRecording() async {
     try {
       final audioFilePath = await _audioRecorder.stop();
-      final videoFile = await cameraController?.stopVideoRecording();
+      final videoFilePath = await _cameraService.stopRecording();
 
       state = state.copyWith(
-          audioFilePath: audioFilePath, videoFilePath: videoFile?.path);
+          audioFilePath: audioFilePath, videoFilePath: videoFilePath);
     } on CameraException catch (e) {
       Logger.logError('recording_page_controller', e.toString());
     }
@@ -89,7 +79,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
 
   @override
   void dispose() {
-    cameraController?.dispose();
+    _cameraService.dispose();
     super.dispose();
   }
 }

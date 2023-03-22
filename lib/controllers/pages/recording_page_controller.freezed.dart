@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RecordingPageState {
-  CameraController? get controller => throw _privateConstructorUsedError;
+  CameraService? get cameraService => throw _privateConstructorUsedError;
   bool get isRecordingVideo => throw _privateConstructorUsedError;
   String? get videoFilePath => throw _privateConstructorUsedError;
   String? get audioFilePath => throw _privateConstructorUsedError;
@@ -33,7 +33,7 @@ abstract class $RecordingPageStateCopyWith<$Res> {
       _$RecordingPageStateCopyWithImpl<$Res, RecordingPageState>;
   @useResult
   $Res call(
-      {CameraController? controller,
+      {CameraService? cameraService,
       bool isRecordingVideo,
       String? videoFilePath,
       String? audioFilePath});
@@ -52,16 +52,16 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? controller = freezed,
+    Object? cameraService = freezed,
     Object? isRecordingVideo = null,
     Object? videoFilePath = freezed,
     Object? audioFilePath = freezed,
   }) {
     return _then(_value.copyWith(
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as CameraController?,
+      cameraService: freezed == cameraService
+          ? _value.cameraService
+          : cameraService // ignore: cast_nullable_to_non_nullable
+              as CameraService?,
       isRecordingVideo: null == isRecordingVideo
           ? _value.isRecordingVideo
           : isRecordingVideo // ignore: cast_nullable_to_non_nullable
@@ -87,7 +87,7 @@ abstract class _$$_CameraStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {CameraController? controller,
+      {CameraService? cameraService,
       bool isRecordingVideo,
       String? videoFilePath,
       String? audioFilePath});
@@ -104,16 +104,16 @@ class __$$_CameraStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? controller = freezed,
+    Object? cameraService = freezed,
     Object? isRecordingVideo = null,
     Object? videoFilePath = freezed,
     Object? audioFilePath = freezed,
   }) {
     return _then(_$_CameraState(
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as CameraController?,
+      cameraService: freezed == cameraService
+          ? _value.cameraService
+          : cameraService // ignore: cast_nullable_to_non_nullable
+              as CameraService?,
       isRecordingVideo: null == isRecordingVideo
           ? _value.isRecordingVideo
           : isRecordingVideo // ignore: cast_nullable_to_non_nullable
@@ -134,14 +134,14 @@ class __$$_CameraStateCopyWithImpl<$Res>
 
 class _$_CameraState implements _CameraState {
   const _$_CameraState(
-      {this.controller = null,
+      {this.cameraService = null,
       this.isRecordingVideo = false,
       this.videoFilePath = null,
       this.audioFilePath = null});
 
   @override
   @JsonKey()
-  final CameraController? controller;
+  final CameraService? cameraService;
   @override
   @JsonKey()
   final bool isRecordingVideo;
@@ -154,7 +154,7 @@ class _$_CameraState implements _CameraState {
 
   @override
   String toString() {
-    return 'RecordingPageState(controller: $controller, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
+    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
   }
 
   @override
@@ -162,8 +162,8 @@ class _$_CameraState implements _CameraState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CameraState &&
-            (identical(other.controller, controller) ||
-                other.controller == controller) &&
+            (identical(other.cameraService, cameraService) ||
+                other.cameraService == cameraService) &&
             (identical(other.isRecordingVideo, isRecordingVideo) ||
                 other.isRecordingVideo == isRecordingVideo) &&
             (identical(other.videoFilePath, videoFilePath) ||
@@ -173,8 +173,8 @@ class _$_CameraState implements _CameraState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, controller, isRecordingVideo, videoFilePath, audioFilePath);
+  int get hashCode => Object.hash(runtimeType, cameraService, isRecordingVideo,
+      videoFilePath, audioFilePath);
 
   @JsonKey(ignore: true)
   @override
@@ -185,13 +185,13 @@ class _$_CameraState implements _CameraState {
 
 abstract class _CameraState implements RecordingPageState {
   const factory _CameraState(
-      {final CameraController? controller,
+      {final CameraService? cameraService,
       final bool isRecordingVideo,
       final String? videoFilePath,
       final String? audioFilePath}) = _$_CameraState;
 
   @override
-  CameraController? get controller;
+  CameraService? get cameraService;
   @override
   bool get isRecordingVideo;
   @override
