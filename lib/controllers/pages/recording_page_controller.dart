@@ -42,7 +42,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       addControllerListener(cameraController!);
       state = state.copyWith(controller: controller);
     } catch (e) {
-      Logger.logError('camera_provider_controller', e.toString());
+      Logger.logError('recording_page_controller:init', e.toString());
     }
   }
 
@@ -60,7 +60,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       }
     } catch (e) {
       Logger.logError(
-          'camera_provider_controller:start_audio_recording', e.toString());
+          'recording_page_controller:start_audio_recording', e.toString());
     }
   }
 
@@ -71,7 +71,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       await cameraController?.startVideoRecording();
     } on CameraException catch (e) {
       Logger.logError(
-          'camera_provider_controller:start_recording', e.toString());
+          'recording_page_controller:start_recording', e.toString());
     }
   }
 
@@ -83,7 +83,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFile?.path);
     } on CameraException catch (e) {
-      Logger.logError('camera_provider_controller', e.toString());
+      Logger.logError('recording_page_controller', e.toString());
     }
   }
 

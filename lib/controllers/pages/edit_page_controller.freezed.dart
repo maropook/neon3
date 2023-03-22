@@ -17,7 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EditPageState {
   bool get isPlaying => throw _privateConstructorUsedError;
-  VideoPlayerController? get controller => throw _privateConstructorUsedError;
+  VideoPlayerService? get videoPlayerService =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $EditPageStateCopyWith<$Res> {
           EditPageState value, $Res Function(EditPageState) then) =
       _$EditPageStateCopyWithImpl<$Res, EditPageState>;
   @useResult
-  $Res call({bool isPlaying, VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
 }
 
 /// @nodoc
@@ -47,17 +48,17 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
   @override
   $Res call({
     Object? isPlaying = null,
-    Object? controller = freezed,
+    Object? videoPlayerService = freezed,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+      videoPlayerService: freezed == videoPlayerService
+          ? _value.videoPlayerService
+          : videoPlayerService // ignore: cast_nullable_to_non_nullable
+              as VideoPlayerService?,
     ) as $Val);
   }
 }
@@ -70,7 +71,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       __$$_EditPageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isPlaying, VideoPlayerController? controller});
+  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
 }
 
 /// @nodoc
@@ -85,17 +86,17 @@ class __$$_EditPageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isPlaying = null,
-    Object? controller = freezed,
+    Object? videoPlayerService = freezed,
   }) {
     return _then(_$_EditPageState(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: freezed == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerController?,
+      videoPlayerService: freezed == videoPlayerService
+          ? _value.videoPlayerService
+          : videoPlayerService // ignore: cast_nullable_to_non_nullable
+              as VideoPlayerService?,
     ));
   }
 }
@@ -103,18 +104,19 @@ class __$$_EditPageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_EditPageState implements _EditPageState {
-  const _$_EditPageState({this.isPlaying = false, this.controller = null});
+  const _$_EditPageState(
+      {this.isPlaying = false, this.videoPlayerService = null});
 
   @override
   @JsonKey()
   final bool isPlaying;
   @override
   @JsonKey()
-  final VideoPlayerController? controller;
+  final VideoPlayerService? videoPlayerService;
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, controller: $controller)';
+    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService)';
   }
 
   @override
@@ -124,12 +126,12 @@ class _$_EditPageState implements _EditPageState {
             other is _$_EditPageState &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
-            (identical(other.controller, controller) ||
-                other.controller == controller));
+            (identical(other.videoPlayerService, videoPlayerService) ||
+                other.videoPlayerService == videoPlayerService));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isPlaying, controller);
+  int get hashCode => Object.hash(runtimeType, isPlaying, videoPlayerService);
 
   @JsonKey(ignore: true)
   @override
@@ -141,12 +143,12 @@ class _$_EditPageState implements _EditPageState {
 abstract class _EditPageState implements EditPageState {
   const factory _EditPageState(
       {final bool isPlaying,
-      final VideoPlayerController? controller}) = _$_EditPageState;
+      final VideoPlayerService? videoPlayerService}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
   @override
-  VideoPlayerController? get controller;
+  VideoPlayerService? get videoPlayerService;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>
