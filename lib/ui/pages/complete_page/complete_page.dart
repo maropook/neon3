@@ -34,7 +34,7 @@ class CompletePage extends StatelessWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final videoController =
+      final videoPlayerService =
           ref.watch(completePageProvider.select((s) => s.videoPlayerService));
       final completePageController = ref.read(completePageProvider.notifier);
       final isPlaying =
@@ -45,7 +45,7 @@ class CompletePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              videoController != null
+              videoPlayerService != null
                   ? SizedBox(
                       height: 300,
                       child: GestureDetector(
@@ -54,7 +54,7 @@ class CompletePage extends StatelessWidget {
                               ? completePageController.pause()
                               : completePageController.play();
                         },
-                        child: videoController.buildVideoPlayer(),
+                        child: videoPlayerService.buildVideoPlayer(),
                       ),
                     )
                   : const CircularProgressIndicator(),
