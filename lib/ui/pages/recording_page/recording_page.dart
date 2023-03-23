@@ -33,12 +33,27 @@ class RecordingPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final cameraService =
           ref.watch(recordingPageProvider.select((s) => s.cameraService));
+      final isAvatarActive =
+          ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
+      final current =
+          ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
 
       return cameraService != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [cameraService.buildCameraPreview(), _buildButton()],
+              children: [
+                cameraService.buildCameraPreview(),
+                _buildButton(),
+                Row(
+                  children: [
+                    Text(isAvatarActive.toString(),
+                        style: const TextStyle(color: Colors.white)),
+                    Text(current.toString(),
+                        style: const TextStyle(color: Colors.white)),
+                  ],
+                )
+              ],
             )
           : const CircularProgressIndicator();
     });
