@@ -33,6 +33,10 @@ dependencies:
     git:
       url: https://github.com/ini-siro/neon_video_encoder.git
       ref: refs/heads/fix/move_logic_plugin
+  neon_speech_to_text:
+    git:
+      url: https://github.com/maropook/neon_speech_to_text.git
+      ref: refs/heads/feature/#1/can_speech_to_text
 
 dev_dependencies:
   flutter_gen_runner: ^5.2.0

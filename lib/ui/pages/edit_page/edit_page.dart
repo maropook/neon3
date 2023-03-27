@@ -17,8 +17,10 @@ class EditPage extends ConsumerWidget {
     return ProviderScope(
       overrides: [
         editPageProvider.overrideWith((ref) => EditPageController(
-            videoFilePath: editPageArgs.videoFilePath,
-            audioFilePath: editPageArgs.audioFilePath))
+              videoFilePath: editPageArgs.videoFilePath,
+              audioFilePath: editPageArgs.audioFilePath,
+              activeFrames: editPageArgs.activeFrames,
+            ))
       ],
       child: Scaffold(
           appBar: AppBar(

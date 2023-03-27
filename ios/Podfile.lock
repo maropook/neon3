@@ -4,6 +4,8 @@ PODS:
   - camera_avfoundation (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - neon_speech_to_text (0.0.1):
+    - Flutter
   - neon_video_encoder (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -20,6 +22,7 @@ DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - Flutter (from `Flutter`)
+  - neon_speech_to_text (from `.symlinks/plugins/neon_speech_to_text/ios`)
   - neon_video_encoder (from `.symlinks/plugins/neon_video_encoder/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -33,6 +36,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   Flutter:
     :path: Flutter
+  neon_speech_to_text:
+    :path: ".symlinks/plugins/neon_speech_to_text/ios"
   neon_video_encoder:
     :path: ".symlinks/plugins/neon_video_encoder/ios"
   path_provider_foundation:
@@ -48,6 +53,7 @@ SPEC CHECKSUMS:
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  neon_speech_to_text: cd66c0df5349c170a5c59e5239219f810a024ce4
   neon_video_encoder: d30c03b76c6394a8c3d5209f7082067d11b63ed1
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0

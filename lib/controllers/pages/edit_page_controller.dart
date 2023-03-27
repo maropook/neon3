@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
+import 'package:maropook_neon2/services/speech_to_text_service.dart';
 import 'package:maropook_neon2/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'edit_page_controller.freezed.dart';
 
@@ -25,19 +27,31 @@ class EditPageController extends StateNotifier<EditPageState> {
   EditPageController({
     required String videoFilePath,
     required String audioFilePath,
+    required List<Map<String, double>> activeFrames,
   })  : _videoFilePath = videoFilePath,
         _audioFilePath = audioFilePath,
+        _activeFrames = activeFrames,
         super(const EditPageState()) {
     init();
   }
 
   final String _videoFilePath;
   final String _audioFilePath;
+  final List<Map<String, double>> _activeFrames;
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final SpeechToTextService _speechToTextService = SpeechToTextService();
   VideoPlayerService? _videoPlayerService;
+
+  List<Map<String, double>> sampleActiveFrames = [
+    {"startTime": 1.3, "endTime": 2.0},
+    {"startTime": 3.0, "endTime": 4.5}
+  ];
 
   Future<void> init() async {
     try {
+      // await _speechToTextService.speechToText();
+      // await _speechToTextService.buildTexts(_activeFrames, _audioFilePath);
+      await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath);
       _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         state = state.copyWith(isPlaying: _videoPlayerService!.isPlaying);

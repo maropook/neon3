@@ -72,12 +72,15 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     }
   }
 
+  Future<void> disposeTimer() async {
+    _frameTimer?.cancel();
+    _secondTimer?.cancel();
+  }
+
   @override
   void dispose() {
     _cameraService.dispose();
     _audioRecordService.dispose();
-    _frameTimer?.cancel();
-    _secondTimer?.cancel();
     super.dispose();
   }
 
@@ -87,7 +90,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   double startSeconds = 0.0;
   int _currentDetailedFrame = 0;
 
-  final double threshold = 20.0;
+  final double threshold = 10.0;
   final int fps = 60;
   int get spf => 1000 ~/ fps;
 
@@ -130,3 +133,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     }
   }
 }
+
+List<Map<String, double>> activeFrames = [
+  {"startTime": 1.3, "endTime": 2.0},
+  {"startTime": 3.0, "endTime": 4.5}
+];
