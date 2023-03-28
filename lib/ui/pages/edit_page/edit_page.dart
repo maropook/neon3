@@ -65,7 +65,8 @@ class EditPage extends ConsumerWidget {
                     ),
                   )
                 : const CircularProgressIndicator(),
-            for (int i = 0; i < texts.length; i++) Text(texts[i].word),
+            for (int i = 0; i < texts.length; i++)
+              Text("${texts[i].startTime}:${texts[i].word}"),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
