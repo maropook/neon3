@@ -17,16 +17,80 @@ class SpeechToTextService {
   FileService fileService = FileService();
   List<SubtitleText> texts = <SubtitleText>[];
 
-  Future<void> speechToTexts(
-      {required List<String> inputFilePathList,
-      required void Function() completeCallBack}) async {
-    try {
-      _neonSpeechToTextPlugin.setListener(
-          addListenersFunction: (LinkedHashMap map) async {
-        final String word = map.entries.first.value;
-        texts.add(SubtitleText(startTime: 0.0, endTime: 0.0, word: word));
-      });
+  Future<void> buildTexts(
+      List<Map<String, double>> activeFrames,
+      String audioFilePath,
+      void Function(List<SubtitleText> texts) completeCallBack) async {
+    final List<String> trimmedAudioFilePathList =
+        await trimAudio(activeFrames, audioFilePath);
+    if (trimmedAudioFilePathList.isEmpty) {
+      completeCallBack([]);
+      return;
+    }
+    if (trimmedAudioFilePathList.length != activeFrames.length) {
+      Logger.logError("build_texts",
+          "trimmedAudioFilePathList.length != activeFrames.length");
+      completeCallBack([]);
+      return;
+    }
+    await speechToTexts(
+        //音声がなかったらここでbadStateNoElementになる
+        activeFrames: activeFrames,
+        inputFilePathList: trimmedAudioFilePathList,
+        completeCallBack: completeCallBack);
 
+    //ここでtextsは返せない。completeCallBackでtextが作られるが作られるが、それを察知して自分でtextを取りに行くしかない
+  }
+
+  Future<List<String>> trimAudio(
+      List<Map<String, double>> activeFrames, String audioFilePath) async {
+    final List<String> trimmedAudioFilePathList = [];
+
+    final String voiceFilePath1 = (await fileService.saveFile(
+            inputFilePath: Assets.audio.voiceFile1,
+            outputFilePath: "audio1.mp3"))
+        .path;
+
+    for (int index = 0; index < activeFrames.length; ++index) {
+      final String trimmedAudioFilePath = await encodeService.trimAudio(
+        audioFilePath,
+        // voiceFilePath1,
+        await fileService.getTempFilePath('audio_$index.m4a'),
+        activeFrames[index]['startTime']!,
+        activeFrames[index]['endTime']!,
+      );
+      trimmedAudioFilePathList.add(trimmedAudioFilePath);
+    }
+    return trimmedAudioFilePathList;
+  }
+
+  Future<void> speechToTexts({
+    required List<Map<String, double>> activeFrames,
+    required List<String> inputFilePathList,
+    required void Function(List<SubtitleText> texts) completeCallBack,
+  }) async {
+    void setSubtitleTexts(List<String> speechTextsList) {
+      Logger.log("speechToTexts_complete_call_back", "complete");
+
+      if (activeFrames.length != speechTextsList.length) {
+        Logger.logError(
+            "build_texts", "speechTextsList.length != activeFrames.length");
+        completeCallBack([]);
+        return;
+      }
+      for (int index = 0; index < activeFrames.length; ++index) {
+        //completeしてからじゃなくて、addListenersCallBackでtexts.addしたほうがいいのか？
+        texts.add(SubtitleText(
+            startTime: activeFrames[index]['startTime']!,
+            endTime: activeFrames[index]['endTime']!,
+            word: speechTextsList[index]));
+        // Logger.log(
+        //     "speechToTexts_complete_call_back", speechTextsList[index]);
+        completeCallBack(texts);
+      }
+    }
+
+    try {
       final String voiceFilePath1 = (await fileService.saveFile(
               inputFilePath: Assets.audio.voiceFile1,
               outputFilePath: "audio1.mp3"))
@@ -41,26 +105,14 @@ class SpeechToTextService {
           .path;
 
       await _neonSpeechToTextPlugin.speechToTexts(
-        inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],
-        completeCallBack: () {
-          debugPrint("[speechToTexts]:complete speech_to_text");
-        },
-        // inputFilePathList: inputFilePathList,
+        // inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],
+        inputFilePathList: inputFilePathList, //TODO
+        completeCallBack: setSubtitleTexts,
+        addListenersFunction: (LinkedHashMap map) async {},
       );
     } on PlatformException catch (e) {
       debugPrint(e.toString());
     }
-  }
-
-  Future<List<SubtitleText>> buildTexts(
-      List<Map<String, double>> activeFrames, String audioFilePath) async {
-    final List<String> trimmedAudioFilePathList =
-        await trimAudio(activeFrames, audioFilePath);
-
-    await speechToTexts(
-        inputFilePathList: trimmedAudioFilePathList, completeCallBack: () {});
-
-    return texts;
   }
 
   final List<SubtitleText> subtitleTexts = [
@@ -77,19 +129,4 @@ class SpeechToTextService {
       // voiceFilePath: voiceFilePath2
     ),
   ];
-
-  Future<List<String>> trimAudio(
-      List<Map<String, double>> activeFrames, String audioFilePath) async {
-    final List<String> trimmedAudioFilePathList = [];
-    for (int index = 0; index < activeFrames.length; ++index) {
-      final String trimmedAudioFilePath = await encodeService.trimAudio(
-        audioFilePath,
-        await fileService.getTempFilePath('audio_$index.m4a'),
-        activeFrames[index]['startTime']!,
-        activeFrames[index]['endTime']!,
-      );
-      trimmedAudioFilePathList.add(trimmedAudioFilePath);
-    }
-    return trimmedAudioFilePathList;
-  }
 }

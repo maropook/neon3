@@ -15,6 +15,7 @@ class EditPageState with _$EditPageState {
   const factory EditPageState({
     @Default(false) bool isPlaying,
     @Default(null) VideoPlayerService? videoPlayerService,
+    @Default([]) List<SubtitleText> subtitleTexts,
   }) = _EditPageState;
 }
 
@@ -43,15 +44,18 @@ class EditPageController extends StateNotifier<EditPageState> {
   VideoPlayerService? _videoPlayerService;
 
   List<Map<String, double>> sampleActiveFrames = [
-    {"startTime": 1.3, "endTime": 2.0},
-    {"startTime": 3.0, "endTime": 4.5}
+    {"startTime": 0, "endTime": 1.0},
+    {"startTime": 0, "endTime": 1.0},
+    {"startTime": 0, "endTime": 1.5}
   ];
 
   Future<void> init() async {
     try {
-      // await _speechToTextService.speechToText();
-      // await _speechToTextService.buildTexts(_activeFrames, _audioFilePath);
-      await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath);
+      // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,
+      await _speechToTextService.buildTexts(_activeFrames, _audioFilePath,
+          (List<SubtitleText> texts) {
+        state = state.copyWith(subtitleTexts: texts);
+      });
       _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         state = state.copyWith(isPlaying: _videoPlayerService!.isPlaying);

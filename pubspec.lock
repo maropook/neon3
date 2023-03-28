@@ -613,10 +613,10 @@ packages:
     description:
       path: "."
       ref: "refs/heads/feature/#1/can_speech_to_text"
-      resolved-ref: ed2623a2ea0c5e9cbc59b2b698846cff8d9344d8
+      resolved-ref: "2e58cb53976b2b186a8773375f96487c6da01f4d"
       url: "https://github.com/maropook/neon_speech_to_text.git"
     source: git
-    version: "0.0.3"
+    version: "0.0.9"
   neon_video_encoder:
     dependency: "direct main"
     description:
