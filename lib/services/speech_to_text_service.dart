@@ -12,6 +12,21 @@ import 'package:neon_video_encoder/subtitle_text.dart';
 class SpeechToTextService {
   SpeechToTextService();
 
+  final List<SubtitleText> subtitleTexts = [
+    SubtitleText(
+      startTime: 1.0,
+      endTime: 2.0,
+      word: "word1",
+      // voiceFilePath: voiceFilePath1
+    ),
+    SubtitleText(
+      startTime: 2.0,
+      endTime: 3.0,
+      word: "word2",
+      // voiceFilePath: voiceFilePath2
+    ),
+  ];
+
   final NeonSpeechToText _neonSpeechToTextPlugin = NeonSpeechToText();
   EncodeService encodeService = EncodeService();
   FileService fileService = FileService();
@@ -23,10 +38,18 @@ class SpeechToTextService {
       void Function(List<SubtitleText> texts) completeCallBack) async {
     final List<String> trimmedAudioFilePathList =
         await trimAudio(activeFrames, audioFilePath);
-    if (trimmedAudioFilePathList.isEmpty) {
-      completeCallBack([]);
+    // if (trimmedAudioFilePathList.isEmpty) {
+    //   completeCallBack([]);
+    //   return;
+    // }
+
+    //TODO:一旦activeFramesとsubtitleTextはサンプルの値にする
+    if (true) {
+      completeCallBack(subtitleTexts);
       return;
     }
+    //TODO:一旦activeFramesとsubtitleTextはサンプルの値にする
+
     if (trimmedAudioFilePathList.length != activeFrames.length) {
       Logger.logError("build_texts",
           "trimmedAudioFilePathList.length != activeFrames.length");
@@ -114,19 +137,4 @@ class SpeechToTextService {
       debugPrint(e.toString());
     }
   }
-
-  final List<SubtitleText> subtitleTexts = [
-    SubtitleText(
-      startTime: 1.0,
-      endTime: 2.0,
-      word: "word1",
-      // voiceFilePath: voiceFilePath1
-    ),
-    SubtitleText(
-      startTime: 2.0,
-      endTime: 3.0,
-      word: "word2",
-      // voiceFilePath: voiceFilePath2
-    ),
-  ];
 }
