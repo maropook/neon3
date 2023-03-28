@@ -119,11 +119,9 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     if (state.isAvatarActive == isAvatarActive) return;
 
     state = state.copyWith(isAvatarActive: isAvatarActive);
-    final double currentMillSeconds =
-        1000 / (_currentDetailedFrame * spf); //TODO: currentMillSecondsがバグる
-    print(currentMillSeconds);
-    final double currentSeconds = state.currentSeconds + 0;
-    // final double currentSeconds = state.currentSeconds + currentMillSeconds;
+    final double currentMillSeconds = 0.001 * (_currentDetailedFrame * spf);
+
+    final double currentSeconds = state.currentSeconds + currentMillSeconds;
 
     if (isAvatarActive) {
       startSeconds = currentSeconds;
