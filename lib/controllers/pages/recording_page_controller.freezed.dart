@@ -20,6 +20,10 @@ mixin _$RecordingPageState {
   bool get isRecordingVideo => throw _privateConstructorUsedError;
   String? get videoFilePath => throw _privateConstructorUsedError;
   String? get audioFilePath => throw _privateConstructorUsedError;
+  double get currentSeconds => throw _privateConstructorUsedError;
+  bool get isAvatarActive => throw _privateConstructorUsedError;
+  List<Map<String, double>> get activeFrames =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RecordingPageStateCopyWith<RecordingPageState> get copyWith =>
@@ -36,7 +40,10 @@ abstract class $RecordingPageStateCopyWith<$Res> {
       {CameraService? cameraService,
       bool isRecordingVideo,
       String? videoFilePath,
-      String? audioFilePath});
+      String? audioFilePath,
+      double currentSeconds,
+      bool isAvatarActive,
+      List<Map<String, double>> activeFrames});
 }
 
 /// @nodoc
@@ -56,6 +63,9 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
     Object? isRecordingVideo = null,
     Object? videoFilePath = freezed,
     Object? audioFilePath = freezed,
+    Object? currentSeconds = null,
+    Object? isAvatarActive = null,
+    Object? activeFrames = null,
   }) {
     return _then(_value.copyWith(
       cameraService: freezed == cameraService
@@ -74,6 +84,18 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
           ? _value.audioFilePath
           : audioFilePath // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentSeconds: null == currentSeconds
+          ? _value.currentSeconds
+          : currentSeconds // ignore: cast_nullable_to_non_nullable
+              as double,
+      isAvatarActive: null == isAvatarActive
+          ? _value.isAvatarActive
+          : isAvatarActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      activeFrames: null == activeFrames
+          ? _value.activeFrames
+          : activeFrames // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, double>>,
     ) as $Val);
   }
 }
@@ -90,7 +112,10 @@ abstract class _$$_CameraStateCopyWith<$Res>
       {CameraService? cameraService,
       bool isRecordingVideo,
       String? videoFilePath,
-      String? audioFilePath});
+      String? audioFilePath,
+      double currentSeconds,
+      bool isAvatarActive,
+      List<Map<String, double>> activeFrames});
 }
 
 /// @nodoc
@@ -108,6 +133,9 @@ class __$$_CameraStateCopyWithImpl<$Res>
     Object? isRecordingVideo = null,
     Object? videoFilePath = freezed,
     Object? audioFilePath = freezed,
+    Object? currentSeconds = null,
+    Object? isAvatarActive = null,
+    Object? activeFrames = null,
   }) {
     return _then(_$_CameraState(
       cameraService: freezed == cameraService
@@ -126,6 +154,18 @@ class __$$_CameraStateCopyWithImpl<$Res>
           ? _value.audioFilePath
           : audioFilePath // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentSeconds: null == currentSeconds
+          ? _value.currentSeconds
+          : currentSeconds // ignore: cast_nullable_to_non_nullable
+              as double,
+      isAvatarActive: null == isAvatarActive
+          ? _value.isAvatarActive
+          : isAvatarActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      activeFrames: null == activeFrames
+          ? _value._activeFrames
+          : activeFrames // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, double>>,
     ));
   }
 }
@@ -137,7 +177,11 @@ class _$_CameraState implements _CameraState {
       {this.cameraService = null,
       this.isRecordingVideo = false,
       this.videoFilePath = null,
-      this.audioFilePath = null});
+      this.audioFilePath = null,
+      this.currentSeconds = 0.0,
+      this.isAvatarActive = false,
+      final List<Map<String, double>> activeFrames = const []})
+      : _activeFrames = activeFrames;
 
   @override
   @JsonKey()
@@ -151,10 +195,24 @@ class _$_CameraState implements _CameraState {
   @override
   @JsonKey()
   final String? audioFilePath;
+  @override
+  @JsonKey()
+  final double currentSeconds;
+  @override
+  @JsonKey()
+  final bool isAvatarActive;
+  final List<Map<String, double>> _activeFrames;
+  @override
+  @JsonKey()
+  List<Map<String, double>> get activeFrames {
+    if (_activeFrames is EqualUnmodifiableListView) return _activeFrames;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_activeFrames);
+  }
 
   @override
   String toString() {
-    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath)';
+    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath, currentSeconds: $currentSeconds, isAvatarActive: $isAvatarActive, activeFrames: $activeFrames)';
   }
 
   @override
@@ -169,12 +227,25 @@ class _$_CameraState implements _CameraState {
             (identical(other.videoFilePath, videoFilePath) ||
                 other.videoFilePath == videoFilePath) &&
             (identical(other.audioFilePath, audioFilePath) ||
-                other.audioFilePath == audioFilePath));
+                other.audioFilePath == audioFilePath) &&
+            (identical(other.currentSeconds, currentSeconds) ||
+                other.currentSeconds == currentSeconds) &&
+            (identical(other.isAvatarActive, isAvatarActive) ||
+                other.isAvatarActive == isAvatarActive) &&
+            const DeepCollectionEquality()
+                .equals(other._activeFrames, _activeFrames));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, cameraService, isRecordingVideo,
-      videoFilePath, audioFilePath);
+  int get hashCode => Object.hash(
+      runtimeType,
+      cameraService,
+      isRecordingVideo,
+      videoFilePath,
+      audioFilePath,
+      currentSeconds,
+      isAvatarActive,
+      const DeepCollectionEquality().hash(_activeFrames));
 
   @JsonKey(ignore: true)
   @override
@@ -188,7 +259,10 @@ abstract class _CameraState implements RecordingPageState {
       {final CameraService? cameraService,
       final bool isRecordingVideo,
       final String? videoFilePath,
-      final String? audioFilePath}) = _$_CameraState;
+      final String? audioFilePath,
+      final double currentSeconds,
+      final bool isAvatarActive,
+      final List<Map<String, double>> activeFrames}) = _$_CameraState;
 
   @override
   CameraService? get cameraService;
@@ -198,6 +272,12 @@ abstract class _CameraState implements RecordingPageState {
   String? get videoFilePath;
   @override
   String? get audioFilePath;
+  @override
+  double get currentSeconds;
+  @override
+  bool get isAvatarActive;
+  @override
+  List<Map<String, double>> get activeFrames;
   @override
   @JsonKey(ignore: true)
   _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>

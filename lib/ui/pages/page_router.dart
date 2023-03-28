@@ -47,7 +47,7 @@ class PageRouter {
     GoRoute(
       path: '/encoding',
       builder: (BuildContext context, GoRouterState state) {
-        return EncodePage(editPageArgs: state.extra as EditPageArgs);
+        return EncodePage(encodePageArgs: state.extra as EditPageArgs);
       },
     ),
     GoRoute(

@@ -6,17 +6,17 @@ import 'package:maropook_neon2/controllers/pages/encode_page_controller.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 
 class EncodePage extends ConsumerWidget {
-  const EncodePage({required this.editPageArgs, super.key});
+  const EncodePage({required this.encodePageArgs, super.key});
 
-  final EditPageArgs editPageArgs;
+  final EditPageArgs encodePageArgs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
         encodePageProvider.overrideWith((ref) => EncodeController(
-            videoFilePath: editPageArgs.videoFilePath,
-            audioFilePath: editPageArgs.audioFilePath))
+            videoFilePath: encodePageArgs.videoFilePath,
+            audioFilePath: encodePageArgs.audioFilePath))
       ],
       child: Scaffold(
           backgroundColor: Colors.black,
@@ -26,14 +26,17 @@ class EncodePage extends ConsumerWidget {
               IconButton(
                   onPressed: () => context.go(
                         '/complete',
-                        extra: editPageArgs.videoFilePath,
+                        extra: encodePageArgs.videoFilePath,
                       ),
                   icon: const Icon(Icons.chevron_right)),
             ],
             leading: IconButton(
                 onPressed: () => context.go(
                       '/edit',
-                      extra: editPageArgs,
+                      extra: EditPageArgs(
+                          audioFilePath: encodePageArgs.audioFilePath,
+                          videoFilePath: encodePageArgs.videoFilePath,
+                          activeFrames: encodePageArgs.activeFrames),
                     ),
                 icon: const Icon(Icons.chevron_left)),
           ),

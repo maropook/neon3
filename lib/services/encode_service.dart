@@ -1,24 +1,20 @@
-import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
+import 'package:maropook_neon2/services/file_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:neon_video_encoder/audio_setting.dart';
 import 'package:neon_video_encoder/avatar_animation.dart';
 import 'package:neon_video_encoder/neon_video_encoder.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class EncodeService {
   EncodeService();
-  late String audioPath;
-  late String mergedAudioPath;
+
+  final FileService fileService = FileService();
 
   Future<String> imageToVideo() async {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
-    String imagePath = (await saveFile(
+    String imagePath = (await fileService.saveFile(
             inputFilePath: Assets.images.testBackground.path,
             outputFilePath: "test.png"))
         .path;
@@ -26,18 +22,18 @@ class EncodeService {
     final String videoFilePath = await neonVideoEncoder.imageToVideo(
       sourceImagePath: imagePath,
       videoDuration: const Duration(seconds: 30),
-      outputFilePath: await getTempFilePath('image-to-movie.mp4'),
+      outputFilePath: await fileService.getTempFilePath('image-to-movie.mp4'),
     );
     return videoFilePath;
   }
 
-  Future<void> mergeAudio() async {
+  Future<String> mergeAudio() async {
     NeonVoiceFileList neonVoiceFileList = NeonVoiceFileList();
-    String voiceFilePath1 = (await saveFile(
+    String voiceFilePath1 = (await fileService.saveFile(
             inputFilePath: Assets.audio.voiceFile1,
             outputFilePath: "audio1.mp3"))
         .path;
-    String voiceFilePath2 = (await saveFile(
+    String voiceFilePath2 = (await fileService.saveFile(
             inputFilePath: Assets.audio.voiceFile2,
             outputFilePath: "audio2.mp3"))
         .path;
@@ -55,25 +51,28 @@ class EncodeService {
       Logger.log('encode', 'mergeAudio  =>  $progressRate %');
     });
 
-    final String ttsAudioFilePath = await neonVideoEncoder.mergeAudio(
-        outputFilePath: await getTempFilePath('merge-audio.m4a'),
+    final String mergedAudioFilePath = await neonVideoEncoder.mergeAudio(
+        outputFilePath: await fileService.getTempFilePath('merge-audio.m4a'),
         voiceFileList: neonVoiceFileList);
 
-    mergedAudioPath = ttsAudioFilePath;
+    return mergedAudioFilePath;
   }
 
-  Future<void> trimAudio() async {
+  Future<String> trimAudio(String audioFilePath, String outPutFilePath,
+      double startTime, double endTime) async {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
     neonVideoEncoder.getProgressStatus.listen((dynamic value) {
       Logger.log('sttService', 'trimAudio');
     });
-    audioPath = await neonVideoEncoder.trimAudio(
-      inputFilePath: mergedAudioPath,
-      outputFilePath: await getTempFilePath('trim-audio.m4a'),
-      startTime: 0.0,
-      endTime: 40.0,
+    final String trimmedAudioFilePath = await neonVideoEncoder.trimAudio(
+      inputFilePath: audioFilePath,
+      outputFilePath:
+          outPutFilePath, // await getTempFilePath('trim-audio.m4a'),
+      startTime: startTime, //0.0,
+      endTime: endTime, //40.0,
     );
+    return trimmedAudioFilePath;
   }
 
   Future<String> encode({
@@ -81,15 +80,16 @@ class EncodeService {
     required String audioFilePath,
     required void Function(dynamic value) addListenersFunction,
   }) async {
-    await mergeAudio();
-    await trimAudio();
+    final String mergedAudioFilePath = await mergeAudio();
+    final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
+        await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
-    String voiceFilePath1 = (await saveFile(
+    String voiceFilePath1 = (await fileService.saveFile(
             inputFilePath: Assets.audio.voiceFile1,
             outputFilePath: "audio1.mp3"))
         .path;
-    String voiceFilePath2 = (await saveFile(
+    String voiceFilePath2 = (await fileService.saveFile(
             inputFilePath: Assets.audio.voiceFile2,
             outputFilePath: "audio2.mp3"))
         .path;
@@ -109,11 +109,11 @@ class EncodeService {
     ];
 
     // AvatarAnimation
-    final String activeImagePath = (await saveFile(
+    final String activeImagePath = (await fileService.saveFile(
             inputFilePath: Assets.images.avatarActive.path,
             outputFilePath: 'active_avatar.png'))
         .path;
-    final String stopImagePath = (await saveFile(
+    final String stopImagePath = (await fileService.saveFile(
             inputFilePath: Assets.images.avatarStop.path,
             outputFilePath: 'stop_avatar.png'))
         .path;
@@ -132,7 +132,7 @@ class EncodeService {
         positionX: 0.5);
 
     //AudioSetting
-    final musicFilePath = (await saveFile(
+    final musicFilePath = (await fileService.saveFile(
             inputFilePath: Assets.audio.musicFile,
             outputFilePath: 'music_file.mp3'))
         .path;
@@ -164,31 +164,9 @@ class EncodeService {
       encodeArgs: encodeArgs,
       // inputFilePath: await imageToVideo(),
       inputFilePath: videoFilePath,
-      outputFilePath: await getTempFilePath('video-with-audio.mp4'),
+      outputFilePath: await fileService.getTempFilePath('video-with-audio.mp4'),
     );
 
     return encodedVideoFilePath;
   }
-}
-
-Future<String> getTempFilePath(String fileName) async {
-  final Directory documentsDirectory = await getTemporaryDirectory();
-  return '${documentsDirectory.path}/$fileName';
-}
-
-Future<File> saveFile({
-  required String inputFilePath,
-  required String outputFilePath,
-}) async {
-  final ByteData assetByteData = await rootBundle.load(inputFilePath);
-
-  final List<int> byteList = assetByteData.buffer
-      .asUint8List(assetByteData.offsetInBytes, assetByteData.lengthInBytes);
-
-  final String fullOutputFilePath =
-      join((await getApplicationDocumentsDirectory()).path, outputFilePath);
-  final File fileFuture = await File(fullOutputFilePath)
-      .writeAsBytes(byteList, mode: FileMode.writeOnly, flush: false);
-
-  return fileFuture;
 }

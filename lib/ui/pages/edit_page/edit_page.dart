@@ -6,6 +6,7 @@ import 'package:maropook_neon2/controllers/pages/edit_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/themes/styles.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 import 'package:video_player/video_player.dart';
 
 class EditPage extends ConsumerWidget {
@@ -17,8 +18,10 @@ class EditPage extends ConsumerWidget {
     return ProviderScope(
       overrides: [
         editPageProvider.overrideWith((ref) => EditPageController(
-            videoFilePath: editPageArgs.videoFilePath,
-            audioFilePath: editPageArgs.audioFilePath))
+              videoFilePath: editPageArgs.videoFilePath,
+              audioFilePath: editPageArgs.audioFilePath,
+              activeFrames: editPageArgs.activeFrames,
+            ))
       ],
       child: Scaffold(
           appBar: AppBar(
@@ -43,6 +46,8 @@ class EditPage extends ConsumerWidget {
           ref.watch(editPageProvider.select((s) => s.videoPlayerService));
       final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,6 +65,8 @@ class EditPage extends ConsumerWidget {
                     ),
                   )
                 : const CircularProgressIndicator(),
+            for (int i = 0; i < texts.length; i++)
+              Text("${texts[i].startTime}:${texts[i].word}"),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

@@ -19,6 +19,7 @@ mixin _$EditPageState {
   bool get isPlaying => throw _privateConstructorUsedError;
   VideoPlayerService? get videoPlayerService =>
       throw _privateConstructorUsedError;
+  List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -31,7 +32,10 @@ abstract class $EditPageStateCopyWith<$Res> {
           EditPageState value, $Res Function(EditPageState) then) =
       _$EditPageStateCopyWithImpl<$Res, EditPageState>;
   @useResult
-  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
+  $Res call(
+      {bool isPlaying,
+      VideoPlayerService? videoPlayerService,
+      List<SubtitleText> subtitleTexts});
 }
 
 /// @nodoc
@@ -49,6 +53,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
   $Res call({
     Object? isPlaying = null,
     Object? videoPlayerService = freezed,
+    Object? subtitleTexts = null,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
@@ -59,6 +64,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
               as VideoPlayerService?,
+      subtitleTexts: null == subtitleTexts
+          ? _value.subtitleTexts
+          : subtitleTexts // ignore: cast_nullable_to_non_nullable
+              as List<SubtitleText>,
     ) as $Val);
   }
 }
@@ -71,7 +80,10 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       __$$_EditPageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
+  $Res call(
+      {bool isPlaying,
+      VideoPlayerService? videoPlayerService,
+      List<SubtitleText> subtitleTexts});
 }
 
 /// @nodoc
@@ -87,6 +99,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
   $Res call({
     Object? isPlaying = null,
     Object? videoPlayerService = freezed,
+    Object? subtitleTexts = null,
   }) {
     return _then(_$_EditPageState(
       isPlaying: null == isPlaying
@@ -97,6 +110,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
               as VideoPlayerService?,
+      subtitleTexts: null == subtitleTexts
+          ? _value._subtitleTexts
+          : subtitleTexts // ignore: cast_nullable_to_non_nullable
+              as List<SubtitleText>,
     ));
   }
 }
@@ -105,7 +122,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
 
 class _$_EditPageState implements _EditPageState {
   const _$_EditPageState(
-      {this.isPlaying = false, this.videoPlayerService = null});
+      {this.isPlaying = false,
+      this.videoPlayerService = null,
+      final List<SubtitleText> subtitleTexts = const []})
+      : _subtitleTexts = subtitleTexts;
 
   @override
   @JsonKey()
@@ -113,10 +133,18 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final VideoPlayerService? videoPlayerService;
+  final List<SubtitleText> _subtitleTexts;
+  @override
+  @JsonKey()
+  List<SubtitleText> get subtitleTexts {
+    if (_subtitleTexts is EqualUnmodifiableListView) return _subtitleTexts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_subtitleTexts);
+  }
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService)';
+    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, subtitleTexts: $subtitleTexts)';
   }
 
   @override
@@ -127,11 +155,14 @@ class _$_EditPageState implements _EditPageState {
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
-                other.videoPlayerService == videoPlayerService));
+                other.videoPlayerService == videoPlayerService) &&
+            const DeepCollectionEquality()
+                .equals(other._subtitleTexts, _subtitleTexts));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isPlaying, videoPlayerService);
+  int get hashCode => Object.hash(runtimeType, isPlaying, videoPlayerService,
+      const DeepCollectionEquality().hash(_subtitleTexts));
 
   @JsonKey(ignore: true)
   @override
@@ -143,12 +174,15 @@ class _$_EditPageState implements _EditPageState {
 abstract class _EditPageState implements EditPageState {
   const factory _EditPageState(
       {final bool isPlaying,
-      final VideoPlayerService? videoPlayerService}) = _$_EditPageState;
+      final VideoPlayerService? videoPlayerService,
+      final List<SubtitleText> subtitleTexts}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
   @override
   VideoPlayerService? get videoPlayerService;
+  @override
+  List<SubtitleText> get subtitleTexts;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>
