@@ -55,7 +55,7 @@ class RecordingPage extends ConsumerWidget {
                 )
               ],
             )
-          : const CircularProgressIndicator();
+          : const Center(child: CircularProgressIndicator());
     });
   }
 

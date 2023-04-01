@@ -66,5 +66,9 @@
 	<string>This app requires to access your photo library</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
     <string>This permission is required to use voice analysis.</string>
+	<key>FirebaseScreenReportingEnabled</key>
+    <false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>撮影した写真を保存します</string>
 </dict>
 </plist>
