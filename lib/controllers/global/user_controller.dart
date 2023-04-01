@@ -29,42 +29,37 @@ class UserController extends StateNotifier<UserState> {
 
   void anonymous() async {
     state = state.copyWith(isAnonymous: true);
-    // _listen();
   }
 
   Future<void> init() async {
-    // _listen();
-    state = state.copyWith(isAnonymous: null);
+    addListen();
   }
 
-  void _listen() {
+  void addListen() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      state = state.copyWith(isAnonymous: user?.isAnonymous, user: user);
       switch (user?.isAnonymous) {
         case null:
-          state = state.copyWith(loginMessage: 'メールアドレスが無効です');
+          state = state.copyWith(loginMessage: 'ログインしてください');
           break;
         case true:
-          state = state.copyWith(
-              loginMessage: '匿名認証', isAnonymous: user!.isAnonymous);
+          state = state.copyWith(loginMessage: '匿名認証中です');
           break;
         case false:
-          state = state.copyWith(
-              loginMessage: 'ログイン中:${user!.email}',
-              isAnonymous: user.isAnonymous);
+          state = state.copyWith(loginMessage: 'ログイン中です:${user!.email}');
           break;
         default:
-          state = state.copyWith(
-              loginMessage: 'listen:default', isAnonymous: user?.isAnonymous);
+          state = state.copyWith(loginMessage: 'call listen:default');
       }
     });
   }
 
-  void _signIn(String id, String pass) async {
+  Future<void> signIn(String id, String pass) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: id, password: pass);
 
-      state = state.copyWith(user: credential.user, loginMessage: 'サインインできました');
+      state = state.copyWith(user: credential.user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'invalid-email':
@@ -84,16 +79,14 @@ class UserController extends StateNotifier<UserState> {
     }
   }
 
-  void _signUp(String id, String pass) async {
+  Future<void> signUp(String id, String pass) async {
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: id,
-        password: pass,
-      );
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: id, password: pass);
 
-      state =
-          state.copyWith(loginMessage: 'アカウント作成に成功しました', user: credential.user);
+      state = state.copyWith(
+          loginMessage: 'アカウント作成に成功${credential.user!.email!}',
+          user: credential.user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'weak-password':
@@ -110,16 +103,15 @@ class UserController extends StateNotifier<UserState> {
     }
   }
 
-  void _signOut(WidgetRef ref) async {
+  Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     state = state.copyWith(loginMessage: 'サインインまたはアカウントを作成してください');
   }
 
-  Future<void> _signInAnonymously(WidgetRef ref) async {
+  Future<void> signInAnonymously() async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     try {
       final credential = await firebaseAuth.signInAnonymously();
-
       state =
           state.copyWith(user: credential.user, loginMessage: '匿名認証に成功しました');
     } catch (e) {
@@ -128,17 +120,16 @@ class UserController extends StateNotifier<UserState> {
     }
   }
 
-  Future<void> _linkWithCredential(String email, String password) async {
-    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    final user = firebaseAuth.currentUser;
-
+  Future<void> linkWithCredential(String email, String password) async {
+    final user = FirebaseAuth.instance.currentUser;
     if (user != null && user.isAnonymous) {
       try {
         final AuthCredential authCredential =
             EmailAuthProvider.credential(email: email, password: password);
         final credential = await user.linkWithCredential(authCredential);
         state = state.copyWith(
-            user: credential.user, loginMessage: '匿名アカウントとのリンクに成功しました');
+            user: credential.user,
+            loginMessage: '匿名アカウントとのリンクに成功${credential.user!.email!}');
       } catch (e) {
         state = state.copyWith(loginMessage: '匿名アカウントのリンクエラー$e');
         Logger.log("user_controller:link_with_credential", e.toString());
