@@ -9,8 +9,6 @@ part 'user_controller.freezed.dart';
 class UserState with _$UserState {
   factory UserState({
     @Default('') String loginMessage,
-    @Default('') String email,
-    @Default('') String password,
     @Default('') String uid,
     @Default(null) User? user,
     @Default(null) bool? isAnonymous, //nullの場合は匿名でもなくログインしていない
