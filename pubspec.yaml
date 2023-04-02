@@ -20,6 +20,7 @@ dependencies:
   # firebase_crashlytics: ^3.0.6
   # firebase_messaging: ^14.1.1
   firebase_storage: ^11.0.6
+  cloud_firestore: ^4.5.0
 
   flutter_svg: ^1.1.6
   flutter_hooks: ^0.18.0

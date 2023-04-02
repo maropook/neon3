@@ -78,7 +78,8 @@ final routerProvider = Provider((ref) {
       if (isAnonymous == null) {
         return state.subloc == '/login' ? null : '/login';
       }
-      return '/';
+      return null;
+      return '/'; //これだと/かloginのページしか行けない(画面遷移ができない)
     },
   );
 });
