@@ -24,6 +24,7 @@ dependencies:
 
   flutter_svg: ^1.1.6
   flutter_hooks: ^0.18.0
+  freezed_annotation: ^2.0.3
   hooks_riverpod: ^2.1.1
   go_router: ^5.2.2
   url_strategy: ^0.2.0
@@ -38,6 +39,7 @@ dependencies:
   record: ^4.4.0
   audioplayers: ^1.0.1
   image_picker: ^0.8.5
+  uuid: ^3.0.6
 
   neon_video_encoder:
     git:

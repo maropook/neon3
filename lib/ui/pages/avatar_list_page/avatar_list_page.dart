@@ -49,19 +49,19 @@ class AvatarListPage extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              firestoreService.setDoc();
+              firestoreService.addAvatar();
             },
             child: const Icon(Icons.download),
           ),
           ElevatedButton(
             onPressed: () {
-              firestoreService.getDoc();
+              firestoreService.fetch();
             },
             child: const Icon(Icons.download),
           ),
           ElevatedButton(
             onPressed: () {
-              firestoreService.deleteDoc();
+              firestoreService.deleteAvatar(uuid: '');
             },
             child: const Icon(Icons.download),
           ),
