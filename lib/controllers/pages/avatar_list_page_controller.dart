@@ -6,11 +6,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/services/fire_avatar_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 part 'avatar_list_page_controller.freezed.dart';
 
@@ -32,49 +34,42 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
   }
 
   Future<void> init() async {
-    fetchAvatars();
+    await fetchAvatars();
   }
 
   final FireAvatarService fireAvatarService = FireAvatarService();
-  final userID = FirebaseAuth.instance.currentUser?.uid ??
+  final uid = FirebaseAuth.instance.currentUser?.uid ??
       'no_account'; //currentUser==nullのときは匿名認証すらしていない
 
-  void uploadPic() async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      File file = File(image!.path);
-      print(image.path.split('/').last);
+  final ImagePicker picker = ImagePicker();
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final Uuid uuid = const Uuid();
 
-      String uploadName = 'image.png';
-      final storageRef =
-          FirebaseStorage.instance.ref().child('users/$userID/$uploadName');
-      await storageRef.putFile(file);
+  Future<String?> uploadImage({required String id}) async {
+    final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImageFile == null) return null;
+    final croppedImageFile = await ImageCropper().cropImage(
+      sourcePath: pickedImageFile.path,
+      compressQuality: 80,
+      maxWidth: 1024,
+      maxHeight: 1024,
+    );
+    if (croppedImageFile == null) return null;
+    final File imageFile = File(croppedImageFile.path);
+    final Reference ref = storage.ref("users/$uid/$id/${id}.jpg");
+    try {
+      await ref.putFile(imageFile);
     } catch (e) {
-      Logger.logError('upload_pic', e.toString());
+      Logger.logError('upload_image', e.toString());
     }
+
+    return ref.getDownloadURL();
   }
 
-  void downloadPic() async {
+  Future<void> deleteImage({required String id}) async {
     try {
-      /// 参照の作成
-      String downloadName = 'image.png';
       final storageRef =
-          FirebaseStorage.instance.ref().child('users/$userID/$downloadName');
-
-      // const oneMegabyte = 1024 * 1024;
-      const oneMegabyte = 2048 * 2048;
-      state = state.copyWith(image: await storageRef.getData(oneMegabyte));
-    } catch (e) {
-      Logger.logError('download_pic', e.toString());
-    }
-  }
-
-  void deletePic() async {
-    try {
-      String deleteName = 'image.png';
-      final storageRef =
-          FirebaseStorage.instance.ref().child('users/$userID/$deleteName');
+          FirebaseStorage.instance.ref().child('users/$uid/$id/${id}.jpg');
       await storageRef.delete();
       state = state.copyWith(image: null);
     } catch (e) {
@@ -82,20 +77,23 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     }
   }
 
+  Future<List<Avatar>> fetchAvatars() async {
+    List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
+    state = state.copyWith(avatarList: avatarList);
+
+    return avatarList;
+  }
+
   Future<void> addNewAvatar({required Avatar avatar}) async {
+    final imageUrl = await uploadImage(id: avatar.id);
+    if (imageUrl == null) return;
+    avatar =
+        avatar.copyWith(activeImagePath: imageUrl, stopImagePath: imageUrl);
     await fireAvatarService.addNewAvatar(avatar: avatar);
 
     state = state.copyWith(
       avatarList: [avatar, ...state.avatarList],
     );
-  }
-
-  Future<void> deleteAvatar({required String id}) async {
-    await fireAvatarService.deleteAvatar(id: id);
-    final List<Avatar> avatarList =
-        state.avatarList.where((avatar) => avatar.id != id).toList();
-
-    state = state.copyWith(avatarList: avatarList);
   }
 
   Future<void> updateAvatar(
@@ -109,10 +107,11 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     state = state.copyWith(avatarList: avatarList);
   }
 
-  Future<List<Avatar>> fetchAvatars() async {
-    List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
+  Future<void> deleteAvatar({required String id}) async {
+    await fireAvatarService.deleteAvatar(id: id);
+    final List<Avatar> avatarList =
+        state.avatarList.where((avatar) => avatar.id != id).toList();
+    await deleteImage(id: id);
     state = state.copyWith(avatarList: avatarList);
-
-    return avatarList;
   }
 }

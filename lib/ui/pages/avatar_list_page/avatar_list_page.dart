@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 import 'package:uuid/uuid.dart';
 
 class AvatarListPage extends ConsumerWidget {
@@ -10,8 +11,6 @@ class AvatarListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final image = ref.watch(avatarListPageProvider.select((s) => s.image));
-
     final avatarList =
         ref.watch(avatarListPageProvider.select((s) => s.avatarList));
     return Scaffold(
@@ -29,33 +28,10 @@ class AvatarListPage extends ConsumerWidget {
       body: Column(
         children: [
           ElevatedButton(
-            onPressed: () {
-              ref.read(avatarListPageProvider.notifier).uploadPic();
-            },
-            child: const Icon(Icons.upload),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(avatarListPageProvider.notifier).downloadPic();
-            },
-            child: const Icon(Icons.download),
-          ),
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: image == null ? const Text('No Image') : Image.memory(image),
-          ),
-          TextButton(
-            onPressed: () {
-              ref.read(avatarListPageProvider.notifier).deletePic();
-            },
-            child: const Text('画像を削除'),
-          ),
-          ElevatedButton(
             onPressed: () async {
               final avatar = Avatar(
-                activeImagePath: "activeImagePath",
-                stopImagePath: "stopImagePath",
+                activeImagePath: "",
+                stopImagePath: "",
                 id: const Uuid().v4(),
                 created: DateTime.now(),
                 updated: DateTime.now(),
@@ -65,16 +41,25 @@ class AvatarListPage extends ConsumerWidget {
                   .read(avatarListPageProvider.notifier)
                   .addNewAvatar(avatar: avatar);
             },
-            child: const Icon(Icons.download),
+            child: const Icon(Icons.add),
           ),
           for (Avatar avatar in avatarList)
-            TextButton(
-              onPressed: () async {
-                await ref
-                    .read(avatarListPageProvider.notifier)
-                    .deleteAvatar(id: avatar.id);
-              },
-              child: Text(avatar.id),
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: GestureDetector(
+                onTap: () async {
+                  await ref
+                      .read(avatarListPageProvider.notifier)
+                      .deleteAvatar(id: avatar.id);
+                },
+                child: avatar.activeImagePath.isNotEmpty
+                    ? UniversalImage(
+                        avatar.activeImagePath,
+                        fit: BoxFit.cover,
+                      )
+                    : Text(avatar.id),
+              ),
             )
         ],
       ),
