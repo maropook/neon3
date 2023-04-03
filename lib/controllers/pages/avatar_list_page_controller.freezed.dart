@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AvatarListPageState {
   Uint8List? get image => throw _privateConstructorUsedError;
+  List<Avatar> get avatarList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AvatarListPageStateCopyWith<AvatarListPageState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $AvatarListPageStateCopyWith<$Res> {
           AvatarListPageState value, $Res Function(AvatarListPageState) then) =
       _$AvatarListPageStateCopyWithImpl<$Res, AvatarListPageState>;
   @useResult
-  $Res call({Uint8List? image});
+  $Res call({Uint8List? image, List<Avatar> avatarList});
 }
 
 /// @nodoc
@@ -46,12 +47,17 @@ class _$AvatarListPageStateCopyWithImpl<$Res, $Val extends AvatarListPageState>
   @override
   $Res call({
     Object? image = freezed,
+    Object? avatarList = null,
   }) {
     return _then(_value.copyWith(
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as Uint8List?,
+      avatarList: null == avatarList
+          ? _value.avatarList
+          : avatarList // ignore: cast_nullable_to_non_nullable
+              as List<Avatar>,
     ) as $Val);
   }
 }
@@ -64,7 +70,7 @@ abstract class _$$_AvatarListPageStateCopyWith<$Res>
       __$$_AvatarListPageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Uint8List? image});
+  $Res call({Uint8List? image, List<Avatar> avatarList});
 }
 
 /// @nodoc
@@ -79,12 +85,17 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? image = freezed,
+    Object? avatarList = null,
   }) {
     return _then(_$_AvatarListPageState(
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as Uint8List?,
+      avatarList: null == avatarList
+          ? _value._avatarList
+          : avatarList // ignore: cast_nullable_to_non_nullable
+              as List<Avatar>,
     ));
   }
 }
@@ -92,15 +103,25 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AvatarListPageState implements _AvatarListPageState {
-  const _$_AvatarListPageState({this.image = null});
+  const _$_AvatarListPageState(
+      {this.image = null, final List<Avatar> avatarList = const []})
+      : _avatarList = avatarList;
 
   @override
   @JsonKey()
   final Uint8List? image;
+  final List<Avatar> _avatarList;
+  @override
+  @JsonKey()
+  List<Avatar> get avatarList {
+    if (_avatarList is EqualUnmodifiableListView) return _avatarList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_avatarList);
+  }
 
   @override
   String toString() {
-    return 'AvatarListPageState(image: $image)';
+    return 'AvatarListPageState(image: $image, avatarList: $avatarList)';
   }
 
   @override
@@ -108,12 +129,16 @@ class _$_AvatarListPageState implements _AvatarListPageState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AvatarListPageState &&
-            const DeepCollectionEquality().equals(other.image, image));
+            const DeepCollectionEquality().equals(other.image, image) &&
+            const DeepCollectionEquality()
+                .equals(other._avatarList, _avatarList));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(image));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(image),
+      const DeepCollectionEquality().hash(_avatarList));
 
   @JsonKey(ignore: true)
   @override
@@ -124,11 +149,14 @@ class _$_AvatarListPageState implements _AvatarListPageState {
 }
 
 abstract class _AvatarListPageState implements AvatarListPageState {
-  const factory _AvatarListPageState({final Uint8List? image}) =
-      _$_AvatarListPageState;
+  const factory _AvatarListPageState(
+      {final Uint8List? image,
+      final List<Avatar> avatarList}) = _$_AvatarListPageState;
 
   @override
   Uint8List? get image;
+  @override
+  List<Avatar> get avatarList;
   @override
   @JsonKey(ignore: true)
   _$$_AvatarListPageStateCopyWith<_$_AvatarListPageState> get copyWith =>

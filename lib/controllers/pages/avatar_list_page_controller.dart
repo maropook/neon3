@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/services/fire_avatar_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,6 +18,7 @@ part 'avatar_list_page_controller.freezed.dart';
 class AvatarListPageState with _$AvatarListPageState {
   const factory AvatarListPageState({
     @Default(null) Uint8List? image,
+    @Default([]) List<Avatar> avatarList,
   }) = _AvatarListPageState;
 }
 
@@ -30,8 +31,11 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     init();
   }
 
-  Future<void> init() async {}
+  Future<void> init() async {
+    fetchAvatars();
+  }
 
+  final FireAvatarService fireAvatarService = FireAvatarService();
   final userID = FirebaseAuth.instance.currentUser?.uid ??
       'no_account'; //currentUser==nullのときは匿名認証すらしていない
 
@@ -77,97 +81,38 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
       Logger.logError('delete_pic', e.toString());
     }
   }
-}
 
-class FirestoreService {
-  FirestoreService();
+  Future<void> addNewAvatar({required Avatar avatar}) async {
+    await fireAvatarService.addNewAvatar(avatar: avatar);
 
-  final User? currentUser = FirebaseAuth.instance.currentUser;
-
-  // Future<void> getDocs() async {
-  //   String uid = currentUser?.uid ?? 'no_account';
-
-  //   final ref = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(uid)
-  //       .collection('images')
-  //       .get();
-
-  //   for (int i = 0; ref.docs.length > i; i++) {
-  //     print(ref.docs[i].get("activeImagePath"));
-  //   }
-  // }
-
-  void addAvatar() {
-    final _avatar = Avatar(
-      activeImagePath: "activeImagePath",
-      stopImagePath: "",
-      uniqueKey: const Uuid().v4(),
-      created: DateTime.now(),
-      updated: DateTime.now(),
+    state = state.copyWith(
+      avatarList: [avatar, ...state.avatarList],
     );
-
-    String uid = currentUser?.uid ?? 'no_account';
-    var uuid = const Uuid();
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('images')
-        // .doc(uuid.v4())
-        .doc('sample')
-        .set(_avatar.toJson());
   }
 
-  void deleteAvatar({required String uuid}) {
-    String uid = currentUser?.uid ?? 'no_account';
+  Future<void> deleteAvatar({required String id}) async {
+    await fireAvatarService.deleteAvatar(id: id);
+    final List<Avatar> avatarList =
+        state.avatarList.where((avatar) => avatar.id != id).toList();
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('images')
-        .doc('sample')
-        // .doc(uuid)
-        .delete();
+    state = state.copyWith(avatarList: avatarList);
   }
 
-  final _fireStore = FirebaseFirestore.instance;
+  Future<void> updateAvatar(
+      {required String id, required Avatar newAvatar}) async {
+    await fireAvatarService.deleteAvatar(id: id);
+
+    final List<Avatar> avatarList = state.avatarList
+        .map((avatar) => avatar.id == newAvatar.id ? newAvatar : avatar)
+        .toList();
+
+    state = state.copyWith(avatarList: avatarList);
+  }
 
   Future<List<Avatar>> fetchAvatars() async {
-    String uid = currentUser?.uid ?? 'no_account';
+    List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
+    state = state.copyWith(avatarList: avatarList);
 
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('images')
-        .orderBy('created', descending: true)
-        .get();
-    return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
-  }
-
-  Future<void> fetch() async {
-    final List<Avatar> list = await fetchAvatars();
-
-    for (int i = 0; list.length > i; i++) {
-      print(list[i].activeImagePath);
-    }
-  }
-
-  // teamId,matchIDを指定してMatchを取得
-  Future<Avatar?> fetchSelectedAvatar({required String uuid}) async {
-    String uid = currentUser?.uid ?? 'no_account';
-
-    final docSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('images')
-        .doc(uuid)
-        .get();
-    final data = docSnapshot.data();
-
-    if (data != null) {
-      return Avatar.fromJson(data);
-    }
-    return null;
+    return avatarList;
   }
 }

@@ -20,9 +20,9 @@ Avatar _$AvatarFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Avatar {
+  String get id => throw _privateConstructorUsedError;
   String get activeImagePath => throw _privateConstructorUsedError;
   String get stopImagePath => throw _privateConstructorUsedError;
-  String get uniqueKey => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
   DateTime get created => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
@@ -39,9 +39,9 @@ abstract class $AvatarCopyWith<$Res> {
       _$AvatarCopyWithImpl<$Res, Avatar>;
   @useResult
   $Res call(
-      {String activeImagePath,
+      {String id,
+      String activeImagePath,
       String stopImagePath,
-      String uniqueKey,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -59,13 +59,17 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? activeImagePath = null,
     Object? stopImagePath = null,
-    Object? uniqueKey = null,
     Object? created = null,
     Object? updated = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       activeImagePath: null == activeImagePath
           ? _value.activeImagePath
           : activeImagePath // ignore: cast_nullable_to_non_nullable
@@ -73,10 +77,6 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
       stopImagePath: null == stopImagePath
           ? _value.stopImagePath
           : stopImagePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      uniqueKey: null == uniqueKey
-          ? _value.uniqueKey
-          : uniqueKey // ignore: cast_nullable_to_non_nullable
               as String,
       created: null == created
           ? _value.created
@@ -97,9 +97,9 @@ abstract class _$$_AvatarCopyWith<$Res> implements $AvatarCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String activeImagePath,
+      {String id,
+      String activeImagePath,
       String stopImagePath,
-      String uniqueKey,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -114,13 +114,17 @@ class __$$_AvatarCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? activeImagePath = null,
     Object? stopImagePath = null,
-    Object? uniqueKey = null,
     Object? created = null,
     Object? updated = null,
   }) {
     return _then(_$_Avatar(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       activeImagePath: null == activeImagePath
           ? _value.activeImagePath
           : activeImagePath // ignore: cast_nullable_to_non_nullable
@@ -128,10 +132,6 @@ class __$$_AvatarCopyWithImpl<$Res>
       stopImagePath: null == stopImagePath
           ? _value.stopImagePath
           : stopImagePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      uniqueKey: null == uniqueKey
-          ? _value.uniqueKey
-          : uniqueKey // ignore: cast_nullable_to_non_nullable
               as String,
       created: null == created
           ? _value.created
@@ -150,9 +150,9 @@ class __$$_AvatarCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_Avatar implements _Avatar {
   const _$_Avatar(
-      {this.activeImagePath = '',
+      {this.id = '',
+      this.activeImagePath = '',
       this.stopImagePath = '',
-      this.uniqueKey = '',
       @FireTimestampConverterNonNull() required this.created,
       @FireTimestampConverterNonNull() required this.updated});
 
@@ -161,13 +161,13 @@ class _$_Avatar implements _Avatar {
 
   @override
   @JsonKey()
+  final String id;
+  @override
+  @JsonKey()
   final String activeImagePath;
   @override
   @JsonKey()
   final String stopImagePath;
-  @override
-  @JsonKey()
-  final String uniqueKey;
   @override
   @FireTimestampConverterNonNull()
   final DateTime created;
@@ -177,7 +177,7 @@ class _$_Avatar implements _Avatar {
 
   @override
   String toString() {
-    return 'Avatar(activeImagePath: $activeImagePath, stopImagePath: $stopImagePath, uniqueKey: $uniqueKey, created: $created, updated: $updated)';
+    return 'Avatar(id: $id, activeImagePath: $activeImagePath, stopImagePath: $stopImagePath, created: $created, updated: $updated)';
   }
 
   @override
@@ -185,12 +185,11 @@ class _$_Avatar implements _Avatar {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Avatar &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.activeImagePath, activeImagePath) ||
                 other.activeImagePath == activeImagePath) &&
             (identical(other.stopImagePath, stopImagePath) ||
                 other.stopImagePath == stopImagePath) &&
-            (identical(other.uniqueKey, uniqueKey) ||
-                other.uniqueKey == uniqueKey) &&
             (identical(other.created, created) || other.created == created) &&
             (identical(other.updated, updated) || other.updated == updated));
   }
@@ -198,7 +197,7 @@ class _$_Avatar implements _Avatar {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, activeImagePath, stopImagePath, uniqueKey, created, updated);
+      runtimeType, id, activeImagePath, stopImagePath, created, updated);
 
   @JsonKey(ignore: true)
   @override
@@ -216,9 +215,9 @@ class _$_Avatar implements _Avatar {
 
 abstract class _Avatar implements Avatar {
   const factory _Avatar(
-          {final String activeImagePath,
+          {final String id,
+          final String activeImagePath,
           final String stopImagePath,
-          final String uniqueKey,
           @FireTimestampConverterNonNull() required final DateTime created,
           @FireTimestampConverterNonNull() required final DateTime updated}) =
       _$_Avatar;
@@ -226,11 +225,11 @@ abstract class _Avatar implements Avatar {
   factory _Avatar.fromJson(Map<String, dynamic> json) = _$_Avatar.fromJson;
 
   @override
+  String get id;
+  @override
   String get activeImagePath;
   @override
   String get stopImagePath;
-  @override
-  String get uniqueKey;
   @override
   @FireTimestampConverterNonNull()
   DateTime get created;
