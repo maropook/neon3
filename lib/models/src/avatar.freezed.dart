@@ -21,8 +21,8 @@ Avatar _$AvatarFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Avatar {
   String get id => throw _privateConstructorUsedError;
-  String get activeImagePath => throw _privateConstructorUsedError;
-  String get stopImagePath => throw _privateConstructorUsedError;
+  String get activeImageUrl => throw _privateConstructorUsedError;
+  String get stopImageUrl => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
   DateTime get created => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
@@ -40,8 +40,8 @@ abstract class $AvatarCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String activeImagePath,
-      String stopImagePath,
+      String activeImageUrl,
+      String stopImageUrl,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -60,8 +60,8 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
   @override
   $Res call({
     Object? id = null,
-    Object? activeImagePath = null,
-    Object? stopImagePath = null,
+    Object? activeImageUrl = null,
+    Object? stopImageUrl = null,
     Object? created = null,
     Object? updated = null,
   }) {
@@ -70,13 +70,13 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      activeImagePath: null == activeImagePath
-          ? _value.activeImagePath
-          : activeImagePath // ignore: cast_nullable_to_non_nullable
+      activeImageUrl: null == activeImageUrl
+          ? _value.activeImageUrl
+          : activeImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      stopImagePath: null == stopImagePath
-          ? _value.stopImagePath
-          : stopImagePath // ignore: cast_nullable_to_non_nullable
+      stopImageUrl: null == stopImageUrl
+          ? _value.stopImageUrl
+          : stopImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       created: null == created
           ? _value.created
@@ -98,8 +98,8 @@ abstract class _$$_AvatarCopyWith<$Res> implements $AvatarCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String activeImagePath,
-      String stopImagePath,
+      String activeImageUrl,
+      String stopImageUrl,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -115,8 +115,8 @@ class __$$_AvatarCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? activeImagePath = null,
-    Object? stopImagePath = null,
+    Object? activeImageUrl = null,
+    Object? stopImageUrl = null,
     Object? created = null,
     Object? updated = null,
   }) {
@@ -125,13 +125,13 @@ class __$$_AvatarCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      activeImagePath: null == activeImagePath
-          ? _value.activeImagePath
-          : activeImagePath // ignore: cast_nullable_to_non_nullable
+      activeImageUrl: null == activeImageUrl
+          ? _value.activeImageUrl
+          : activeImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      stopImagePath: null == stopImagePath
-          ? _value.stopImagePath
-          : stopImagePath // ignore: cast_nullable_to_non_nullable
+      stopImageUrl: null == stopImageUrl
+          ? _value.stopImageUrl
+          : stopImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       created: null == created
           ? _value.created
@@ -151,8 +151,8 @@ class __$$_AvatarCopyWithImpl<$Res>
 class _$_Avatar implements _Avatar {
   const _$_Avatar(
       {this.id = '',
-      this.activeImagePath = '',
-      this.stopImagePath = '',
+      this.activeImageUrl = '',
+      this.stopImageUrl = '',
       @FireTimestampConverterNonNull() required this.created,
       @FireTimestampConverterNonNull() required this.updated});
 
@@ -164,10 +164,10 @@ class _$_Avatar implements _Avatar {
   final String id;
   @override
   @JsonKey()
-  final String activeImagePath;
+  final String activeImageUrl;
   @override
   @JsonKey()
-  final String stopImagePath;
+  final String stopImageUrl;
   @override
   @FireTimestampConverterNonNull()
   final DateTime created;
@@ -177,7 +177,7 @@ class _$_Avatar implements _Avatar {
 
   @override
   String toString() {
-    return 'Avatar(id: $id, activeImagePath: $activeImagePath, stopImagePath: $stopImagePath, created: $created, updated: $updated)';
+    return 'Avatar(id: $id, activeImageUrl: $activeImageUrl, stopImageUrl: $stopImageUrl, created: $created, updated: $updated)';
   }
 
   @override
@@ -186,10 +186,10 @@ class _$_Avatar implements _Avatar {
         (other.runtimeType == runtimeType &&
             other is _$_Avatar &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.activeImagePath, activeImagePath) ||
-                other.activeImagePath == activeImagePath) &&
-            (identical(other.stopImagePath, stopImagePath) ||
-                other.stopImagePath == stopImagePath) &&
+            (identical(other.activeImageUrl, activeImageUrl) ||
+                other.activeImageUrl == activeImageUrl) &&
+            (identical(other.stopImageUrl, stopImageUrl) ||
+                other.stopImageUrl == stopImageUrl) &&
             (identical(other.created, created) || other.created == created) &&
             (identical(other.updated, updated) || other.updated == updated));
   }
@@ -197,7 +197,7 @@ class _$_Avatar implements _Avatar {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, activeImagePath, stopImagePath, created, updated);
+      runtimeType, id, activeImageUrl, stopImageUrl, created, updated);
 
   @JsonKey(ignore: true)
   @override
@@ -216,8 +216,8 @@ class _$_Avatar implements _Avatar {
 abstract class _Avatar implements Avatar {
   const factory _Avatar(
           {final String id,
-          final String activeImagePath,
-          final String stopImagePath,
+          final String activeImageUrl,
+          final String stopImageUrl,
           @FireTimestampConverterNonNull() required final DateTime created,
           @FireTimestampConverterNonNull() required final DateTime updated}) =
       _$_Avatar;
@@ -227,9 +227,9 @@ abstract class _Avatar implements Avatar {
   @override
   String get id;
   @override
-  String get activeImagePath;
+  String get activeImageUrl;
   @override
-  String get stopImagePath;
+  String get stopImageUrl;
   @override
   @FireTimestampConverterNonNull()
   DateTime get created;

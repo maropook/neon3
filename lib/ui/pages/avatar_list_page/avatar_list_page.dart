@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/ui/components/src/universal_image.dart';
-import 'package:uuid/uuid.dart';
 
 class AvatarListPage extends ConsumerWidget {
   const AvatarListPage({super.key});
@@ -37,7 +36,6 @@ class AvatarListPage extends ConsumerWidget {
           mainAxisSpacing: 10,
           crossAxisCount: 2,
         ),
-        //指定した要素の数分を生成
         itemBuilder: (context, index) {
           return Container(
             color: Colors.white,
@@ -47,9 +45,9 @@ class AvatarListPage extends ConsumerWidget {
                       context.go('/avatar/list/detail',
                           extra: avatarList[index]);
                     },
-                    child: avatarList[index].activeImagePath.isNotEmpty
+                    child: avatarList[index].activeImageUrl.isNotEmpty
                         ? UniversalImage(
-                            avatarList[index].activeImagePath,
+                            avatarList[index].activeImageUrl,
                             fit: BoxFit.cover,
                           )
                         : UniversalImage(
@@ -57,16 +55,17 @@ class AvatarListPage extends ConsumerWidget {
                             fit: BoxFit.cover,
                           ),
                   )
-                : _buildShowModalButton(context),
+                : _buildShowModalButton(context, ref),
           );
         },
       ),
     );
   }
 
-  Widget _buildShowModalButton(BuildContext context) {
+  Widget _buildShowModalButton(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
+        ref.read(avatarListPageProvider.notifier).clearNewImagePath();
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
@@ -110,7 +109,7 @@ class AvatarListPage extends ConsumerWidget {
                 onTap: () async {
                   await ref
                       .read(avatarListPageProvider.notifier)
-                      .uploadNewImage(isActive: true);
+                      .setNewImage(isActive: true);
                 },
               ),
               GestureDetector(
@@ -121,7 +120,7 @@ class AvatarListPage extends ConsumerWidget {
                 onTap: () async {
                   await ref
                       .read(avatarListPageProvider.notifier)
-                      .uploadNewImage(isActive: false);
+                      .setNewImage(isActive: false);
                 },
               ),
             ],

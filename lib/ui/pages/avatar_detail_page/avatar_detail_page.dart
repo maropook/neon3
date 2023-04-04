@@ -13,6 +13,7 @@ class AvatarDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('アバター詳細'),
         leading: IconButton(
@@ -20,26 +21,33 @@ class AvatarDetailPage extends ConsumerWidget {
             icon: const Icon(Icons.chevron_left)),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: UniversalImage(_avatar.activeImageUrl)),
+              SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: UniversalImage(_avatar.stopImageUrl)),
+            ],
+          ),
           IconButton(
               onPressed: () async {
                 await ref
                     .read(avatarListPageProvider.notifier)
                     .deleteAvatar(id: _avatar.id);
+                context.go('/avatar/list');
               },
-              icon: const Icon(Icons.delete)),
-          Row(
-            children: [
-              SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: UniversalImage(_avatar.activeImagePath)),
-              SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: UniversalImage(_avatar.stopImagePath)),
-            ],
-          ),
+              icon: const Icon(
+                Icons.delete,
+                size: 50,
+                color: Colors.white,
+              )),
         ],
       ),
     );

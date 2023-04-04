@@ -9,8 +9,8 @@ class Avatar with _$Avatar {
   @JsonSerializable(explicitToJson: true)
   const factory Avatar({
     @Default('') String id,
-    @Default('') String activeImagePath,
-    @Default('') String stopImagePath,
+    @Default('') String activeImageUrl,
+    @Default('') String stopImageUrl,
     @FireTimestampConverterNonNull() required DateTime created,
     @FireTimestampConverterNonNull() required DateTime updated,
   }) = _Avatar;
