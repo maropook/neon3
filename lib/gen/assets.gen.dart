@@ -41,6 +41,13 @@ class $AssetsImagesGen {
   AssetGenImage get avatarActive =>
       const AssetGenImage('assets/images/avatar_active.png');
 
+  /// File path: assets/images/avatar_import_face.svg
+  String get avatarImportFace => 'assets/images/avatar_import_face.svg';
+
+  /// File path: assets/images/avatar_import_face_smile.svg
+  String get avatarImportFaceSmile =>
+      'assets/images/avatar_import_face_smile.svg';
+
   /// File path: assets/images/avatar_stop.png
   AssetGenImage get avatarStop =>
       const AssetGenImage('assets/images/avatar_stop.png');
@@ -55,6 +62,21 @@ class $AssetsImagesGen {
   /// File path: assets/images/encoding.png
   AssetGenImage get encoding =>
       const AssetGenImage('assets/images/encoding.png');
+
+  /// File path: assets/images/face.svg
+  String get face => 'assets/images/face.svg';
+
+  /// File path: assets/images/face_smile.svg
+  String get faceSmile => 'assets/images/face_smile.svg';
+
+  /// File path: assets/images/note.svg
+  String get note => 'assets/images/note.svg';
+
+  /// File path: assets/images/pencil.svg
+  String get pencil => 'assets/images/pencil.svg';
+
+  /// File path: assets/images/photos.svg
+  String get photos => 'assets/images/photos.svg';
 
   /// File path: assets/images/test_background.png
   AssetGenImage get testBackground =>
@@ -72,10 +94,17 @@ class $AssetsImagesGen {
         addBgmIcon,
         artificialVoiceIcon,
         avatarActive,
+        avatarImportFace,
+        avatarImportFaceSmile,
         avatarStop,
         backgroundSea,
         changeAvatarIcon,
         encoding,
+        face,
+        faceSmile,
+        note,
+        pencil,
+        photos,
         testBackground,
         testWoman,
         textEditIcon

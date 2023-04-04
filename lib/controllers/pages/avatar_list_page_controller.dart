@@ -19,7 +19,9 @@ part 'avatar_list_page_controller.freezed.dart';
 @freezed
 class AvatarListPageState with _$AvatarListPageState {
   const factory AvatarListPageState({
-    @Default(null) Uint8List? image,
+    @Default(null) Avatar? newAvatar,
+    @Default("") String newActiveImagePath,
+    @Default("") String newStopImagePath,
     @Default([]) List<Avatar> avatarList,
   }) = _AvatarListPageState;
 }
@@ -45,6 +47,24 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
   final FirebaseStorage storage = FirebaseStorage.instance;
   final Uuid uuid = const Uuid();
 
+  Future<void> uploadNewImage({required bool isActive}) async {
+    final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImageFile == null) return;
+    final croppedImageFile = await ImageCropper().cropImage(
+      sourcePath: pickedImageFile.path,
+      compressQuality: 80,
+      maxWidth: 1024,
+      maxHeight: 1024,
+    );
+    if (croppedImageFile == null) return;
+
+    if (isActive) {
+      state = state.copyWith(newActiveImagePath: croppedImageFile.path);
+      return;
+    }
+    state = state.copyWith(newStopImagePath: croppedImageFile.path);
+  }
+
   Future<String?> uploadImage({required String id}) async {
     final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImageFile == null) return null;
@@ -66,12 +86,32 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     return ref.getDownloadURL();
   }
 
+  Future<Map<String, String>> uploadImageOfFiles({
+    required String id,
+  }) async {
+    if (state.newActiveImagePath.isEmpty || state.newStopImagePath.isEmpty) {
+      Logger.log('upload_image_of_files', 'image_path_is_empty');
+      return {};
+    }
+    final Reference activeRef = storage.ref("users/$uid/$id/activeAvatar.jpg");
+    final Reference stopRef = storage.ref("users/$uid/$id/stopAvatar.jpg");
+    try {
+      await activeRef.putFile(File(state.newActiveImagePath));
+      await stopRef.putFile(File(state.newStopImagePath));
+    } catch (e) {
+      Logger.logError('upload_image', e.toString());
+    }
+    return {
+      'activeImageUrl': await activeRef.getDownloadURL(),
+      'stopImageUrl': await activeRef.getDownloadURL(),
+    };
+  }
+
   Future<void> deleteImage({required String id}) async {
     try {
       final storageRef =
           FirebaseStorage.instance.ref().child('users/$uid/$id/${id}.jpg');
       await storageRef.delete();
-      state = state.copyWith(image: null);
     } catch (e) {
       Logger.logError('delete_pic', e.toString());
     }
@@ -84,15 +124,21 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     return avatarList;
   }
 
-  Future<void> addNewAvatar({required Avatar avatar}) async {
-    final imageUrl = await uploadImage(id: avatar.id);
-    if (imageUrl == null) return;
-    avatar =
-        avatar.copyWith(activeImagePath: imageUrl, stopImagePath: imageUrl);
-    await fireAvatarService.addNewAvatar(avatar: avatar);
+  Future<void> addNewAvatar() async {
+    final newAvatarId = uuid.v4();
+
+    final imageUrlMap = await uploadImageOfFiles(id: newAvatarId);
+    final newAvatar = Avatar(
+      activeImagePath: imageUrlMap['activeImageUrl'] ?? '',
+      stopImagePath: imageUrlMap['stopImageUrl'] ?? '',
+      id: newAvatarId,
+      created: DateTime.now(),
+      updated: DateTime.now(),
+    );
+    await fireAvatarService.addNewAvatar(avatar: newAvatar);
 
     state = state.copyWith(
-      avatarList: [avatar, ...state.avatarList],
+      avatarList: [newAvatar, ...state.avatarList],
     );
   }
 

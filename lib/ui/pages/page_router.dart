@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/global/user_controller.dart';
 import 'package:maropook_neon2/main.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/ui/pages/avatar_detail_page/avatar_detail_page.dart';
 import 'package:maropook_neon2/ui/pages/avatar_list_page/avatar_list_page.dart';
 import 'package:maropook_neon2/ui/pages/complete_page/complete_page.dart';
@@ -43,7 +44,7 @@ final routerProvider = Provider((ref) {
                 GoRoute(
                   path: 'detail',
                   builder: (BuildContext context, GoRouterState state) {
-                    return const AvatarDetailPage();
+                    return AvatarDetailPage(avatar: state.extra as Avatar);
                   },
                 ),
               ]),

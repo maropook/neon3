@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AvatarListPageState {
-  Uint8List? get image => throw _privateConstructorUsedError;
+  Avatar? get newAvatar => throw _privateConstructorUsedError;
+  String get newActiveImagePath => throw _privateConstructorUsedError;
+  String get newStopImagePath => throw _privateConstructorUsedError;
   List<Avatar> get avatarList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +32,13 @@ abstract class $AvatarListPageStateCopyWith<$Res> {
           AvatarListPageState value, $Res Function(AvatarListPageState) then) =
       _$AvatarListPageStateCopyWithImpl<$Res, AvatarListPageState>;
   @useResult
-  $Res call({Uint8List? image, List<Avatar> avatarList});
+  $Res call(
+      {Avatar? newAvatar,
+      String newActiveImagePath,
+      String newStopImagePath,
+      List<Avatar> avatarList});
+
+  $AvatarCopyWith<$Res>? get newAvatar;
 }
 
 /// @nodoc
@@ -46,19 +54,41 @@ class _$AvatarListPageStateCopyWithImpl<$Res, $Val extends AvatarListPageState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = freezed,
+    Object? newAvatar = freezed,
+    Object? newActiveImagePath = null,
+    Object? newStopImagePath = null,
     Object? avatarList = null,
   }) {
     return _then(_value.copyWith(
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as Uint8List?,
+      newAvatar: freezed == newAvatar
+          ? _value.newAvatar
+          : newAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
+      newActiveImagePath: null == newActiveImagePath
+          ? _value.newActiveImagePath
+          : newActiveImagePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      newStopImagePath: null == newStopImagePath
+          ? _value.newStopImagePath
+          : newStopImagePath // ignore: cast_nullable_to_non_nullable
+              as String,
       avatarList: null == avatarList
           ? _value.avatarList
           : avatarList // ignore: cast_nullable_to_non_nullable
               as List<Avatar>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AvatarCopyWith<$Res>? get newAvatar {
+    if (_value.newAvatar == null) {
+      return null;
+    }
+
+    return $AvatarCopyWith<$Res>(_value.newAvatar!, (value) {
+      return _then(_value.copyWith(newAvatar: value) as $Val);
+    });
   }
 }
 
@@ -70,7 +100,14 @@ abstract class _$$_AvatarListPageStateCopyWith<$Res>
       __$$_AvatarListPageStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Uint8List? image, List<Avatar> avatarList});
+  $Res call(
+      {Avatar? newAvatar,
+      String newActiveImagePath,
+      String newStopImagePath,
+      List<Avatar> avatarList});
+
+  @override
+  $AvatarCopyWith<$Res>? get newAvatar;
 }
 
 /// @nodoc
@@ -84,14 +121,24 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = freezed,
+    Object? newAvatar = freezed,
+    Object? newActiveImagePath = null,
+    Object? newStopImagePath = null,
     Object? avatarList = null,
   }) {
     return _then(_$_AvatarListPageState(
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as Uint8List?,
+      newAvatar: freezed == newAvatar
+          ? _value.newAvatar
+          : newAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
+      newActiveImagePath: null == newActiveImagePath
+          ? _value.newActiveImagePath
+          : newActiveImagePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      newStopImagePath: null == newStopImagePath
+          ? _value.newStopImagePath
+          : newStopImagePath // ignore: cast_nullable_to_non_nullable
+              as String,
       avatarList: null == avatarList
           ? _value._avatarList
           : avatarList // ignore: cast_nullable_to_non_nullable
@@ -104,12 +151,21 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
 
 class _$_AvatarListPageState implements _AvatarListPageState {
   const _$_AvatarListPageState(
-      {this.image = null, final List<Avatar> avatarList = const []})
+      {this.newAvatar = null,
+      this.newActiveImagePath = "",
+      this.newStopImagePath = "",
+      final List<Avatar> avatarList = const []})
       : _avatarList = avatarList;
 
   @override
   @JsonKey()
-  final Uint8List? image;
+  final Avatar? newAvatar;
+  @override
+  @JsonKey()
+  final String newActiveImagePath;
+  @override
+  @JsonKey()
+  final String newStopImagePath;
   final List<Avatar> _avatarList;
   @override
   @JsonKey()
@@ -121,7 +177,7 @@ class _$_AvatarListPageState implements _AvatarListPageState {
 
   @override
   String toString() {
-    return 'AvatarListPageState(image: $image, avatarList: $avatarList)';
+    return 'AvatarListPageState(newAvatar: $newAvatar, newActiveImagePath: $newActiveImagePath, newStopImagePath: $newStopImagePath, avatarList: $avatarList)';
   }
 
   @override
@@ -129,16 +185,19 @@ class _$_AvatarListPageState implements _AvatarListPageState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AvatarListPageState &&
-            const DeepCollectionEquality().equals(other.image, image) &&
+            (identical(other.newAvatar, newAvatar) ||
+                other.newAvatar == newAvatar) &&
+            (identical(other.newActiveImagePath, newActiveImagePath) ||
+                other.newActiveImagePath == newActiveImagePath) &&
+            (identical(other.newStopImagePath, newStopImagePath) ||
+                other.newStopImagePath == newStopImagePath) &&
             const DeepCollectionEquality()
                 .equals(other._avatarList, _avatarList));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(image),
-      const DeepCollectionEquality().hash(_avatarList));
+  int get hashCode => Object.hash(runtimeType, newAvatar, newActiveImagePath,
+      newStopImagePath, const DeepCollectionEquality().hash(_avatarList));
 
   @JsonKey(ignore: true)
   @override
@@ -150,11 +209,17 @@ class _$_AvatarListPageState implements _AvatarListPageState {
 
 abstract class _AvatarListPageState implements AvatarListPageState {
   const factory _AvatarListPageState(
-      {final Uint8List? image,
+      {final Avatar? newAvatar,
+      final String newActiveImagePath,
+      final String newStopImagePath,
       final List<Avatar> avatarList}) = _$_AvatarListPageState;
 
   @override
-  Uint8List? get image;
+  Avatar? get newAvatar;
+  @override
+  String get newActiveImagePath;
+  @override
+  String get newStopImagePath;
   @override
   List<Avatar> get avatarList;
   @override
