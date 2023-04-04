@@ -19,11 +19,6 @@ class AvatarListPage extends ConsumerWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('アバター一覧'),
-        actions: [
-          IconButton(
-              onPressed: () => context.go('/avatar/list/detail'),
-              icon: const Icon(Icons.chevron_right)),
-        ],
         leading: IconButton(
             onPressed: () => context.go('/'),
             icon: const Icon(Icons.chevron_left)),
