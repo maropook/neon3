@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/services/common/field_name.dart';
 import 'package:uuid/uuid.dart';
 
 class FireAvatarService {
   FireAvatarService();
 
-  final _fireStore = FirebaseFirestore.instance;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final User? currentUser = FirebaseAuth.instance.currentUser;
+  final String uid =
+      FirebaseAuth.instance.currentUser?.uid ?? FieldName.noAccount;
 
   Future<void> addNewAvatar({required Avatar avatar}) async {
-    String uid = currentUser?.uid ?? 'no_account';
-
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -21,8 +22,6 @@ class FireAvatarService {
   }
 
   Future<void> updateAvatar({required Avatar avatar}) async {
-    String uid = currentUser?.uid ?? 'no_account';
-
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -32,9 +31,7 @@ class FireAvatarService {
   }
 
   Future<void> deleteAvatar({required String id}) async {
-    String uid = currentUser?.uid ?? 'no_account';
-
-    await _fireStore
+    await fireStore
         .collection('users')
         .doc(uid)
         .collection('images')
@@ -43,9 +40,7 @@ class FireAvatarService {
   }
 
   Future<List<Avatar>> fetchAvatars() async {
-    String uid = currentUser?.uid ?? 'no_account';
-
-    final snapshot = await _fireStore
+    final snapshot = await fireStore
         .collection('users')
         .doc(uid)
         .collection('images')
@@ -55,9 +50,7 @@ class FireAvatarService {
   }
 
   Future<Avatar?> fetchSelectedAvatar({required String uuid}) async {
-    String uid = currentUser?.uid ?? 'no_account';
-
-    final docSnapshot = await _fireStore
+    final docSnapshot = await fireStore
         .collection('users')
         .doc(uid)
         .collection('images')
