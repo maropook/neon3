@@ -123,8 +123,8 @@ class AvatarListPage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
-              width: 100, //横幅
-              height: 100, //高さ
+              width: 100,
+              height: 100,
               child: ElevatedButton(
                 onPressed: () async {
                   EasyLoading.show();
