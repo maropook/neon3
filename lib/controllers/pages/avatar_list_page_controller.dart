@@ -65,27 +65,6 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     state = state.copyWith(newStopImagePath: croppedImageFile.path);
   }
 
-  Future<String?> uploadImage({required String id}) async {
-    final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImageFile == null) return null;
-    final croppedImageFile = await ImageCropper().cropImage(
-      sourcePath: pickedImageFile.path,
-      compressQuality: 80,
-      maxWidth: 1024,
-      maxHeight: 1024,
-    );
-    if (croppedImageFile == null) return null;
-    final File imageFile = File(croppedImageFile.path);
-    final Reference ref = storage.ref("users/$uid/$id/${id}.jpg");
-    try {
-      await ref.putFile(imageFile);
-    } catch (e) {
-      Logger.logError('upload_image', e.toString());
-    }
-
-    return ref.getDownloadURL();
-  }
-
   Future<Map<String, String>> uploadImageOfFiles({
     required String id,
   }) async {
@@ -109,9 +88,11 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
 
   Future<void> deleteImage({required String id}) async {
     try {
-      final storageRef =
-          FirebaseStorage.instance.ref().child('users/$uid/$id/${id}.jpg');
-      await storageRef.delete();
+      final Reference activeRef =
+          storage.ref("users/$uid/$id/activeAvatar.jpg");
+      final Reference stopRef = storage.ref("users/$uid/$id/stopAvatar.jpg");
+      await activeRef.delete();
+      await stopRef.delete();
     } catch (e) {
       Logger.logError('delete_pic', e.toString());
     }
