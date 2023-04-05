@@ -1,4 +1,6 @@
 import 'package:maropook_neon2/gen/assets.gen.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/services/download_image_service.dart';
 import 'package:maropook_neon2/services/file_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:neon_video_encoder/audio_setting.dart';
@@ -84,6 +86,7 @@ class EncodeService {
     final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
         await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
+    final DownloadImageService downloadImageService = DownloadImageService();
 
     String voiceFilePath1 = (await fileService.saveFile(
             inputFilePath: Assets.audio.voiceFile1,
@@ -109,23 +112,16 @@ class EncodeService {
     ];
 
     // AvatarAnimation
-    final String activeImagePath = (await fileService.saveFile(
-            inputFilePath: Assets.images.avatarActive.path,
-            outputFilePath: 'active_avatar.png'))
-        .path;
-    final String stopImagePath = (await fileService.saveFile(
-            inputFilePath: Assets.images.avatarStop.path,
-            outputFilePath: 'stop_avatar.png'))
-        .path;
-
     List<Map<String, double>> activeFrames = [
       {"startTime": 1.3, "endTime": 2.0},
       {"startTime": 3.0, "endTime": 4.5}
     ];
 
     AvatarAnimation avatarAnimation = AvatarAnimation(
-        activeImagePath: activeImagePath,
-        stopImagePath: stopImagePath,
+        activeImagePath: await downloadImageService.downloadImage(
+            downloadUrl: defaultAvatar.activeImageUrl),
+        stopImagePath: await downloadImageService.downloadImage(
+            downloadUrl: defaultAvatar.stopImageUrl),
         imageSizeRatio: 1.0,
         activeFrameList: activeFrames,
         avatarSizeRatio: 0.5,

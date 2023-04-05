@@ -43,6 +43,9 @@ dependencies:
   uuid: ^3.0.6
   cached_network_image: ^3.0.0
   flutter_easyloading: ^3.0.5
+  http: ^0.13.5
+  file: ^6.1.4
+  image_downloader: ^0.31.0
 
   neon_video_encoder:
     git:

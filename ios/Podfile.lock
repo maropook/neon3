@@ -741,6 +741,8 @@ PODS:
   - image_cropper (0.0.4):
     - Flutter
     - TOCropViewController (~> 2.6.1)
+  - image_downloader (0.0.1):
+    - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
   - leveldb-library (1.22.2)
@@ -783,6 +785,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
+  - image_downloader (from `.symlinks/plugins/image_downloader/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - neon_speech_to_text (from `.symlinks/plugins/neon_speech_to_text/ios`)
   - neon_video_encoder (from `.symlinks/plugins/neon_video_encoder/ios`)
@@ -833,6 +836,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   image_cropper:
     :path: ".symlinks/plugins/image_cropper/ios"
+  image_downloader:
+    :path: ".symlinks/plugins/image_downloader/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   neon_speech_to_text:
@@ -875,6 +880,7 @@ SPEC CHECKSUMS:
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: c9e714f7eec91a55641e2bab9f45fd83a219b882
   image_cropper: 60c2789d1f1a78c873235d4319ca0c34a69f2d98
+  image_downloader: 73e190d6c9f286f2649554051348d9cb319cd4b3
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
