@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/controllers/pages/avatar_detail_page_controller.dart';
 import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/ui/components/src/universal_image.dart';
@@ -15,46 +16,58 @@ class AvatarDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final avatar = ref.watch(avatarListPageProvider.select((s) => s.avatarList
-        .where((element) => element.id == _avatar.id)
-        .toList()
-        .first));
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('アバター詳細'),
-        leading: IconButton(
-            onPressed: () => context.go('/avatar/list'),
-            icon: const Icon(Icons.chevron_left)),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: UniversalImage(avatar.activeImageUrl)),
-              SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: UniversalImage(avatar.stopImageUrl)),
-            ],
-          ),
-          if (!avatar.isDefault) _buildEditContents(context, ref)
+    return ProviderScope(
+        overrides: [
+          avatarDetailPageProvider.overrideWith(
+              (ref) => AvatarDetailPageController(avatar: _avatar))
         ],
-      ),
-    );
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            title: const Text('アバター詳細'),
+            leading: IconButton(
+                onPressed: () async {
+                  await ref
+                      .read(avatarListPageProvider.notifier)
+                      .fetchAvatars();
+                  context.go('/avatar/list');
+                },
+                icon: const Icon(Icons.chevron_left)),
+          ),
+          body: _buildBody(),
+        ));
+  }
+
+  Widget _buildBody() {
+    return Consumer(builder: (context, ref, _) {
+      final avatar =
+          ref.watch(avatarDetailPageProvider.select((s) => s.avatar));
+      return avatar != null
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: UniversalImage(avatar.activeImageUrl)),
+                    SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: UniversalImage(avatar.stopImageUrl)),
+                  ],
+                ),
+                if (!avatar.isDefault) _buildEditContents(context, ref)
+              ],
+            )
+          : const CircularProgressIndicator();
+    });
   }
 
   Widget _buildEditContents(BuildContext context, WidgetRef ref) {
-    final avatar = ref.watch(avatarListPageProvider.select((s) => s.avatarList
-        .where((element) => element.id == _avatar.id)
-        .toList()
-        .first));
+    final avatar = ref.watch(avatarDetailPageProvider.select((s) => s.avatar));
 
     return Column(
       children: [
@@ -62,8 +75,9 @@ class AvatarDetailPage extends ConsumerWidget {
         IconButton(
             onPressed: () async {
               await ref
-                  .read(avatarListPageProvider.notifier)
-                  .deleteAvatar(id: avatar.id);
+                  .read(avatarDetailPageProvider.notifier)
+                  .deleteAvatar(id: avatar!.id);
+              await ref.read(avatarListPageProvider.notifier).fetchAvatars();
               context.go('/avatar/list');
             },
             icon: const Icon(
@@ -78,7 +92,7 @@ class AvatarDetailPage extends ConsumerWidget {
   Widget _buildShowModalButton(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        ref.read(avatarListPageProvider.notifier).clearNewImagePath();
+        ref.read(avatarDetailPageProvider.notifier).clearNewImagePath();
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
@@ -95,7 +109,7 @@ class AvatarDetailPage extends ConsumerWidget {
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: _buildAddAvatarModalBody());
+                  child: _buildEditAvatarModalBody(context, ref));
             });
       },
       child: const Icon(
@@ -106,79 +120,79 @@ class AvatarDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildAddAvatarModalBody() {
-    return Consumer(builder: (context, ref, _) {
-      final avatar = ref.watch(avatarListPageProvider.select((s) => s.avatarList
-          .where((element) => element.id == _avatar.id)
-          .toList()
-          .first));
-      final activeImagePath =
-          ref.watch(avatarListPageProvider.select((s) => s.newActiveImagePath));
-      final stopImagePath =
-          ref.watch(avatarListPageProvider.select((s) => s.newStopImagePath));
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget _buildEditAvatarModalBody(BuildContext context, WidgetRef ref) {
+    final avatar = ref.watch(avatarDetailPageProvider.select((s) => s.avatar));
+
+    final activeImagePath =
+        ref.watch(avatarDetailPageProvider.select((s) => s.newActiveImagePath));
+    final stopImagePath =
+        ref.watch(avatarDetailPageProvider.select((s) => s.newStopImagePath));
+    return avatar != null
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                child: activeImagePath.isNotEmpty
-                    ? SizedBox(
-                        width: 150, child: Image.file(File(activeImagePath)))
-                    : SizedBox(
-                        width: 150,
-                        child: UniversalImage(avatar.activeImageUrl)),
-                onTap: () async {
-                  await ref
-                      .read(avatarListPageProvider.notifier)
-                      .setNewImage(isActive: true);
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: activeImagePath.isNotEmpty
+                        ? SizedBox(
+                            width: 150,
+                            child: Image.file(File(activeImagePath)))
+                        : SizedBox(
+                            width: 150,
+                            child: UniversalImage(avatar!.activeImageUrl)),
+                    onTap: () async {
+                      await ref
+                          .read(avatarDetailPageProvider.notifier)
+                          .setNewImage(isActive: true);
+                    },
+                  ),
+                  GestureDetector(
+                    child: stopImagePath.isNotEmpty
+                        ? SizedBox(
+                            width: 150, child: Image.file(File(stopImagePath)))
+                        : SizedBox(
+                            width: 150,
+                            child: UniversalImage(avatar!.stopImageUrl)),
+                    onTap: () async {
+                      await ref
+                          .read(avatarDetailPageProvider.notifier)
+                          .setNewImage(isActive: false);
+                    },
+                  ),
+                ],
               ),
-              GestureDetector(
-                child: stopImagePath.isNotEmpty
-                    ? SizedBox(
-                        width: 150, child: Image.file(File(stopImagePath)))
-                    : SizedBox(
-                        width: 150, child: UniversalImage(avatar.stopImageUrl)),
-                onTap: () async {
-                  await ref
-                      .read(avatarListPageProvider.notifier)
-                      .setNewImage(isActive: false);
-                },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      EasyLoading.show();
+                      await ref
+                          .read(avatarDetailPageProvider.notifier)
+                          .updateAvatar(previousAvatar: _avatar);
+                      EasyLoading.dismiss();
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: const CircleBorder(),
+                    ),
+                    child: const Text(
+                      '完了',
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: ElevatedButton(
-                onPressed: () async {
-                  EasyLoading.show();
-                  await ref
-                      .read(avatarListPageProvider.notifier)
-                      .updateAvatar(previousAvatar: _avatar);
-                  EasyLoading.dismiss();
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                ),
-                child: const Text(
-                  '完了',
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    });
+          )
+        : const CircularProgressIndicator();
   }
 }

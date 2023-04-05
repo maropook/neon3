@@ -1,0 +1,109 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/services/common/field_name.dart';
+import 'package:maropook_neon2/services/fire_avatar_service.dart';
+import 'package:maropook_neon2/services/fire_storage_service.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
+
+part 'avatar_detail_page_controller.freezed.dart';
+
+@freezed
+class AvatarDetailPageState with _$AvatarDetailPageState {
+  const factory AvatarDetailPageState({
+    @Default("") String newActiveImagePath,
+    @Default("") String newStopImagePath,
+    @Default(null) Avatar? avatar,
+  }) = _AvatarDetailPageState;
+}
+
+final avatarDetailPageProvider = StateNotifierProvider.autoDispose<
+    AvatarDetailPageController, AvatarDetailPageState>((ref) {
+  return throw UnimplementedError();
+});
+
+class AvatarDetailPageController extends StateNotifier<AvatarDetailPageState> {
+  AvatarDetailPageController({required avatar})
+      : _avatar = avatar,
+        super(const AvatarDetailPageState()) {
+    init();
+  }
+  final Avatar _avatar;
+  final FireStorageService fireStorageService = FireStorageService();
+  final FireAvatarService fireAvatarService = FireAvatarService();
+  final uid = FirebaseAuth.instance.currentUser?.uid ??
+      FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
+
+  Future<void> init() async {
+    await fetchSelectedAvatarFromId();
+  }
+
+  Future<void> fetchSelectedAvatarFromId() async {
+    if (_avatar.id.isEmpty) {
+      state = state.copyWith(avatar: defaultAvatar);
+      return;
+    }
+    state = state.copyWith(
+        avatar: await fireAvatarService.fetchAvatarFromUuid(id: _avatar.id));
+  }
+
+  void clearNewImagePath() {
+    state = state.copyWith(newActiveImagePath: '', newStopImagePath: '');
+  }
+
+  Future<void> setNewImage({required bool isActive}) async {
+    String imageFilePath = await fireStorageService.getNewImagePath();
+    if (imageFilePath.isEmpty) return;
+
+    if (isActive) {
+      state = state.copyWith(newActiveImagePath: imageFilePath);
+      return;
+    }
+    state = state.copyWith(newStopImagePath: imageFilePath);
+  }
+
+  Future<void> updateAvatar({required Avatar previousAvatar}) async {
+    final id = previousAvatar.id;
+    var newAvatar = Avatar(
+      activeImageUrl: previousAvatar.activeImageUrl,
+      stopImageUrl: previousAvatar.stopImageUrl,
+      id: previousAvatar.id,
+      created: previousAvatar.created,
+      updated: DateTime.now(),
+    );
+
+    if (state.newActiveImagePath.isNotEmpty) {
+      await fireStorageService.deleteImage(
+          id: id, imageName: FieldName.activeAvatar);
+      final activeImageUrl = await fireStorageService.uploadImage(
+          id: id,
+          imageName: FieldName.activeAvatar,
+          imagePath: state.newActiveImagePath);
+      newAvatar = newAvatar.copyWith(activeImageUrl: activeImageUrl);
+    }
+
+    if (state.newStopImagePath.isNotEmpty) {
+      await fireStorageService.deleteImage(
+          id: id, imageName: FieldName.stopAvatar);
+      final stopImageUrl = await fireStorageService.uploadImage(
+          id: id,
+          imageName: FieldName.stopAvatar,
+          imagePath: state.newStopImagePath);
+      newAvatar = newAvatar.copyWith(stopImageUrl: stopImageUrl);
+    }
+
+    await fireAvatarService.updateAvatar(avatar: newAvatar);
+    state = state.copyWith(avatar: newAvatar);
+  }
+
+  Future<void> deleteAvatar({required String id}) async {
+    await fireAvatarService.deleteAvatar(id: id);
+    await fireStorageService.deleteImage(
+        id: id, imageName: FieldName.activeAvatar);
+    await fireStorageService.deleteImage(
+        id: id, imageName: FieldName.stopAvatar);
+    state = state.copyWith(avatar: null);
+  }
+}

@@ -22,6 +22,7 @@ mixin _$RecordingPageState {
   String? get audioFilePath => throw _privateConstructorUsedError;
   double get currentSeconds => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
+  Avatar? get selectedAvatar => throw _privateConstructorUsedError;
   List<Map<String, double>> get activeFrames =>
       throw _privateConstructorUsedError;
 
@@ -43,7 +44,10 @@ abstract class $RecordingPageStateCopyWith<$Res> {
       String? audioFilePath,
       double currentSeconds,
       bool isAvatarActive,
+      Avatar? selectedAvatar,
       List<Map<String, double>> activeFrames});
+
+  $AvatarCopyWith<$Res>? get selectedAvatar;
 }
 
 /// @nodoc
@@ -65,6 +69,7 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
     Object? audioFilePath = freezed,
     Object? currentSeconds = null,
     Object? isAvatarActive = null,
+    Object? selectedAvatar = freezed,
     Object? activeFrames = null,
   }) {
     return _then(_value.copyWith(
@@ -92,11 +97,27 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedAvatar: freezed == selectedAvatar
+          ? _value.selectedAvatar
+          : selectedAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
       activeFrames: null == activeFrames
           ? _value.activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
               as List<Map<String, double>>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AvatarCopyWith<$Res>? get selectedAvatar {
+    if (_value.selectedAvatar == null) {
+      return null;
+    }
+
+    return $AvatarCopyWith<$Res>(_value.selectedAvatar!, (value) {
+      return _then(_value.copyWith(selectedAvatar: value) as $Val);
+    });
   }
 }
 
@@ -115,7 +136,11 @@ abstract class _$$_CameraStateCopyWith<$Res>
       String? audioFilePath,
       double currentSeconds,
       bool isAvatarActive,
+      Avatar? selectedAvatar,
       List<Map<String, double>> activeFrames});
+
+  @override
+  $AvatarCopyWith<$Res>? get selectedAvatar;
 }
 
 /// @nodoc
@@ -135,6 +160,7 @@ class __$$_CameraStateCopyWithImpl<$Res>
     Object? audioFilePath = freezed,
     Object? currentSeconds = null,
     Object? isAvatarActive = null,
+    Object? selectedAvatar = freezed,
     Object? activeFrames = null,
   }) {
     return _then(_$_CameraState(
@@ -162,6 +188,10 @@ class __$$_CameraStateCopyWithImpl<$Res>
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedAvatar: freezed == selectedAvatar
+          ? _value.selectedAvatar
+          : selectedAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
       activeFrames: null == activeFrames
           ? _value._activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
@@ -180,6 +210,7 @@ class _$_CameraState implements _CameraState {
       this.audioFilePath = null,
       this.currentSeconds = 0.0,
       this.isAvatarActive = false,
+      this.selectedAvatar = null,
       final List<Map<String, double>> activeFrames = const []})
       : _activeFrames = activeFrames;
 
@@ -201,6 +232,9 @@ class _$_CameraState implements _CameraState {
   @override
   @JsonKey()
   final bool isAvatarActive;
+  @override
+  @JsonKey()
+  final Avatar? selectedAvatar;
   final List<Map<String, double>> _activeFrames;
   @override
   @JsonKey()
@@ -212,7 +246,7 @@ class _$_CameraState implements _CameraState {
 
   @override
   String toString() {
-    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath, currentSeconds: $currentSeconds, isAvatarActive: $isAvatarActive, activeFrames: $activeFrames)';
+    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath, currentSeconds: $currentSeconds, isAvatarActive: $isAvatarActive, selectedAvatar: $selectedAvatar, activeFrames: $activeFrames)';
   }
 
   @override
@@ -232,6 +266,8 @@ class _$_CameraState implements _CameraState {
                 other.currentSeconds == currentSeconds) &&
             (identical(other.isAvatarActive, isAvatarActive) ||
                 other.isAvatarActive == isAvatarActive) &&
+            (identical(other.selectedAvatar, selectedAvatar) ||
+                other.selectedAvatar == selectedAvatar) &&
             const DeepCollectionEquality()
                 .equals(other._activeFrames, _activeFrames));
   }
@@ -245,6 +281,7 @@ class _$_CameraState implements _CameraState {
       audioFilePath,
       currentSeconds,
       isAvatarActive,
+      selectedAvatar,
       const DeepCollectionEquality().hash(_activeFrames));
 
   @JsonKey(ignore: true)
@@ -262,6 +299,7 @@ abstract class _CameraState implements RecordingPageState {
       final String? audioFilePath,
       final double currentSeconds,
       final bool isAvatarActive,
+      final Avatar? selectedAvatar,
       final List<Map<String, double>> activeFrames}) = _$_CameraState;
 
   @override
@@ -276,6 +314,8 @@ abstract class _CameraState implements RecordingPageState {
   double get currentSeconds;
   @override
   bool get isAvatarActive;
+  @override
+  Avatar? get selectedAvatar;
   @override
   List<Map<String, double>> get activeFrames;
   @override

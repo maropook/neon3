@@ -39,6 +39,9 @@ class RecordingPage extends ConsumerWidget {
           ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
       final current =
           ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
+      final Avatar selectedAvatar =
+          ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
+              defaultAvatar;
 
       return cameraService != null
           ? Column(
@@ -52,8 +55,8 @@ class RecordingPage extends ConsumerWidget {
                     SizedBox(
                       width: 100,
                       child: UniversalImage(isAvatarActive
-                          ? defaultAvatar.activeImageUrl
-                          : defaultAvatar.stopImageUrl),
+                          ? selectedAvatar.activeImageUrl
+                          : selectedAvatar.stopImageUrl),
                     ),
                   ],
                 ),

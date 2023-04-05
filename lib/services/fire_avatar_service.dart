@@ -49,12 +49,12 @@ class FireAvatarService {
     return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
   }
 
-  Future<Avatar?> fetchAvatarFromUuid({required String uuid}) async {
+  Future<Avatar?> fetchAvatarFromUuid({required String id}) async {
     final docSnapshot = await fireStore
         .collection('users')
         .doc(uid)
         .collection('avatars')
-        .doc(uuid)
+        .doc(id)
         .get();
     final data = docSnapshot.data();
 

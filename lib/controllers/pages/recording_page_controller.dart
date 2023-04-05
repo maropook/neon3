@@ -21,6 +21,7 @@ class RecordingPageState with _$RecordingPageState {
     @Default(null) String? audioFilePath,
     @Default(0.0) double currentSeconds,
     @Default(false) bool isAvatarActive,
+    @Default(null) Avatar? selectedAvatar,
     @Default([]) List<Map<String, double>> activeFrames,
   }) = _CameraState;
 }
@@ -41,6 +42,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
 
   Future<void> init() async {
     try {
+      await fetchSelectedAvatarFromId();
       await _cameraService.init(addListenersFunction: () {
         state =
             state.copyWith(isRecordingVideo: _cameraService.isRecordingVideo);
@@ -88,13 +90,15 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   }
 
   //avatar
-  Future<void> fetchSelectedAvatarId() async {
-    //TODO:とりあえずdefaultAvatarを使うことにしてやろう
+  Future<void> fetchSelectedAvatarFromId() async {
     String selectedAvatarId = await _fireAvatarService.fetchSelectedAvatarId();
-    if (selectedAvatarId.isEmpty) {}
-    // List<Avatar> defaultAvatarList =
-    //     await fireAvatarService.fetchDefaultAvatar();
-    // state = state.copyWith(avatarList: [...avatarList, ...defaultAvatarList]);
+    if (selectedAvatarId.isEmpty) {
+      state = state.copyWith(selectedAvatar: defaultAvatar);
+      return;
+    }
+    state = state.copyWith(
+        selectedAvatar:
+            await _fireAvatarService.fetchAvatarFromUuid(id: selectedAvatarId));
   }
 
   //animation_avatar
