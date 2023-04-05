@@ -19,6 +19,7 @@ mixin _$AvatarDetailPageState {
   String get newActiveImagePath => throw _privateConstructorUsedError;
   String get newStopImagePath => throw _privateConstructorUsedError;
   Avatar? get avatar => throw _privateConstructorUsedError;
+  String get selectedAvatarId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AvatarDetailPageStateCopyWith<AvatarDetailPageState> get copyWith =>
@@ -32,7 +33,10 @@ abstract class $AvatarDetailPageStateCopyWith<$Res> {
       _$AvatarDetailPageStateCopyWithImpl<$Res, AvatarDetailPageState>;
   @useResult
   $Res call(
-      {String newActiveImagePath, String newStopImagePath, Avatar? avatar});
+      {String newActiveImagePath,
+      String newStopImagePath,
+      Avatar? avatar,
+      String selectedAvatarId});
 
   $AvatarCopyWith<$Res>? get avatar;
 }
@@ -54,6 +58,7 @@ class _$AvatarDetailPageStateCopyWithImpl<$Res,
     Object? newActiveImagePath = null,
     Object? newStopImagePath = null,
     Object? avatar = freezed,
+    Object? selectedAvatarId = null,
   }) {
     return _then(_value.copyWith(
       newActiveImagePath: null == newActiveImagePath
@@ -68,6 +73,10 @@ class _$AvatarDetailPageStateCopyWithImpl<$Res,
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as Avatar?,
+      selectedAvatarId: null == selectedAvatarId
+          ? _value.selectedAvatarId
+          : selectedAvatarId // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -93,7 +102,10 @@ abstract class _$$_AvatarDetailPageStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String newActiveImagePath, String newStopImagePath, Avatar? avatar});
+      {String newActiveImagePath,
+      String newStopImagePath,
+      Avatar? avatar,
+      String selectedAvatarId});
 
   @override
   $AvatarCopyWith<$Res>? get avatar;
@@ -113,6 +125,7 @@ class __$$_AvatarDetailPageStateCopyWithImpl<$Res>
     Object? newActiveImagePath = null,
     Object? newStopImagePath = null,
     Object? avatar = freezed,
+    Object? selectedAvatarId = null,
   }) {
     return _then(_$_AvatarDetailPageState(
       newActiveImagePath: null == newActiveImagePath
@@ -127,6 +140,10 @@ class __$$_AvatarDetailPageStateCopyWithImpl<$Res>
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as Avatar?,
+      selectedAvatarId: null == selectedAvatarId
+          ? _value.selectedAvatarId
+          : selectedAvatarId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -137,7 +154,8 @@ class _$_AvatarDetailPageState implements _AvatarDetailPageState {
   const _$_AvatarDetailPageState(
       {this.newActiveImagePath = "",
       this.newStopImagePath = "",
-      this.avatar = null});
+      this.avatar = null,
+      this.selectedAvatarId = ""});
 
   @override
   @JsonKey()
@@ -148,10 +166,13 @@ class _$_AvatarDetailPageState implements _AvatarDetailPageState {
   @override
   @JsonKey()
   final Avatar? avatar;
+  @override
+  @JsonKey()
+  final String selectedAvatarId;
 
   @override
   String toString() {
-    return 'AvatarDetailPageState(newActiveImagePath: $newActiveImagePath, newStopImagePath: $newStopImagePath, avatar: $avatar)';
+    return 'AvatarDetailPageState(newActiveImagePath: $newActiveImagePath, newStopImagePath: $newStopImagePath, avatar: $avatar, selectedAvatarId: $selectedAvatarId)';
   }
 
   @override
@@ -163,12 +184,14 @@ class _$_AvatarDetailPageState implements _AvatarDetailPageState {
                 other.newActiveImagePath == newActiveImagePath) &&
             (identical(other.newStopImagePath, newStopImagePath) ||
                 other.newStopImagePath == newStopImagePath) &&
-            (identical(other.avatar, avatar) || other.avatar == avatar));
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
+            (identical(other.selectedAvatarId, selectedAvatarId) ||
+                other.selectedAvatarId == selectedAvatarId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, newActiveImagePath, newStopImagePath, avatar);
+  int get hashCode => Object.hash(runtimeType, newActiveImagePath,
+      newStopImagePath, avatar, selectedAvatarId);
 
   @JsonKey(ignore: true)
   @override
@@ -182,7 +205,8 @@ abstract class _AvatarDetailPageState implements AvatarDetailPageState {
   const factory _AvatarDetailPageState(
       {final String newActiveImagePath,
       final String newStopImagePath,
-      final Avatar? avatar}) = _$_AvatarDetailPageState;
+      final Avatar? avatar,
+      final String selectedAvatarId}) = _$_AvatarDetailPageState;
 
   @override
   String get newActiveImagePath;
@@ -190,6 +214,8 @@ abstract class _AvatarDetailPageState implements AvatarDetailPageState {
   String get newStopImagePath;
   @override
   Avatar? get avatar;
+  @override
+  String get selectedAvatarId;
   @override
   @JsonKey(ignore: true)
   _$$_AvatarDetailPageStateCopyWith<_$_AvatarDetailPageState> get copyWith =>

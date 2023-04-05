@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
+import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/ui/components/src/universal_image.dart';
@@ -25,7 +26,12 @@ class AvatarListPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('アバター一覧'),
         leading: IconButton(
-            onPressed: () => context.go('/'),
+            onPressed: () {
+              ref
+                  .read(recordingPageProvider.notifier)
+                  .fetchSelectedAvatarFromId();
+              context.go('/');
+            },
             icon: const Icon(Icons.chevron_left)),
       ),
       body: GridView.builder(

@@ -36,11 +36,11 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
       FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
 
   Future<void> init() async {
-    await fetchSelectedAvatarFromId();
+    await fetchSelectedAvatar();
     await fetchAvatars();
   }
 
-  Future<void> fetchSelectedAvatarFromId() async {
+  Future<void> fetchSelectedAvatar() async {
     String selectedAvatarId = await fireAvatarService.fetchSelectedAvatarId();
     if (selectedAvatarId.isEmpty) {
       state = state.copyWith(selectedAvatar: defaultAvatar);

@@ -13,7 +13,7 @@ class FireAvatarService {
       FirebaseAuth.instance.currentUser?.uid ?? FieldName.noAccount;
 
   Future<void> addNewAvatar({required Avatar avatar}) async {
-    FirebaseFirestore.instance
+    fireStore
         .collection('users')
         .doc(uid)
         .collection('avatars')
@@ -22,7 +22,7 @@ class FireAvatarService {
   }
 
   Future<void> updateAvatar({required Avatar avatar}) async {
-    FirebaseFirestore.instance
+    fireStore
         .collection('users')
         .doc(uid)
         .collection('avatars')
@@ -78,6 +78,15 @@ class FireAvatarService {
       return data['id'];
     }
     return '';
+  }
+
+  Future<void> setSelectAvatarId({required id}) async {
+    await fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('avatars')
+        .doc('selectedAvatar')
+        .set({'id': id});
   }
 
   Future<List<Avatar>> fetchDefaultAvatar() async {

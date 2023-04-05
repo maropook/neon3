@@ -16,6 +16,7 @@ class AvatarDetailPageState with _$AvatarDetailPageState {
     @Default("") String newActiveImagePath,
     @Default("") String newStopImagePath,
     @Default(null) Avatar? avatar,
+    @Default("") String selectedAvatarId,
   }) = _AvatarDetailPageState;
 }
 
@@ -37,10 +38,24 @@ class AvatarDetailPageController extends StateNotifier<AvatarDetailPageState> {
       FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
 
   Future<void> init() async {
-    await fetchSelectedAvatarFromId();
+    await fetchAvatarFromId();
+    await fetchSelectedAvatarId();
   }
 
-  Future<void> fetchSelectedAvatarFromId() async {
+  Future<void> selectAvatar() async {
+    if (_avatar.id == state.selectedAvatarId) {
+      return;
+    }
+    await fireAvatarService.setSelectAvatarId(id: _avatar.id);
+    state = state.copyWith(selectedAvatarId: _avatar.id);
+  }
+
+  Future<void> fetchSelectedAvatarId() async {
+    state = state.copyWith(
+        selectedAvatarId: await fireAvatarService.fetchSelectedAvatarId());
+  }
+
+  Future<void> fetchAvatarFromId() async {
     if (_avatar.id.isEmpty) {
       state = state.copyWith(avatar: defaultAvatar);
       return;
@@ -99,6 +114,9 @@ class AvatarDetailPageController extends StateNotifier<AvatarDetailPageState> {
   }
 
   Future<void> deleteAvatar({required String id}) async {
+    if (id == state.selectedAvatarId || id == '') {
+      return;
+    }
     await fireAvatarService.deleteAvatar(id: id);
     await fireStorageService.deleteImage(
         id: id, imageName: FieldName.activeAvatar);

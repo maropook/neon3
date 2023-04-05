@@ -30,6 +30,9 @@ class AvatarDetailPage extends ConsumerWidget {
                   await ref
                       .read(avatarListPageProvider.notifier)
                       .fetchAvatars();
+                  await ref
+                      .read(avatarListPageProvider.notifier)
+                      .fetchSelectedAvatar();
                   context.go('/avatar/list');
                 },
                 icon: const Icon(Icons.chevron_left)),
@@ -42,10 +45,23 @@ class AvatarDetailPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final avatar =
           ref.watch(avatarDetailPageProvider.select((s) => s.avatar));
+      final selectedAvatarId =
+          ref.watch(avatarDetailPageProvider.select((s) => s.selectedAvatarId));
       return avatar != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                GestureDetector(
+                  onTap: () async {
+                    ref.read(avatarDetailPageProvider.notifier).selectAvatar();
+                  },
+                  child: Icon(
+                    Icons.star,
+                    color: avatar.id == selectedAvatarId
+                        ? Colors.yellow
+                        : Colors.white,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -74,10 +90,10 @@ class AvatarDetailPage extends ConsumerWidget {
         _buildShowModalButton(context, ref),
         IconButton(
             onPressed: () async {
-              await ref
-                  .read(avatarDetailPageProvider.notifier)
-                  .deleteAvatar(id: avatar!.id);
-              await ref.read(avatarListPageProvider.notifier).fetchAvatars();
+              if (avatar == null) {
+                return;
+              }
+              await goToAvatarListCallBack(ref, avatar.id);
               context.go('/avatar/list');
             },
             icon: const Icon(
@@ -194,5 +210,13 @@ class AvatarDetailPage extends ConsumerWidget {
             ],
           )
         : const CircularProgressIndicator();
+  }
+
+  Future<void> goToAvatarListCallBack(WidgetRef ref, String avatarId) async {
+    await ref
+        .read(avatarDetailPageProvider.notifier)
+        .deleteAvatar(id: avatarId);
+    await ref.read(avatarListPageProvider.notifier).fetchAvatars();
+    await ref.read(avatarListPageProvider.notifier).fetchSelectedAvatar();
   }
 }
