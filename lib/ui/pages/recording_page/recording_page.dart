@@ -87,13 +87,17 @@ class RecordingPage extends ConsumerWidget {
             final videoFilePath = ref.read(recordingPageProvider).videoFilePath;
             final audioFilePath = ref.read(recordingPageProvider).audioFilePath;
             final activeFrames = ref.read(recordingPageProvider).activeFrames;
-            if (audioFilePath != null && videoFilePath != null) {
+            final avatar = ref.read(recordingPageProvider).selectedAvatar;
+            if (audioFilePath != null &&
+                videoFilePath != null &&
+                avatar != null) {
               ref.read(recordingPageProvider.notifier).disposeTimer();
               context.go('/edit',
                   extra: EditPageArgs(
                       audioFilePath: audioFilePath,
                       videoFilePath: videoFilePath,
-                      activeFrames: activeFrames));
+                      activeFrames: activeFrames,
+                      avatar: avatar));
             }
             return;
           }
@@ -146,9 +150,11 @@ class EditPageArgs {
   EditPageArgs(
       {required this.audioFilePath,
       required this.videoFilePath,
-      required this.activeFrames});
+      required this.activeFrames,
+      required this.avatar});
 
   String audioFilePath;
   String videoFilePath;
   List<Map<String, double>> activeFrames;
+  Avatar avatar;
 }

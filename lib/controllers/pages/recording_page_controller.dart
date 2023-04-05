@@ -90,15 +90,17 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   }
 
   //avatar
-  Future<void> fetchSelectedAvatarFromId() async {
+  Future<Avatar> fetchSelectedAvatarFromId() async {
     String selectedAvatarId = await _fireAvatarService.fetchSelectedAvatarId();
     if (selectedAvatarId.isEmpty) {
       state = state.copyWith(selectedAvatar: defaultAvatar);
-      return;
+      return defaultAvatar;
     }
-    state = state.copyWith(
-        selectedAvatar:
-            await _fireAvatarService.fetchAvatarFromUuid(id: selectedAvatarId));
+    final Avatar selectedAvatar =
+        await _fireAvatarService.fetchAvatarFromUuid(id: selectedAvatarId) ??
+            defaultAvatar;
+    state = state.copyWith(selectedAvatar: selectedAvatar);
+    return selectedAvatar;
   }
 
   //animation_avatar

@@ -16,7 +16,8 @@ class EncodePage extends ConsumerWidget {
       overrides: [
         encodePageProvider.overrideWith((ref) => EncodeController(
             videoFilePath: encodePageArgs.videoFilePath,
-            audioFilePath: encodePageArgs.audioFilePath))
+            audioFilePath: encodePageArgs.audioFilePath,
+            avatar: encodePageArgs.avatar))
       ],
       child: Scaffold(
           backgroundColor: Colors.black,
@@ -34,9 +35,11 @@ class EncodePage extends ConsumerWidget {
                 onPressed: () => context.go(
                       '/edit',
                       extra: EditPageArgs(
-                          audioFilePath: encodePageArgs.audioFilePath,
-                          videoFilePath: encodePageArgs.videoFilePath,
-                          activeFrames: encodePageArgs.activeFrames),
+                        audioFilePath: encodePageArgs.audioFilePath,
+                        videoFilePath: encodePageArgs.videoFilePath,
+                        activeFrames: encodePageArgs.activeFrames,
+                        avatar: encodePageArgs.avatar,
+                      ),
                     ),
                 icon: const Icon(Icons.chevron_left)),
           ),

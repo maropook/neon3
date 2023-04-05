@@ -21,30 +21,28 @@ final encodePageProvider =
 
 class EncodeController extends StateNotifier<EncodePageState> {
   EncodeController(
-      {required String videoFilePath, required String audioFilePath})
+      {required String videoFilePath,
+      required String audioFilePath,
+      required Avatar avatar})
       : _videoFilePath = videoFilePath,
         _audioFilePath = audioFilePath,
+        _avatar = avatar,
         super(const EncodePageState()) {
     init();
   }
   final String _videoFilePath;
   final String _audioFilePath;
+  final Avatar _avatar;
   final EncodeService _encodeService = EncodeService();
-  final FireAvatarService _fireAvatarService = FireAvatarService();
 
   Future<void> init() async {
-    final String avatarId = await _fireAvatarService.fetchSelectedAvatarId();
-    final Avatar avatar =
-        await _fireAvatarService.fetchAvatarFromUuid(id: avatarId) ??
-            defaultAvatar;
-
     final String encodedVideoFilePath = await _encodeService.encode(
         addListenersFunction: (dynamic value) {
           state = state.copyWith(progressRate: value as double);
         },
         audioFilePath: _audioFilePath,
         videoFilePath: _videoFilePath,
-        avatar: avatar);
+        avatar: _avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }

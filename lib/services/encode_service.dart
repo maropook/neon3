@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/services/download_image_service.dart';
@@ -83,6 +84,7 @@ class EncodeService {
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
   }) async {
+    EasyLoading.show();
     final String mergedAudioFilePath = await mergeAudio();
     final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
         await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
@@ -156,7 +158,7 @@ class EncodeService {
       addListenersFunction(value);
       Logger.log('encode', 'encode =>  $value %');
     });
-
+    EasyLoading.dismiss();
     final encodedVideoFilePath = await neonVideoEncoder.encode(
       encodeArgs: encodeArgs,
       // inputFilePath: await imageToVideo(),
