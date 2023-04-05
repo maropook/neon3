@@ -23,6 +23,7 @@ mixin _$Avatar {
   String get id => throw _privateConstructorUsedError;
   String get activeImageUrl => throw _privateConstructorUsedError;
   String get stopImageUrl => throw _privateConstructorUsedError;
+  bool get isDefault => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
   DateTime get created => throw _privateConstructorUsedError;
   @FireTimestampConverterNonNull()
@@ -42,6 +43,7 @@ abstract class $AvatarCopyWith<$Res> {
       {String id,
       String activeImageUrl,
       String stopImageUrl,
+      bool isDefault,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -62,6 +64,7 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
     Object? id = null,
     Object? activeImageUrl = null,
     Object? stopImageUrl = null,
+    Object? isDefault = null,
     Object? created = null,
     Object? updated = null,
   }) {
@@ -78,6 +81,10 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
           ? _value.stopImageUrl
           : stopImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      isDefault: null == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
       created: null == created
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
@@ -100,6 +107,7 @@ abstract class _$$_AvatarCopyWith<$Res> implements $AvatarCopyWith<$Res> {
       {String id,
       String activeImageUrl,
       String stopImageUrl,
+      bool isDefault,
       @FireTimestampConverterNonNull() DateTime created,
       @FireTimestampConverterNonNull() DateTime updated});
 }
@@ -117,6 +125,7 @@ class __$$_AvatarCopyWithImpl<$Res>
     Object? id = null,
     Object? activeImageUrl = null,
     Object? stopImageUrl = null,
+    Object? isDefault = null,
     Object? created = null,
     Object? updated = null,
   }) {
@@ -133,6 +142,10 @@ class __$$_AvatarCopyWithImpl<$Res>
           ? _value.stopImageUrl
           : stopImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      isDefault: null == isDefault
+          ? _value.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
       created: null == created
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
@@ -153,6 +166,7 @@ class _$_Avatar implements _Avatar {
       {this.id = '',
       this.activeImageUrl = '',
       this.stopImageUrl = '',
+      this.isDefault = false,
       @FireTimestampConverterNonNull() required this.created,
       @FireTimestampConverterNonNull() required this.updated});
 
@@ -169,6 +183,9 @@ class _$_Avatar implements _Avatar {
   @JsonKey()
   final String stopImageUrl;
   @override
+  @JsonKey()
+  final bool isDefault;
+  @override
   @FireTimestampConverterNonNull()
   final DateTime created;
   @override
@@ -177,7 +194,7 @@ class _$_Avatar implements _Avatar {
 
   @override
   String toString() {
-    return 'Avatar(id: $id, activeImageUrl: $activeImageUrl, stopImageUrl: $stopImageUrl, created: $created, updated: $updated)';
+    return 'Avatar(id: $id, activeImageUrl: $activeImageUrl, stopImageUrl: $stopImageUrl, isDefault: $isDefault, created: $created, updated: $updated)';
   }
 
   @override
@@ -190,14 +207,16 @@ class _$_Avatar implements _Avatar {
                 other.activeImageUrl == activeImageUrl) &&
             (identical(other.stopImageUrl, stopImageUrl) ||
                 other.stopImageUrl == stopImageUrl) &&
+            (identical(other.isDefault, isDefault) ||
+                other.isDefault == isDefault) &&
             (identical(other.created, created) || other.created == created) &&
             (identical(other.updated, updated) || other.updated == updated));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, activeImageUrl, stopImageUrl, created, updated);
+  int get hashCode => Object.hash(runtimeType, id, activeImageUrl, stopImageUrl,
+      isDefault, created, updated);
 
   @JsonKey(ignore: true)
   @override
@@ -218,6 +237,7 @@ abstract class _Avatar implements Avatar {
           {final String id,
           final String activeImageUrl,
           final String stopImageUrl,
+          final bool isDefault,
           @FireTimestampConverterNonNull() required final DateTime created,
           @FireTimestampConverterNonNull() required final DateTime updated}) =
       _$_Avatar;
@@ -230,6 +250,8 @@ abstract class _Avatar implements Avatar {
   String get activeImageUrl;
   @override
   String get stopImageUrl;
+  @override
+  bool get isDefault;
   @override
   @FireTimestampConverterNonNull()
   DateTime get created;

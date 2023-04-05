@@ -11,6 +11,7 @@ class Avatar with _$Avatar {
     @Default('') String id,
     @Default('') String activeImageUrl,
     @Default('') String stopImageUrl,
+    @Default(false) bool isDefault,
     @FireTimestampConverterNonNull() required DateTime created,
     @FireTimestampConverterNonNull() required DateTime updated,
   }) = _Avatar;

@@ -55,7 +55,10 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
 
   Future<List<Avatar>> fetchAvatars() async {
     List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
-    state = state.copyWith(avatarList: avatarList);
+    List<Avatar> defaultAvatarList =
+        await fireAvatarService.fetchDefaultAvatar();
+
+    state = state.copyWith(avatarList: [...avatarList, ...defaultAvatarList]);
 
     return avatarList;
   }

@@ -16,7 +16,7 @@ class FireAvatarService {
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(avatar.id)
         .set(avatar.toJson());
   }
@@ -25,7 +25,7 @@ class FireAvatarService {
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(avatar.id)
         .set(avatar.toJson());
   }
@@ -34,7 +34,7 @@ class FireAvatarService {
     await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(id)
         .delete();
   }
@@ -43,7 +43,7 @@ class FireAvatarService {
     final snapshot = await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .orderBy('created', descending: true)
         .get();
     return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
@@ -53,7 +53,7 @@ class FireAvatarService {
     final docSnapshot = await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(uuid)
         .get();
     final data = docSnapshot.data();
@@ -62,5 +62,13 @@ class FireAvatarService {
       return Avatar.fromJson(data);
     }
     return null;
+  }
+
+  Future<List<Avatar>> fetchDefaultAvatar() async {
+    final snapshot = await fireStore
+        .collection('avatars')
+        .orderBy('created', descending: true)
+        .get();
+    return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
   }
 }

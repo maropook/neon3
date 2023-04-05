@@ -44,21 +44,34 @@ class AvatarDetailPage extends ConsumerWidget {
                   child: UniversalImage(avatar.stopImageUrl)),
             ],
           ),
-          _buildShowModalButton(context, ref),
-          IconButton(
-              onPressed: () async {
-                await ref
-                    .read(avatarListPageProvider.notifier)
-                    .deleteAvatar(id: avatar.id);
-                context.go('/avatar/list');
-              },
-              icon: const Icon(
-                Icons.delete,
-                size: 50,
-                color: Colors.white,
-              )),
+          if (!avatar.isDefault) _buildEditContents(context, ref)
         ],
       ),
+    );
+  }
+
+  Widget _buildEditContents(BuildContext context, WidgetRef ref) {
+    final avatar = ref.watch(avatarListPageProvider.select((s) => s.avatarList
+        .where((element) => element.id == _avatar.id)
+        .toList()
+        .first));
+
+    return Column(
+      children: [
+        _buildShowModalButton(context, ref),
+        IconButton(
+            onPressed: () async {
+              await ref
+                  .read(avatarListPageProvider.notifier)
+                  .deleteAvatar(id: avatar.id);
+              context.go('/avatar/list');
+            },
+            icon: const Icon(
+              Icons.delete,
+              size: 50,
+              color: Colors.white,
+            )),
+      ],
     );
   }
 
