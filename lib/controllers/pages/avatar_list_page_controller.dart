@@ -57,15 +57,12 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
     List<Avatar> defaultAvatarList =
         await fireAvatarService.fetchDefaultAvatar();
-
     state = state.copyWith(avatarList: [...avatarList, ...defaultAvatarList]);
-
     return avatarList;
   }
 
   Future<void> addNewAvatar() async {
     final newAvatarId = const Uuid().v4();
-
     final newAvatar = Avatar(
       activeImageUrl: await fireStorageService.uploadImage(
           id: newAvatarId,

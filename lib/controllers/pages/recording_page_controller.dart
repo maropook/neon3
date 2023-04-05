@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/services/audio_record_service.dart';
 import 'package:maropook_neon2/services/camera_service.dart';
+import 'package:maropook_neon2/services/fire_avatar_service.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:path_provider/path_provider.dart';
 part 'recording_page_controller.freezed.dart';
@@ -35,6 +37,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
 
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
+  final FireAvatarService _fireAvatarService = FireAvatarService();
 
   Future<void> init() async {
     try {
@@ -82,6 +85,16 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     _cameraService.dispose();
     _audioRecordService.dispose();
     super.dispose();
+  }
+
+  //avatar
+  Future<void> fetchSelectedAvatarId() async {
+    //TODO:とりあえずdefaultAvatarを使うことにしてやろう
+    String selectedAvatarId = await _fireAvatarService.fetchSelectedAvatarId();
+    if (selectedAvatarId.isEmpty) {}
+    // List<Avatar> defaultAvatarList =
+    //     await fireAvatarService.fetchDefaultAvatar();
+    // state = state.copyWith(avatarList: [...avatarList, ...defaultAvatarList]);
   }
 
   //animation_avatar

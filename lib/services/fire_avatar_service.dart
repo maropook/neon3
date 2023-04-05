@@ -49,7 +49,7 @@ class FireAvatarService {
     return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
   }
 
-  Future<Avatar?> fetchSelectedAvatar({required String uuid}) async {
+  Future<Avatar?> fetchAvatarFromUuid({required String uuid}) async {
     final docSnapshot = await fireStore
         .collection('users')
         .doc(uid)
@@ -62,6 +62,22 @@ class FireAvatarService {
       return Avatar.fromJson(data);
     }
     return null;
+  }
+
+  Future<String> fetchSelectedAvatarId() async {
+    final docSnapshot = await fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('avatars')
+        .doc('selectedAvatar')
+        .get();
+
+    final data = docSnapshot.data();
+
+    if (data != null) {
+      return data['id'];
+    }
+    return '';
   }
 
   Future<List<Avatar>> fetchDefaultAvatar() async {

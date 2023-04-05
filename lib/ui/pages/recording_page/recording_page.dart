@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -43,7 +45,18 @@ class RecordingPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                cameraService.buildCameraPreview(),
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    cameraService.buildCameraPreview(),
+                    SizedBox(
+                      width: 100,
+                      child: UniversalImage(isAvatarActive
+                          ? defaultAvatar.activeImageUrl
+                          : defaultAvatar.stopImageUrl),
+                    ),
+                  ],
+                ),
                 _buildButton(),
                 Row(
                   children: [
