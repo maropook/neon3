@@ -80,6 +80,7 @@ class EncodeService {
   Future<String> encode({
     required String videoFilePath,
     required String audioFilePath,
+    required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
   }) async {
     final String mergedAudioFilePath = await mergeAudio();
@@ -119,9 +120,9 @@ class EncodeService {
 
     AvatarAnimation avatarAnimation = AvatarAnimation(
         activeImagePath: await downloadImageService.downloadImage(
-            downloadUrl: defaultAvatar.activeImageUrl),
+            downloadUrl: avatar.activeImageUrl),
         stopImagePath: await downloadImageService.downloadImage(
-            downloadUrl: defaultAvatar.stopImageUrl),
+            downloadUrl: avatar.stopImageUrl),
         imageSizeRatio: 1.0,
         activeFrameList: activeFrames,
         avatarSizeRatio: 0.5,
