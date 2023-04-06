@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/services/logger.dart';
 import 'package:maropook_neon2/services/speech_to_text_service.dart';
 import 'package:maropook_neon2/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:maropook_neon2/ui/pages/edit_page/edit_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'edit_page_controller.freezed.dart';
@@ -17,6 +19,7 @@ class EditPageState with _$EditPageState {
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default([]) List<SubtitleText> subtitleTexts,
     @Default(false) bool isAvatarActive,
+    @Default(0.0) double videoPlayerWidth,
   }) = _EditPageState;
 }
 
@@ -69,8 +72,18 @@ class EditPageController extends StateNotifier<EditPageState> {
 
       state = state.copyWith(videoPlayerService: _videoPlayerService);
       await play();
+      getVideoPlayerWidth(editVideoPlayerKey);
     } catch (e) {
       Logger.logError('edit_controller:init', e.toString());
+    }
+  }
+
+  void getVideoPlayerWidth(GlobalKey globalKey) {
+    try {
+      state = state.copyWith(
+          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 0);
+    } catch (e) {
+      Logger.logError('get_video_player_width', e.toString());
     }
   }
 

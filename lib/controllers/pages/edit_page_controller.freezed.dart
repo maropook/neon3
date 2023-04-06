@@ -21,6 +21,7 @@ mixin _$EditPageState {
       throw _privateConstructorUsedError;
   List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
+  double get videoPlayerWidth => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -37,7 +38,8 @@ abstract class $EditPageStateCopyWith<$Res> {
       {bool isPlaying,
       VideoPlayerService? videoPlayerService,
       List<SubtitleText> subtitleTexts,
-      bool isAvatarActive});
+      bool isAvatarActive,
+      double videoPlayerWidth});
 }
 
 /// @nodoc
@@ -57,6 +59,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? videoPlayerService = freezed,
     Object? subtitleTexts = null,
     Object? isAvatarActive = null,
+    Object? videoPlayerWidth = null,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
@@ -75,6 +78,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      videoPlayerWidth: null == videoPlayerWidth
+          ? _value.videoPlayerWidth
+          : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -91,7 +98,8 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       {bool isPlaying,
       VideoPlayerService? videoPlayerService,
       List<SubtitleText> subtitleTexts,
-      bool isAvatarActive});
+      bool isAvatarActive,
+      double videoPlayerWidth});
 }
 
 /// @nodoc
@@ -109,6 +117,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
     Object? videoPlayerService = freezed,
     Object? subtitleTexts = null,
     Object? isAvatarActive = null,
+    Object? videoPlayerWidth = null,
   }) {
     return _then(_$_EditPageState(
       isPlaying: null == isPlaying
@@ -127,6 +136,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      videoPlayerWidth: null == videoPlayerWidth
+          ? _value.videoPlayerWidth
+          : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -138,7 +151,8 @@ class _$_EditPageState implements _EditPageState {
       {this.isPlaying = false,
       this.videoPlayerService = null,
       final List<SubtitleText> subtitleTexts = const [],
-      this.isAvatarActive = false})
+      this.isAvatarActive = false,
+      this.videoPlayerWidth = 0.0})
       : _subtitleTexts = subtitleTexts;
 
   @override
@@ -159,10 +173,13 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final bool isAvatarActive;
+  @override
+  @JsonKey()
+  final double videoPlayerWidth;
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive)';
+    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth)';
   }
 
   @override
@@ -177,12 +194,19 @@ class _$_EditPageState implements _EditPageState {
             const DeepCollectionEquality()
                 .equals(other._subtitleTexts, _subtitleTexts) &&
             (identical(other.isAvatarActive, isAvatarActive) ||
-                other.isAvatarActive == isAvatarActive));
+                other.isAvatarActive == isAvatarActive) &&
+            (identical(other.videoPlayerWidth, videoPlayerWidth) ||
+                other.videoPlayerWidth == videoPlayerWidth));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isPlaying, videoPlayerService,
-      const DeepCollectionEquality().hash(_subtitleTexts), isAvatarActive);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isPlaying,
+      videoPlayerService,
+      const DeepCollectionEquality().hash(_subtitleTexts),
+      isAvatarActive,
+      videoPlayerWidth);
 
   @JsonKey(ignore: true)
   @override
@@ -196,7 +220,8 @@ abstract class _EditPageState implements EditPageState {
       {final bool isPlaying,
       final VideoPlayerService? videoPlayerService,
       final List<SubtitleText> subtitleTexts,
-      final bool isAvatarActive}) = _$_EditPageState;
+      final bool isAvatarActive,
+      final double videoPlayerWidth}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
@@ -206,6 +231,8 @@ abstract class _EditPageState implements EditPageState {
   List<SubtitleText> get subtitleTexts;
   @override
   bool get isAvatarActive;
+  @override
+  double get videoPlayerWidth;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>

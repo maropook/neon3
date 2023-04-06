@@ -9,10 +9,13 @@ import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
-class EditPage extends ConsumerWidget {
-  const EditPage({required this.editPageArgs, super.key});
+GlobalKey editVideoPlayerKey = GlobalKey();
+
+class EditPage extends HookConsumerWidget {
+  EditPage({required this.editPageArgs, super.key});
 
   final EditPageArgs editPageArgs;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
@@ -51,25 +54,15 @@ class EditPage extends ConsumerWidget {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                _buildVideoPlayer(),
+                RepaintBoundary(
+                    key: editVideoPlayerKey, child: _buildVideoPlayer()),
                 _buildAvatar(),
               ],
             ),
             for (int i = 0; i < texts.length; i++)
-              Text("${texts[i].startTime}:${texts[i].word}"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildEditContentIcon(
-                    'アバターを変更', Assets.images.changeAvatarIcon, context),
-                _buildEditContentIcon(
-                    'テキストを編集', Assets.images.textEditIcon, context),
-                _buildEditContentIcon(
-                    'BGMを追加', Assets.images.addBgmIcon, context),
-                _buildEditContentIcon(
-                    '人工音声', Assets.images.artificialVoiceIcon, context),
-              ],
-            )
+              Text("${texts[i].startTime}:${texts[i].word}",
+                  style: const TextStyle(color: Colors.white)),
+            _buildEditContentIcons(),
           ]);
     });
   }
@@ -101,12 +94,30 @@ class EditPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final isAvatarActive =
           ref.watch(editPageProvider.select((s) => s.isAvatarActive));
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
 
       return SizedBox(
-        width: 50,
+        width: videoPlayerWidth / 2,
         child: UniversalImage(isAvatarActive
             ? editPageArgs.avatar.activeImageUrl
             : editPageArgs.avatar.stopImageUrl),
+      );
+    });
+  }
+
+  Widget _buildEditContentIcons() {
+    return Consumer(builder: (context, ref, _) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildEditContentIcon(
+              'アバターを変更', Assets.images.changeAvatarIcon, context),
+          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context),
+          _buildEditContentIcon('BGMを追加', Assets.images.addBgmIcon, context),
+          _buildEditContentIcon(
+              '人工音声', Assets.images.artificialVoiceIcon, context),
+        ],
       );
     });
   }

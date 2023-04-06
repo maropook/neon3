@@ -35,13 +35,10 @@ class RecordingPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final cameraService =
           ref.watch(recordingPageProvider.select((s) => s.cameraService));
-      final isAvatarActive =
+      final bool isAvatarActive =
           ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
-      final current =
+      final double currentSeconds =
           ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
-      final Avatar selectedAvatar =
-          ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
-              defaultAvatar;
 
       return cameraService != null
           ? Column(
@@ -60,7 +57,7 @@ class RecordingPage extends ConsumerWidget {
                   children: [
                     Text(isAvatarActive.toString(),
                         style: const TextStyle(color: Colors.white)),
-                    Text(current.toString(),
+                    Text(currentSeconds.toString(),
                         style: const TextStyle(color: Colors.white)),
                   ],
                 )
@@ -72,13 +69,13 @@ class RecordingPage extends ConsumerWidget {
 
   Widget _buildAvatar() {
     return Consumer(builder: (context, ref, _) {
-      final isAvatarActive =
+      final bool isAvatarActive =
           ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
       final Avatar selectedAvatar =
           ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
               defaultAvatar;
       return SizedBox(
-        width: 100,
+        width: MediaQuery.of(context).size.width / 2,
         child: UniversalImage(isAvatarActive
             ? selectedAvatar.activeImageUrl
             : selectedAvatar.stopImageUrl),
