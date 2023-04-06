@@ -68,11 +68,11 @@ class AvatarDetailPage extends ConsumerWidget {
                     SizedBox(
                         width: 150,
                         height: 150,
-                        child: UniversalImage(avatar.activeImageUrl)),
+                        child: UniversalImage(avatar.stopImageUrl)),
                     SizedBox(
                         width: 150,
                         height: 150,
-                        child: UniversalImage(avatar.stopImageUrl)),
+                        child: UniversalImage(avatar.activeImageUrl)),
                   ],
                 ),
                 if (!avatar.isDefault) _buildEditContents(context, ref)

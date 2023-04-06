@@ -13,7 +13,7 @@ class FireStorageService {
 
   final String uid = FirebaseAuth.instance.currentUser?.uid ??
       FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
-  final ImagePicker picker = ImagePicker();
+  // final ImagePicker picker = ImagePicker();
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<String> getNewImagePath() async {

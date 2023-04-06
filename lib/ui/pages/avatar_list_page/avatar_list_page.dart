@@ -122,17 +122,6 @@ class AvatarListPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                child: activeImagePath.isNotEmpty
-                    ? SizedBox(
-                        width: 150, child: Image.file(File(activeImagePath)))
-                    : _buildAddIcon(isActive: true),
-                onTap: () async {
-                  await ref
-                      .read(avatarListPageProvider.notifier)
-                      .setNewImage(isActive: true);
-                },
-              ),
-              GestureDetector(
                 child: stopImagePath.isNotEmpty
                     ? SizedBox(
                         width: 150, child: Image.file(File(stopImagePath)))
@@ -141,6 +130,17 @@ class AvatarListPage extends ConsumerWidget {
                   await ref
                       .read(avatarListPageProvider.notifier)
                       .setNewImage(isActive: false);
+                },
+              ),
+              GestureDetector(
+                child: activeImagePath.isNotEmpty
+                    ? SizedBox(
+                        width: 150, child: Image.file(File(activeImagePath)))
+                    : _buildAddIcon(isActive: true),
+                onTap: () async {
+                  await ref
+                      .read(avatarListPageProvider.notifier)
+                      .setNewImage(isActive: true);
                 },
               ),
             ],
