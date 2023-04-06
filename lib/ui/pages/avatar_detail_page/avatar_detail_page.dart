@@ -150,6 +150,8 @@ class AvatarDetailPage extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  //TODO: setNewImageしてもFile(activeImagePath)が更新されない(https://github.com/maropook/maropook_neon2/issues/63)
+
                   GestureDetector(
                     child: activeImagePath.isNotEmpty
                         ? SizedBox(
