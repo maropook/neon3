@@ -47,6 +47,7 @@ dependencies:
   file: ^6.1.4
   image_downloader: ^0.31.0
   file_picker: ^5.2.7
+  video_thumbnail: ^0.5.3
 
   neon_video_encoder:
     git:
