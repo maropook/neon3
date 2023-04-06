@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -16,17 +17,26 @@ class FireStorageService {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<String> getNewImagePath() async {
-    final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImageFile == null) return '';
-    final croppedImageFile = await ImageCropper().cropImage(
-      sourcePath: pickedImageFile.path,
-      compressQuality: 80,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-    );
-    if (croppedImageFile == null) return '';
-    return croppedImageFile.path;
+    final FilePickerResult? pickedImageFile =
+        await FilePicker.platform.pickFiles();
+    if (pickedImageFile == null) {
+      return '';
+    }
+    final String pickedImageFilePath = pickedImageFile.files.single.path!;
+
+    // final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
+    //   if (pickedImageFile == null) return '';
+    // final String pickedImageFilePath =pickedImageFile.path!;
+
+    // final croppedImageFile = await ImageCropper().cropImage(
+    //   sourcePath: pickedImageFilePath, //pickedImageFile.path
+    //   compressQuality: 80,
+    //   maxWidth: 1024,
+    //   maxHeight: 1024,
+    //   aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+    // );
+    // if (croppedImageFile == null) return '';//image_cropperとimage_pickerは透過に対応してない
+    return pickedImageFilePath;
   }
 
   Future<String> uploadImage({
