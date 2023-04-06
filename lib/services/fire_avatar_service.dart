@@ -13,19 +13,19 @@ class FireAvatarService {
       FirebaseAuth.instance.currentUser?.uid ?? FieldName.noAccount;
 
   Future<void> addNewAvatar({required Avatar avatar}) async {
-    FirebaseFirestore.instance
+    fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(avatar.id)
         .set(avatar.toJson());
   }
 
   Future<void> updateAvatar({required Avatar avatar}) async {
-    FirebaseFirestore.instance
+    fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(avatar.id)
         .set(avatar.toJson());
   }
@@ -34,7 +34,7 @@ class FireAvatarService {
     await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .doc(id)
         .delete();
   }
@@ -43,18 +43,18 @@ class FireAvatarService {
     final snapshot = await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
+        .collection('avatars')
         .orderBy('created', descending: true)
         .get();
     return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
   }
 
-  Future<Avatar?> fetchSelectedAvatar({required String uuid}) async {
+  Future<Avatar?> fetchAvatarFromUuid({required String id}) async {
     final docSnapshot = await fireStore
         .collection('users')
         .doc(uid)
-        .collection('images')
-        .doc(uuid)
+        .collection('avatars')
+        .doc(id)
         .get();
     final data = docSnapshot.data();
 
@@ -62,5 +62,38 @@ class FireAvatarService {
       return Avatar.fromJson(data);
     }
     return null;
+  }
+
+  Future<String> fetchSelectedAvatarId() async {
+    final docSnapshot = await fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('avatars')
+        .doc('selectedAvatar')
+        .get();
+
+    final data = docSnapshot.data();
+
+    if (data != null) {
+      return data['id'];
+    }
+    return '';
+  }
+
+  Future<void> setSelectAvatarId({required id}) async {
+    await fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('avatars')
+        .doc('selectedAvatar')
+        .set({'id': id});
+  }
+
+  Future<List<Avatar>> fetchDefaultAvatar() async {
+    final snapshot = await fireStore
+        .collection('avatars')
+        .orderBy('created', descending: true)
+        .get();
+    return snapshot.docs.map((e) => Avatar.fromJson(e.data())).toList();
   }
 }

@@ -17,6 +17,7 @@ class AvatarListPageState with _$AvatarListPageState {
     @Default("") String newActiveImagePath,
     @Default("") String newStopImagePath,
     @Default([]) List<Avatar> avatarList,
+    @Default(null) Avatar? selectedAvatar,
   }) = _AvatarListPageState;
 }
 
@@ -35,7 +36,19 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
       FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
 
   Future<void> init() async {
+    await fetchSelectedAvatar();
     await fetchAvatars();
+  }
+
+  Future<void> fetchSelectedAvatar() async {
+    String selectedAvatarId = await fireAvatarService.fetchSelectedAvatarId();
+    if (selectedAvatarId.isEmpty) {
+      state = state.copyWith(selectedAvatar: defaultAvatar);
+      return;
+    }
+    state = state.copyWith(
+        selectedAvatar:
+            await fireAvatarService.fetchAvatarFromUuid(id: selectedAvatarId));
   }
 
   void clearNewImagePath() {
@@ -55,14 +68,14 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
 
   Future<List<Avatar>> fetchAvatars() async {
     List<Avatar> avatarList = await fireAvatarService.fetchAvatars();
-    state = state.copyWith(avatarList: avatarList);
-
+    List<Avatar> defaultAvatarList =
+        await fireAvatarService.fetchDefaultAvatar();
+    state = state.copyWith(avatarList: [...avatarList, ...defaultAvatarList]);
     return avatarList;
   }
 
   Future<void> addNewAvatar() async {
     final newAvatarId = const Uuid().v4();
-
     final newAvatar = Avatar(
       activeImageUrl: await fireStorageService.uploadImage(
           id: newAvatarId,
@@ -81,55 +94,5 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     state = state.copyWith(
       avatarList: [newAvatar, ...state.avatarList],
     );
-  }
-
-  Future<void> updateAvatar({required Avatar previousAvatar}) async {
-    final id = previousAvatar.id;
-    var newAvatar = Avatar(
-      activeImageUrl: previousAvatar.activeImageUrl,
-      stopImageUrl: previousAvatar.stopImageUrl,
-      id: previousAvatar.id,
-      created: previousAvatar.created,
-      updated: DateTime.now(),
-    );
-
-    if (state.newActiveImagePath.isNotEmpty) {
-      await fireStorageService.deleteImage(
-          id: id, imageName: FieldName.activeAvatar);
-      final activeImageUrl = await fireStorageService.uploadImage(
-          id: id,
-          imageName: FieldName.activeAvatar,
-          imagePath: state.newActiveImagePath);
-      newAvatar = newAvatar.copyWith(activeImageUrl: activeImageUrl);
-    }
-
-    if (state.newStopImagePath.isNotEmpty) {
-      await fireStorageService.deleteImage(
-          id: id, imageName: FieldName.stopAvatar);
-      final stopImageUrl = await fireStorageService.uploadImage(
-          id: id,
-          imageName: FieldName.stopAvatar,
-          imagePath: state.newStopImagePath);
-      newAvatar = newAvatar.copyWith(stopImageUrl: stopImageUrl);
-    }
-
-    await fireAvatarService.updateAvatar(avatar: newAvatar);
-
-    final List<Avatar> avatarList = state.avatarList
-        .map((avatar) => avatar.id == newAvatar.id ? newAvatar : avatar)
-        .toList();
-
-    state = state.copyWith(avatarList: avatarList);
-  }
-
-  Future<void> deleteAvatar({required String id}) async {
-    await fireAvatarService.deleteAvatar(id: id);
-    final List<Avatar> avatarList =
-        state.avatarList.where((avatar) => avatar.id != id).toList();
-    await fireStorageService.deleteImage(
-        id: id, imageName: FieldName.activeAvatar);
-    await fireStorageService.deleteImage(
-        id: id, imageName: FieldName.stopAvatar);
-    state = state.copyWith(avatarList: avatarList);
   }
 }

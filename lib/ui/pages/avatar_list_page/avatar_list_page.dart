@@ -5,7 +5,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
+import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 
 class AvatarListPage extends ConsumerWidget {
@@ -15,12 +17,21 @@ class AvatarListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatarList =
         ref.watch(avatarListPageProvider.select((s) => s.avatarList));
+    final Avatar selectedAvatar =
+        ref.watch(avatarListPageProvider.select((s) => s.selectedAvatar)) ??
+            defaultAvatar;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('アバター一覧'),
         leading: IconButton(
-            onPressed: () => context.go('/'),
+            onPressed: () {
+              ref
+                  .read(recordingPageProvider.notifier)
+                  .fetchSelectedAvatarFromId();
+              context.go('/');
+            },
             icon: const Icon(Icons.chevron_left)),
       ),
       body: GridView.builder(
@@ -40,16 +51,30 @@ class AvatarListPage extends ConsumerWidget {
                       context.go('/avatar/list/detail',
                           extra: avatarList[index]);
                     },
-                    child: avatarList[index].activeImageUrl.isNotEmpty
-                        ? UniversalImage(
-                            avatarList[index].activeImageUrl,
-                            fit: BoxFit.cover,
-                          )
-                        : UniversalImage(
-                            Assets.images.faceSmile,
-                            fit: BoxFit.cover,
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      fit: StackFit.loose,
+                      children: [
+                        avatarList[index].activeImageUrl.isNotEmpty
+                            ? AspectRatio(
+                                aspectRatio: 1,
+                                child: UniversalImage(
+                                  avatarList[index].activeImageUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : UniversalImage(
+                                Assets.images.faceSmile,
+                                fit: BoxFit.cover,
+                              ),
+                        if (avatarList[index].id == selectedAvatar.id)
+                          const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                            size: 30,
                           ),
-                  )
+                      ],
+                    ))
                 : _buildShowModalButton(context, ref),
           );
         },

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
+import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -33,9 +35,9 @@ class RecordingPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final cameraService =
           ref.watch(recordingPageProvider.select((s) => s.cameraService));
-      final isAvatarActive =
+      final bool isAvatarActive =
           ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
-      final current =
+      final double currentSeconds =
           ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
 
       return cameraService != null
@@ -43,19 +45,41 @@ class RecordingPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                cameraService.buildCameraPreview(),
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    cameraService.buildCameraPreview(),
+                    _buildAvatar(),
+                  ],
+                ),
                 _buildButton(),
                 Row(
                   children: [
                     Text(isAvatarActive.toString(),
                         style: const TextStyle(color: Colors.white)),
-                    Text(current.toString(),
+                    Text(currentSeconds.toString(),
                         style: const TextStyle(color: Colors.white)),
                   ],
                 )
               ],
             )
           : const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final bool isAvatarActive =
+          ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
+      final Avatar selectedAvatar =
+          ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
+              defaultAvatar;
+      return SizedBox(
+        width: MediaQuery.of(context).size.width / 2,
+        child: UniversalImage(isAvatarActive
+            ? selectedAvatar.activeImageUrl
+            : selectedAvatar.stopImageUrl),
+      );
     });
   }
 
@@ -71,13 +95,17 @@ class RecordingPage extends ConsumerWidget {
             final videoFilePath = ref.read(recordingPageProvider).videoFilePath;
             final audioFilePath = ref.read(recordingPageProvider).audioFilePath;
             final activeFrames = ref.read(recordingPageProvider).activeFrames;
-            if (audioFilePath != null && videoFilePath != null) {
+            final avatar = ref.read(recordingPageProvider).selectedAvatar;
+            if (audioFilePath != null &&
+                videoFilePath != null &&
+                avatar != null) {
               ref.read(recordingPageProvider.notifier).disposeTimer();
               context.go('/edit',
                   extra: EditPageArgs(
                       audioFilePath: audioFilePath,
                       videoFilePath: videoFilePath,
-                      activeFrames: activeFrames));
+                      activeFrames: activeFrames,
+                      avatar: avatar));
             }
             return;
           }
@@ -130,9 +158,11 @@ class EditPageArgs {
   EditPageArgs(
       {required this.audioFilePath,
       required this.videoFilePath,
-      required this.activeFrames});
+      required this.activeFrames,
+      required this.avatar});
 
   String audioFilePath;
   String videoFilePath;
   List<Map<String, double>> activeFrames;
+  Avatar avatar;
 }

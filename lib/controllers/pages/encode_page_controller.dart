@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:maropook_neon2/models/src/avatar.dart';
 import 'package:maropook_neon2/services/encode_service.dart';
+import 'package:maropook_neon2/services/fire_avatar_service.dart';
 
 part 'encode_page_controller.freezed.dart';
 
@@ -19,23 +21,32 @@ final encodePageProvider =
 
 class EncodeController extends StateNotifier<EncodePageState> {
   EncodeController(
-      {required String videoFilePath, required String audioFilePath})
+      {required String videoFilePath,
+      required String audioFilePath,
+      required Avatar avatar})
       : _videoFilePath = videoFilePath,
         _audioFilePath = audioFilePath,
+        _avatar = avatar,
         super(const EncodePageState()) {
     init();
   }
   final String _videoFilePath;
   final String _audioFilePath;
+  final Avatar _avatar;
   final EncodeService _encodeService = EncodeService();
 
   Future<void> init() async {
-    final encodedVideoFilePath = await _encodeService.encode(
+    final String encodedVideoFilePath = await _encodeService.encode(
         addListenersFunction: (dynamic value) {
           state = state.copyWith(progressRate: value as double);
         },
         audioFilePath: _audioFilePath,
-        videoFilePath: _videoFilePath);
+        videoFilePath: _videoFilePath,
+        activeFrames: [
+          {"startTime": 1.3, "endTime": 2.0},
+          {"startTime": 3.0, "endTime": 4.5}
+        ],
+        avatar: _avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }

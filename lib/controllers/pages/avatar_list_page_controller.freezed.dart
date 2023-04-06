@@ -20,6 +20,7 @@ mixin _$AvatarListPageState {
   String get newActiveImagePath => throw _privateConstructorUsedError;
   String get newStopImagePath => throw _privateConstructorUsedError;
   List<Avatar> get avatarList => throw _privateConstructorUsedError;
+  Avatar? get selectedAvatar => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AvatarListPageStateCopyWith<AvatarListPageState> get copyWith =>
@@ -36,9 +37,11 @@ abstract class $AvatarListPageStateCopyWith<$Res> {
       {Avatar? newAvatar,
       String newActiveImagePath,
       String newStopImagePath,
-      List<Avatar> avatarList});
+      List<Avatar> avatarList,
+      Avatar? selectedAvatar});
 
   $AvatarCopyWith<$Res>? get newAvatar;
+  $AvatarCopyWith<$Res>? get selectedAvatar;
 }
 
 /// @nodoc
@@ -58,6 +61,7 @@ class _$AvatarListPageStateCopyWithImpl<$Res, $Val extends AvatarListPageState>
     Object? newActiveImagePath = null,
     Object? newStopImagePath = null,
     Object? avatarList = null,
+    Object? selectedAvatar = freezed,
   }) {
     return _then(_value.copyWith(
       newAvatar: freezed == newAvatar
@@ -76,6 +80,10 @@ class _$AvatarListPageStateCopyWithImpl<$Res, $Val extends AvatarListPageState>
           ? _value.avatarList
           : avatarList // ignore: cast_nullable_to_non_nullable
               as List<Avatar>,
+      selectedAvatar: freezed == selectedAvatar
+          ? _value.selectedAvatar
+          : selectedAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
     ) as $Val);
   }
 
@@ -88,6 +96,18 @@ class _$AvatarListPageStateCopyWithImpl<$Res, $Val extends AvatarListPageState>
 
     return $AvatarCopyWith<$Res>(_value.newAvatar!, (value) {
       return _then(_value.copyWith(newAvatar: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AvatarCopyWith<$Res>? get selectedAvatar {
+    if (_value.selectedAvatar == null) {
+      return null;
+    }
+
+    return $AvatarCopyWith<$Res>(_value.selectedAvatar!, (value) {
+      return _then(_value.copyWith(selectedAvatar: value) as $Val);
     });
   }
 }
@@ -104,10 +124,13 @@ abstract class _$$_AvatarListPageStateCopyWith<$Res>
       {Avatar? newAvatar,
       String newActiveImagePath,
       String newStopImagePath,
-      List<Avatar> avatarList});
+      List<Avatar> avatarList,
+      Avatar? selectedAvatar});
 
   @override
   $AvatarCopyWith<$Res>? get newAvatar;
+  @override
+  $AvatarCopyWith<$Res>? get selectedAvatar;
 }
 
 /// @nodoc
@@ -125,6 +148,7 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
     Object? newActiveImagePath = null,
     Object? newStopImagePath = null,
     Object? avatarList = null,
+    Object? selectedAvatar = freezed,
   }) {
     return _then(_$_AvatarListPageState(
       newAvatar: freezed == newAvatar
@@ -143,6 +167,10 @@ class __$$_AvatarListPageStateCopyWithImpl<$Res>
           ? _value._avatarList
           : avatarList // ignore: cast_nullable_to_non_nullable
               as List<Avatar>,
+      selectedAvatar: freezed == selectedAvatar
+          ? _value.selectedAvatar
+          : selectedAvatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
     ));
   }
 }
@@ -154,7 +182,8 @@ class _$_AvatarListPageState implements _AvatarListPageState {
       {this.newAvatar = null,
       this.newActiveImagePath = "",
       this.newStopImagePath = "",
-      final List<Avatar> avatarList = const []})
+      final List<Avatar> avatarList = const [],
+      this.selectedAvatar = null})
       : _avatarList = avatarList;
 
   @override
@@ -176,8 +205,12 @@ class _$_AvatarListPageState implements _AvatarListPageState {
   }
 
   @override
+  @JsonKey()
+  final Avatar? selectedAvatar;
+
+  @override
   String toString() {
-    return 'AvatarListPageState(newAvatar: $newAvatar, newActiveImagePath: $newActiveImagePath, newStopImagePath: $newStopImagePath, avatarList: $avatarList)';
+    return 'AvatarListPageState(newAvatar: $newAvatar, newActiveImagePath: $newActiveImagePath, newStopImagePath: $newStopImagePath, avatarList: $avatarList, selectedAvatar: $selectedAvatar)';
   }
 
   @override
@@ -192,12 +225,19 @@ class _$_AvatarListPageState implements _AvatarListPageState {
             (identical(other.newStopImagePath, newStopImagePath) ||
                 other.newStopImagePath == newStopImagePath) &&
             const DeepCollectionEquality()
-                .equals(other._avatarList, _avatarList));
+                .equals(other._avatarList, _avatarList) &&
+            (identical(other.selectedAvatar, selectedAvatar) ||
+                other.selectedAvatar == selectedAvatar));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, newAvatar, newActiveImagePath,
-      newStopImagePath, const DeepCollectionEquality().hash(_avatarList));
+  int get hashCode => Object.hash(
+      runtimeType,
+      newAvatar,
+      newActiveImagePath,
+      newStopImagePath,
+      const DeepCollectionEquality().hash(_avatarList),
+      selectedAvatar);
 
   @JsonKey(ignore: true)
   @override
@@ -212,7 +252,8 @@ abstract class _AvatarListPageState implements AvatarListPageState {
       {final Avatar? newAvatar,
       final String newActiveImagePath,
       final String newStopImagePath,
-      final List<Avatar> avatarList}) = _$_AvatarListPageState;
+      final List<Avatar> avatarList,
+      final Avatar? selectedAvatar}) = _$_AvatarListPageState;
 
   @override
   Avatar? get newAvatar;
@@ -222,6 +263,8 @@ abstract class _AvatarListPageState implements AvatarListPageState {
   String get newStopImagePath;
   @override
   List<Avatar> get avatarList;
+  @override
+  Avatar? get selectedAvatar;
   @override
   @JsonKey(ignore: true)
   _$$_AvatarListPageStateCopyWith<_$_AvatarListPageState> get copyWith =>

@@ -5,14 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:maropook_neon2/controllers/pages/edit_page_controller.dart';
 import 'package:maropook_neon2/gen/assets.gen.dart';
 import 'package:maropook_neon2/themes/styles.dart';
+import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
-import 'package:video_player/video_player.dart';
 
-class EditPage extends ConsumerWidget {
+final GlobalKey editVideoPlayerKey = GlobalKey();
+
+class EditPage extends HookConsumerWidget {
   const EditPage({required this.editPageArgs, super.key});
 
   final EditPageArgs editPageArgs;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
@@ -42,45 +45,80 @@ class EditPage extends ConsumerWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final videoController =
-          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
-      final editPageController = ref.read(editPageProvider.notifier);
-      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            videoController != null
-                ? SizedBox(
-                    height: 300,
-                    child: GestureDetector(
-                      onTap: () {
-                        isPlaying
-                            ? editPageController.pause()
-                            : editPageController.play();
-                      },
-                      child: videoController.buildVideoPlayer(),
-                    ),
-                  )
-                : const CircularProgressIndicator(),
-            for (int i = 0; i < texts.length; i++)
-              Text("${texts[i].startTime}:${texts[i].word}"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Stack(
+              alignment: Alignment.bottomRight,
               children: [
-                _buildEditContentIcon(
-                    'アバターを変更', Assets.images.changeAvatarIcon, context),
-                _buildEditContentIcon(
-                    'テキストを編集', Assets.images.textEditIcon, context),
-                _buildEditContentIcon(
-                    'BGMを追加', Assets.images.addBgmIcon, context),
-                _buildEditContentIcon(
-                    '人工音声', Assets.images.artificialVoiceIcon, context),
+                RepaintBoundary(
+                    key: editVideoPlayerKey, child: _buildVideoPlayer()),
+                _buildAvatar(),
               ],
-            )
+            ),
+            for (int i = 0; i < texts.length; i++)
+              Text("${texts[i].startTime}:${texts[i].word}",
+                  style: const TextStyle(color: Colors.white)),
+            _buildEditContentIcons(),
           ]);
+    });
+  }
+
+  Widget _buildVideoPlayer() {
+    return Consumer(builder: (context, ref, _) {
+      final videoController =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
+      final editPageController = ref.read(editPageProvider.notifier);
+      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
+
+      return videoController != null
+          ? SizedBox(
+              height: 300,
+              child: GestureDetector(
+                onTap: () {
+                  isPlaying
+                      ? editPageController.pause()
+                      : editPageController.play();
+                },
+                child: videoController.buildVideoPlayer(),
+              ),
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final isAvatarActive =
+          ref.watch(editPageProvider.select((s) => s.isAvatarActive));
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+
+      return SizedBox(
+        width: videoPlayerWidth / 2,
+        child: UniversalImage(isAvatarActive
+            ? editPageArgs.avatar.activeImageUrl
+            : editPageArgs.avatar.stopImageUrl),
+      );
+    });
+  }
+
+  Widget _buildEditContentIcons() {
+    return Consumer(builder: (context, ref, _) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildEditContentIcon(
+              'アバターを変更', Assets.images.changeAvatarIcon, context),
+          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context),
+          _buildEditContentIcon('BGMを追加', Assets.images.addBgmIcon, context),
+          _buildEditContentIcon(
+              '人工音声', Assets.images.artificialVoiceIcon, context),
+        ],
+      );
     });
   }
 
