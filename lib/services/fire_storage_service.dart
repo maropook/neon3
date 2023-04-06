@@ -23,6 +23,7 @@ class FireStorageService {
       compressQuality: 80,
       maxWidth: 1024,
       maxHeight: 1024,
+      aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     );
     if (croppedImageFile == null) return '';
     return croppedImageFile.path;

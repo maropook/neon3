@@ -9,10 +9,10 @@ import 'package:maropook_neon2/ui/components/src/universal_image.dart';
 import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
-GlobalKey editVideoPlayerKey = GlobalKey();
+final GlobalKey editVideoPlayerKey = GlobalKey();
 
 class EditPage extends HookConsumerWidget {
-  EditPage({required this.editPageArgs, super.key});
+  const EditPage({required this.editPageArgs, super.key});
 
   final EditPageArgs editPageArgs;
 
