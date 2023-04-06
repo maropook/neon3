@@ -42,6 +42,10 @@ class EncodeController extends StateNotifier<EncodePageState> {
         },
         audioFilePath: _audioFilePath,
         videoFilePath: _videoFilePath,
+        activeFrames: [
+          {"startTime": 1.3, "endTime": 2.0},
+          {"startTime": 3.0, "endTime": 4.5}
+        ],
         avatar: _avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);

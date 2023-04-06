@@ -11,6 +11,8 @@ class VideoPlayerService {
   final String _videoFilePath;
   VideoPlayerController? _videoPlayerController;
   bool get isPlaying => _videoPlayerController?.value.isPlaying ?? false;
+  double get currentSeconds =>
+      0.001 * (_videoPlayerController?.value.position.inMilliseconds ?? 0);
 
   Future<void> init({required void Function() addListenersFunction}) async {
     try {

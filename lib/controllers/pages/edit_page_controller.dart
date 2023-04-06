@@ -16,6 +16,7 @@ class EditPageState with _$EditPageState {
     @Default(false) bool isPlaying,
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default([]) List<SubtitleText> subtitleTexts,
+    @Default(false) bool isAvatarActive,
   }) = _EditPageState;
 }
 
@@ -59,6 +60,9 @@ class EditPageController extends StateNotifier<EditPageState> {
       _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         state = state.copyWith(isPlaying: _videoPlayerService!.isPlaying);
+        state = state.copyWith(
+            isAvatarActive:
+                isAvatarActive(_videoPlayerService!.currentSeconds));
       });
 
       await _audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -85,5 +89,15 @@ class EditPageController extends StateNotifier<EditPageState> {
     _audioPlayer.dispose();
     _videoPlayerService!.dispose();
     super.dispose();
+  }
+
+  bool isAvatarActive(double currentSeconds) {
+    for (int i = 0; i < _activeFrames.length; ++i) {
+      if (_activeFrames[i]['startTime']! <= currentSeconds &&
+          _activeFrames[i]['endTime']! >= currentSeconds) {
+        return true;
+      }
+    }
+    return false;
   }
 }

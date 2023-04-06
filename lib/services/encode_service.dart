@@ -81,6 +81,7 @@ class EncodeService {
   Future<String> encode({
     required String videoFilePath,
     required String audioFilePath,
+    required List<Map<String, double>> activeFrames,
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
   }) async {
@@ -115,10 +116,6 @@ class EncodeService {
     ];
 
     // AvatarAnimation
-    List<Map<String, double>> activeFrames = [
-      {"startTime": 1.3, "endTime": 2.0},
-      {"startTime": 3.0, "endTime": 4.5}
-    ];
 
     AvatarAnimation avatarAnimation = AvatarAnimation(
         activeImagePath: await downloadImageService.downloadImage(

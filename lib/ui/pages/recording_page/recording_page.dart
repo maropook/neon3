@@ -52,12 +52,7 @@ class RecordingPage extends ConsumerWidget {
                   alignment: Alignment.bottomRight,
                   children: [
                     cameraService.buildCameraPreview(),
-                    SizedBox(
-                      width: 100,
-                      child: UniversalImage(isAvatarActive
-                          ? selectedAvatar.activeImageUrl
-                          : selectedAvatar.stopImageUrl),
-                    ),
+                    _buildAvatar(),
                   ],
                 ),
                 _buildButton(),
@@ -72,6 +67,22 @@ class RecordingPage extends ConsumerWidget {
               ],
             )
           : const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final isAvatarActive =
+          ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
+      final Avatar selectedAvatar =
+          ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
+              defaultAvatar;
+      return SizedBox(
+        width: 100,
+        child: UniversalImage(isAvatarActive
+            ? selectedAvatar.activeImageUrl
+            : selectedAvatar.stopImageUrl),
+      );
     });
   }
 
