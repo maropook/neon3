@@ -46,6 +46,7 @@ dependencies:
   http: ^0.13.5
   file: ^6.1.4
   image_downloader: ^0.31.0
+  file_picker: ^5.2.7
 
   neon_video_encoder:
     git:

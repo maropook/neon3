@@ -21,10 +21,11 @@ class Avatar with _$Avatar {
 
 final Avatar defaultAvatar = Avatar(
   activeImageUrl:
-      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/users%2FGtBDfvDJNTa2JAmsjFdxIo3eT2f1%2F26a4b050-d227-4acf-9bbf-3be919838329%2FactiveAvatar.jpg?alt=media&token=f3846a47-e221-452f-adc4-4db7c2bcccec",
+      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/avatars%2Favatar_active.png?alt=media&token=0d57bc2f-2ea8-4ec2-9a32-410a8ec04d67",
   stopImageUrl:
-      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/users%2FGtBDfvDJNTa2JAmsjFdxIo3eT2f1%2F26a4b050-d227-4acf-9bbf-3be919838329%2FstopAvatar.jpg?alt=media&token=3b5beacb-8934-4687-952a-04c36604be3e",
+      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/avatars%2Favatar_stop.png?alt=media&token=0cf59027-0b93-48b0-b96c-876d033c2d3c",
   id: '',
+  isDefault: true,
   created: DateTime.now(),
   updated: DateTime.now(),
 );
