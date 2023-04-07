@@ -153,13 +153,12 @@ class AvatarDetailPage extends ConsumerWidget {
                   //TODO: setNewImageしてもFile(activeImagePath)が更新されない(https://github.com/maropook/neon3/issues/63)
 
                   GestureDetector(
-                    child: activeImagePath.isNotEmpty
+                    child: stopImagePath.isNotEmpty
                         ? SizedBox(
-                            width: 150,
-                            child: Image.file(File(activeImagePath)))
+                            width: 150, child: Image.file(File(stopImagePath)))
                         : SizedBox(
                             width: 150,
-                            child: UniversalImage(avatar!.activeImageUrl)),
+                            child: UniversalImage(avatar.stopImageUrl)),
                     onTap: () async {
                       await ref
                           .read(avatarDetailPageProvider.notifier)
@@ -167,12 +166,13 @@ class AvatarDetailPage extends ConsumerWidget {
                     },
                   ),
                   GestureDetector(
-                    child: stopImagePath.isNotEmpty
+                    child: activeImagePath.isNotEmpty
                         ? SizedBox(
-                            width: 150, child: Image.file(File(stopImagePath)))
+                            width: 150,
+                            child: Image.file(File(activeImagePath)))
                         : SizedBox(
                             width: 150,
-                            child: UniversalImage(avatar!.stopImageUrl)),
+                            child: UniversalImage(avatar.activeImageUrl)),
                     onTap: () async {
                       await ref
                           .read(avatarDetailPageProvider.notifier)

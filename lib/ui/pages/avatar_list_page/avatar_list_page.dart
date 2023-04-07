@@ -55,11 +55,11 @@ class AvatarListPage extends ConsumerWidget {
                       alignment: Alignment.topRight,
                       fit: StackFit.loose,
                       children: [
-                        avatarList[index].activeImageUrl.isNotEmpty
+                        avatarList[index].stopImageUrl.isNotEmpty
                             ? AspectRatio(
                                 aspectRatio: 1,
                                 child: UniversalImage(
-                                  avatarList[index].activeImageUrl,
+                                  avatarList[index].stopImageUrl,
                                   fit: BoxFit.cover,
                                 ),
                               )
