@@ -11,6 +11,9 @@ class VideoPlayerService {
   final String _videoFilePath;
   VideoPlayerController? _videoPlayerController;
   bool get isPlaying => _videoPlayerController?.value.isPlaying ?? false;
+  double get aspectRatio => _videoPlayerController?.value.aspectRatio ?? 1;
+  int get videoDurationInMilliseconds =>
+      _videoPlayerController?.value.duration.inMilliseconds ?? 0;
   double get currentSeconds =>
       0.001 * (_videoPlayerController?.value.position.inMilliseconds ?? 0);
 
