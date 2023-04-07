@@ -2,9 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/ui/components/src/universal_image.dart';
+import 'package:neon3/controllers/pages/recording_page_controller.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});

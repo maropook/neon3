@@ -4,11 +4,11 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/services/audio_record_service.dart';
-import 'package:maropook_neon2/services/camera_service.dart';
-import 'package:maropook_neon2/services/fire_avatar_service.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/services/audio_record_service.dart';
+import 'package:neon3/services/camera_service.dart';
+import 'package:neon3/services/fire_avatar_service.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:path_provider/path_provider.dart';
 part 'recording_page_controller.freezed.dart';
 

@@ -1,4 +1,4 @@
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:record/record.dart';
 
 class AudioRecordService {

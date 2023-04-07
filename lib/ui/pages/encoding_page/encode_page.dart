@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/encode_page_controller.dart';
-import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/controllers/pages/encode_page_controller.dart';
+import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 
 class EncodePage extends ConsumerWidget {
   const EncodePage({required this.encodePageArgs, super.key});

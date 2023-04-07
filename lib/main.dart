@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/global/user_controller.dart';
-import 'package:maropook_neon2/ui/pages/page_router.dart';
+import 'package:neon3/controllers/global/user_controller.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {

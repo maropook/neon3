@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>110509625726-rs6502vkfoc1fg1cdqtiblk04v0dqu7d.apps.googleusercontent.com</string>
+	<string>283872099583-mc2kn10p02as1cqnvl43mq5nenpvj72p.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.110509625726-rs6502vkfoc1fg1cdqtiblk04v0dqu7d</string>
+	<string>com.googleusercontent.apps.283872099583-mc2kn10p02as1cqnvl43mq5nenpvj72p</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDLod5dUWn5gpuB6Jan9NVpnmhRTkudl3g</string>
+	<string>AIzaSyBNjHCUYJ7QDJ-qQ7AsOIj6GH8MAfHkb2w</string>
 	<key>GCM_SENDER_ID</key>
-	<string>110509625726</string>
+	<string>283872099583</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.maropookNeon2</string>
+	<string>com.example.Neon3</string>
 	<key>PROJECT_ID</key>
-	<string>neon-2-807bf</string>
+	<string>neon3-ac080</string>
 	<key>STORAGE_BUCKET</key>
-	<string>neon-2-807bf.appspot.com</string>
+	<string>neon3-ac080.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:110509625726:ios:564ef03d68feba1cc7632f</string>
+	<string>1:283872099583:ios:81178d0241fc11dd66e0ca</string>
 </dict>
 </plist>

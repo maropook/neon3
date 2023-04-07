@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:maropook_neon2/gen/assets.gen.dart';
-import 'package:maropook_neon2/services/encode_service.dart';
-import 'package:maropook_neon2/services/file_service.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/services/encode_service.dart';
+import 'package:neon3/services/file_service.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:neon_speech_to_text/neon_speech_to_text.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 

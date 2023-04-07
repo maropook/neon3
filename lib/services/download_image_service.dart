@@ -1,5 +1,5 @@
 import 'package:image_downloader/image_downloader.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/logger.dart';
 
 class DownloadImageService {
   DownloadImageService();

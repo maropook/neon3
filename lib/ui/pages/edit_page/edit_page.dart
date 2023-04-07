@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/edit_page_controller.dart';
-import 'package:maropook_neon2/gen/assets.gen.dart';
-import 'package:maropook_neon2/themes/styles.dart';
-import 'package:maropook_neon2/ui/components/src/universal_image.dart';
-import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/controllers/pages/edit_page_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/themes/styles.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 final GlobalKey editVideoPlayerKey = GlobalKey();

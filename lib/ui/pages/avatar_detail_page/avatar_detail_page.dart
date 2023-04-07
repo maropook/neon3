@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/avatar_detail_page_controller.dart';
-import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/ui/components/src/universal_image.dart';
+import 'package:neon3/controllers/pages/avatar_detail_page_controller.dart';
+import 'package:neon3/controllers/pages/avatar_list_page_controller.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
 
 class AvatarDetailPage extends ConsumerWidget {
   AvatarDetailPage({super.key, required Avatar avatar}) : _avatar = avatar;
@@ -150,7 +150,7 @@ class AvatarDetailPage extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  //TODO: setNewImageしてもFile(activeImagePath)が更新されない(https://github.com/maropook/maropook_neon2/issues/63)
+                  //TODO: setNewImageしてもFile(activeImagePath)が更新されない(https://github.com/maropook/neon3/issues/63)
 
                   GestureDetector(
                     child: activeImagePath.isNotEmpty

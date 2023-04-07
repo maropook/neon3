@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/logger.dart';
 
 class CameraService {
   CameraService();

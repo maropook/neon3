@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:maropook_neon2/models/libs/fire_timestamp_converter.dart';
+import 'package:neon3/models/libs/fire_timestamp_converter.dart';
 
 part 'avatar.freezed.dart';
 part 'avatar.g.dart';

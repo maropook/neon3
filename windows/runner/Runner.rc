@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "maropook_neon2" "\0"
+            VALUE "FileDescription", "neon3" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "maropook_neon2" "\0"
+            VALUE "InternalName", "neon3" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "maropook_neon2.exe" "\0"
-            VALUE "ProductName", "maropook_neon2" "\0"
+            VALUE "OriginalFilename", "neon3.exe" "\0"
+            VALUE "ProductName", "neon3" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

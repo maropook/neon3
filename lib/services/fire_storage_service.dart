@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:maropook_neon2/services/common/field_name.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/common/field_name.dart';
+import 'package:neon3/services/logger.dart';
 
 class FireStorageService {
   FireStorageService();
