@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/services/logger.dart';
-import 'package:maropook_neon2/services/speech_to_text_service.dart';
-import 'package:maropook_neon2/services/video_player_service.dart';
+import 'package:neon3/services/logger.dart';
+import 'package:neon3/services/speech_to_text_service.dart';
+import 'package:neon3/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:maropook_neon2/ui/pages/edit_page/edit_page.dart';
+import 'package:neon3/ui/pages/edit_page/edit_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'edit_page_controller.freezed.dart';

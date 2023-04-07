@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/complete_page_controller.dart';
+import 'package:neon3/controllers/pages/complete_page_controller.dart';
 import 'package:video_player/video_player.dart';
 
 class CompletePage extends StatelessWidget {

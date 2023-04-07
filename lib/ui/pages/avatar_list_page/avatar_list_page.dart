@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/pages/avatar_list_page_controller.dart';
-import 'package:maropook_neon2/controllers/pages/recording_page_controller.dart';
-import 'package:maropook_neon2/gen/assets.gen.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/ui/components/src/universal_image.dart';
+import 'package:neon3/controllers/pages/avatar_list_page_controller.dart';
+import 'package:neon3/controllers/pages/recording_page_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
 
 class AvatarListPage extends ConsumerWidget {
   const AvatarListPage({super.key});
@@ -55,11 +55,11 @@ class AvatarListPage extends ConsumerWidget {
                       alignment: Alignment.topRight,
                       fit: StackFit.loose,
                       children: [
-                        avatarList[index].activeImageUrl.isNotEmpty
+                        avatarList[index].stopImageUrl.isNotEmpty
                             ? AspectRatio(
                                 aspectRatio: 1,
                                 child: UniversalImage(
-                                  avatarList[index].activeImageUrl,
+                                  avatarList[index].stopImageUrl,
                                   fit: BoxFit.cover,
                                 ),
                               )

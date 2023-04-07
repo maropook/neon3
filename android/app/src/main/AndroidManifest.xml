@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.maropook_neon2">
+    package="com.example.neon3">
    <application
-        android:label="maropook_neon2"
+        android:label="neon_3"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

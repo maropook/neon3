@@ -1,9 +1,9 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:maropook_neon2/gen/assets.gen.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/services/download_image_service.dart';
-import 'package:maropook_neon2/services/file_service.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/services/download_image_service.dart';
+import 'package:neon3/services/file_service.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:neon_video_encoder/audio_setting.dart';
 import 'package:neon_video_encoder/avatar_animation.dart';
 import 'package:neon_video_encoder/neon_video_encoder.dart';

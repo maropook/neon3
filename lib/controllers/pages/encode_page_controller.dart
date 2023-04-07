@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/services/encode_service.dart';
-import 'package:maropook_neon2/services/fire_avatar_service.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/services/encode_service.dart';
+import 'package:neon3/services/fire_avatar_service.dart';
 
 part 'encode_page_controller.freezed.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/global/user_controller.dart';
-import 'package:maropook_neon2/controllers/pages/login_page_controller.dart';
+import 'package:neon3/controllers/global/user_controller.dart';
+import 'package:neon3/controllers/pages/login_page_controller.dart';
 
 class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);

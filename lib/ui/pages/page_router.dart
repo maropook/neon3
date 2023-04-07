@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/controllers/global/user_controller.dart';
-import 'package:maropook_neon2/main.dart';
-import 'package:maropook_neon2/models/src/avatar.dart';
-import 'package:maropook_neon2/ui/pages/avatar_detail_page/avatar_detail_page.dart';
-import 'package:maropook_neon2/ui/pages/avatar_list_page/avatar_list_page.dart';
-import 'package:maropook_neon2/ui/pages/complete_page/complete_page.dart';
-import 'package:maropook_neon2/ui/pages/edit_page/edit_page.dart';
-import 'package:maropook_neon2/ui/pages/encoding_page/encode_page.dart';
-import 'package:maropook_neon2/ui/pages/import_page/import_page.dart';
-import 'package:maropook_neon2/ui/pages/login_page/login_page.dart';
-import 'package:maropook_neon2/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/controllers/global/user_controller.dart';
+import 'package:neon3/main.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/ui/pages/avatar_detail_page/avatar_detail_page.dart';
+import 'package:neon3/ui/pages/avatar_list_page/avatar_list_page.dart';
+import 'package:neon3/ui/pages/complete_page/complete_page.dart';
+import 'package:neon3/ui/pages/edit_page/edit_page.dart';
+import 'package:neon3/ui/pages/encoding_page/encode_page.dart';
+import 'package:neon3/ui/pages/import_page/import_page.dart';
+import 'package:neon3/ui/pages/login_page/login_page.dart';
+import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

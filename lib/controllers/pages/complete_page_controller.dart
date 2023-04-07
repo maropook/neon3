@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/services/logger.dart';
-import 'package:maropook_neon2/services/video_player_service.dart';
+import 'package:neon3/services/logger.dart';
+import 'package:neon3/services/video_player_service.dart';
 
 part 'complete_page_controller.freezed.dart';
 

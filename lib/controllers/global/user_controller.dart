@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/logger.dart';
 
 part 'user_controller.freezed.dart';
 

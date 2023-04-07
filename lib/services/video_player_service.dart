@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:maropook_neon2/services/logger.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerService {

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:maropook_neon2/models/libs/fire_timestamp_converter.dart';
+import 'package:neon3/models/libs/fire_timestamp_converter.dart';
 
 part 'avatar.freezed.dart';
 part 'avatar.g.dart';
@@ -21,9 +21,9 @@ class Avatar with _$Avatar {
 
 final Avatar defaultAvatar = Avatar(
   activeImageUrl:
-      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/avatars%2Favatar_active.png?alt=media&token=0d57bc2f-2ea8-4ec2-9a32-410a8ec04d67",
+      "https://firebasestorage.googleapis.com/v0/b/neon3-ac080.appspot.com/o/avatar_active.png?alt=media&token=bb711708-17d6-418a-93e4-9fd62d130ca4",
   stopImageUrl:
-      "https://firebasestorage.googleapis.com/v0/b/neon-2-807bf.appspot.com/o/avatars%2Favatar_stop.png?alt=media&token=0cf59027-0b93-48b0-b96c-876d033c2d3c",
+      "https://firebasestorage.googleapis.com/v0/b/neon3-ac080.appspot.com/o/avatar_stop.png?alt=media&token=c19880fc-56ab-4ed0-b0ba-4caa8a910ee2",
   id: '',
   isDefault: true,
   created: DateTime.now(),
