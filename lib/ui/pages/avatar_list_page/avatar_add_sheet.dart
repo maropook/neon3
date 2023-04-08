@@ -3,35 +3,30 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/controllers/pages/avatar_edit_sheet_controller.dart';
+import 'package:neon3/controllers/pages/avatar_add_sheet_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 
-Future<Avatar?> showAvatarEditSheet(BuildContext context,
-    {required Avatar avatar}) {
+Future<Avatar?> showAvatarAddSheet(
+  BuildContext context,
+) {
   return showModalBottomSheet<Avatar>(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
       isDismissible: true,
       builder: (BuildContext context) {
-        return _AvatarEditSheet(avatar);
+        return const _AvatarAddSheet();
       });
 }
 
-class _AvatarEditSheet extends StatelessWidget {
-  const _AvatarEditSheet(this.avatar, {Key? key}) : super(key: key);
-  final Avatar avatar;
+class _AvatarAddSheet extends StatelessWidget {
+  const _AvatarAddSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        avatarEditSheetProvider
-            .overrideWith((ref) => AvatarEditSheetController(avatar: avatar))
-      ],
-      child: _buildModal(context),
-    );
+    return _buildModal(context);
   }
 
   Widget _buildModal(BuildContext context) {
@@ -50,10 +45,10 @@ class _AvatarEditSheet extends StatelessWidget {
 
   Widget _buildBody() {
     return Consumer(builder: (context, ref, _) {
-      final activeImagePath = ref
-          .watch(avatarEditSheetProvider.select((s) => s.newActiveImagePath));
+      final activeImagePath =
+          ref.watch(avatarAddSheetProvider.select((s) => s.newActiveImagePath));
       final stopImagePath =
-          ref.watch(avatarEditSheetProvider.select((s) => s.newStopImagePath));
+          ref.watch(avatarAddSheetProvider.select((s) => s.newStopImagePath));
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -64,11 +59,10 @@ class _AvatarEditSheet extends StatelessWidget {
                 child: stopImagePath.isNotEmpty
                     ? SizedBox(
                         width: 150, child: Image.file(File(stopImagePath)))
-                    : SizedBox(
-                        width: 150, child: UniversalImage(avatar.stopImageUrl)),
+                    : _buildAddIcon(isActive: false),
                 onTap: () async {
                   await ref
-                      .read(avatarEditSheetProvider.notifier)
+                      .read(avatarAddSheetProvider.notifier)
                       .setNewImage(isActive: false);
                 },
               ),
@@ -76,12 +70,10 @@ class _AvatarEditSheet extends StatelessWidget {
                 child: activeImagePath.isNotEmpty
                     ? SizedBox(
                         width: 150, child: Image.file(File(activeImagePath)))
-                    : SizedBox(
-                        width: 150,
-                        child: UniversalImage(avatar.activeImageUrl)),
+                    : _buildAddIcon(isActive: true),
                 onTap: () async {
                   await ref
-                      .read(avatarEditSheetProvider.notifier)
+                      .read(avatarAddSheetProvider.notifier)
                       .setNewImage(isActive: true);
                 },
               ),
@@ -96,8 +88,8 @@ class _AvatarEditSheet extends StatelessWidget {
                 onPressed: () async {
                   EasyLoading.show();
                   final newAvatar = await ref
-                      .read(avatarEditSheetProvider.notifier)
-                      .updateAvatar(previousAvatar: avatar);
+                      .read(avatarAddSheetProvider.notifier)
+                      .addNewAvatar();
                   EasyLoading.dismiss();
                   Navigator.of(context).pop(newAvatar);
                 },
@@ -106,7 +98,7 @@ class _AvatarEditSheet extends StatelessWidget {
                   shape: const CircleBorder(),
                 ),
                 child: const Text(
-                  '完了',
+                  '追加',
                   style: TextStyle(
                       fontSize: 25,
                       color: Colors.black,
@@ -118,5 +110,36 @@ class _AvatarEditSheet extends StatelessWidget {
         ],
       );
     });
+  }
+
+  Widget _buildAddIcon({required bool isActive}) {
+    return Container(
+      color: Colors.white,
+      width: 170,
+      height: 170,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: UniversalImage(
+                      isActive ? Assets.images.face : Assets.images.faceSmile)),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: UniversalImage(Assets.images.photos)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
