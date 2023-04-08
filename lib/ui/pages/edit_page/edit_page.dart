@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +27,7 @@ class EditPage extends HookConsumerWidget {
               videoFilePath: editPageArgs.videoFilePath,
               audioFilePath: editPageArgs.audioFilePath,
               activeFrames: editPageArgs.activeFrames,
+              shortestSide: MediaQuery.of(context).size.shortestSide,
             ))
       ],
       child: Scaffold(
@@ -50,20 +54,80 @@ class EditPage extends HookConsumerWidget {
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                RepaintBoundary(
-                    key: editVideoPlayerKey, child: _buildVideoPlayer()),
+                _buildVideoPlayer(),
                 _buildAvatar(),
               ],
             ),
+            _buildThumbnail(),
+            _buildTimeline(),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
                   style: const TextStyle(color: Colors.white)),
             _buildEditContentIcons(),
           ]);
+    });
+  }
+
+  Widget _buildTimeline() {
+    return Consumer(builder: (context, ref, _) {
+      final Duration videoPosition =
+          ref.watch(editPageProvider.select((s) => s.videoPosition));
+      final Duration videoDuration = ref.watch(editPageProvider
+          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
+      final timelineWidth = ref.watch(editPageProvider
+              .select((s) => s.thumbnailService?.timelineWidth)) ??
+          0;
+
+      return SizedBox(
+        width: timelineWidth,
+        child: ProgressBar(
+          progress: videoPosition,
+          total: videoDuration,
+          onSeek: (duration) {
+            ref.read(editPageProvider.notifier).seek(duration: duration);
+          },
+          baseBarColor: Colors.grey.withOpacity(0.24),
+          barHeight: 15.0,
+          thumbRadius: 7.5,
+          barCapShape: BarCapShape.square,
+        ),
+      );
+    });
+  }
+
+  Widget _buildThumbnail() {
+    return Consumer(builder: (context, ref, _) {
+      final List<Uint8List?> thumbnailFileDataList =
+          ref.watch(editPageProvider.select((s) => s.thumbnailFileDataList));
+      final thumbnailService =
+          ref.watch(editPageProvider.select((s) => s.thumbnailService));
+
+      return thumbnailService != null
+          ? Center(
+              child: SizedBox(
+                height: thumbnailService.thumbnailHeight,
+                width: thumbnailService.timelineWidth,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: thumbnailFileDataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        height: thumbnailService.thumbnailHeight,
+                        width: thumbnailService.thumbnailWidth,
+                        child: Image(
+                          image: MemoryImage(thumbnailFileDataList[index]!),
+                          fit: BoxFit.fitHeight,
+                        ),
+                      );
+                    }),
+              ),
+            )
+          : const CircularProgressIndicator();
     });
   }
 
@@ -74,19 +138,22 @@ class EditPage extends HookConsumerWidget {
       final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
 
-      return videoController != null
-          ? SizedBox(
-              height: 300,
-              child: GestureDetector(
-                onTap: () {
-                  isPlaying
-                      ? editPageController.pause()
-                      : editPageController.play();
-                },
-                child: videoController.buildVideoPlayer(),
-              ),
-            )
-          : const CircularProgressIndicator();
+      return RepaintBoundary(
+        key: editVideoPlayerKey,
+        child: videoController != null
+            ? SizedBox(
+                height: 250,
+                child: GestureDetector(
+                  onTap: () {
+                    isPlaying
+                        ? editPageController.pause()
+                        : editPageController.play();
+                  },
+                  child: videoController.buildVideoPlayer(),
+                ),
+              )
+            : const CircularProgressIndicator(),
+      );
     });
   }
 

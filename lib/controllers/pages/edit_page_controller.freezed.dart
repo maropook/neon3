@@ -19,9 +19,15 @@ mixin _$EditPageState {
   bool get isPlaying => throw _privateConstructorUsedError;
   VideoPlayerService? get videoPlayerService =>
       throw _privateConstructorUsedError;
+  ThumbnailService? get thumbnailService => throw _privateConstructorUsedError;
   List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
   double get videoPlayerWidth => throw _privateConstructorUsedError;
+  String get thumbnailFilePath => throw _privateConstructorUsedError;
+  List<Uint8List?> get thumbnailFileDataList =>
+      throw _privateConstructorUsedError;
+  Duration get videoPosition => throw _privateConstructorUsedError;
+  bool get isComplete => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -37,9 +43,14 @@ abstract class $EditPageStateCopyWith<$Res> {
   $Res call(
       {bool isPlaying,
       VideoPlayerService? videoPlayerService,
+      ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
       bool isAvatarActive,
-      double videoPlayerWidth});
+      double videoPlayerWidth,
+      String thumbnailFilePath,
+      List<Uint8List?> thumbnailFileDataList,
+      Duration videoPosition,
+      bool isComplete});
 }
 
 /// @nodoc
@@ -57,9 +68,14 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
   $Res call({
     Object? isPlaying = null,
     Object? videoPlayerService = freezed,
+    Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
+    Object? thumbnailFilePath = null,
+    Object? thumbnailFileDataList = null,
+    Object? videoPosition = null,
+    Object? isComplete = null,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
@@ -70,6 +86,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
               as VideoPlayerService?,
+      thumbnailService: freezed == thumbnailService
+          ? _value.thumbnailService
+          : thumbnailService // ignore: cast_nullable_to_non_nullable
+              as ThumbnailService?,
       subtitleTexts: null == subtitleTexts
           ? _value.subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
@@ -82,6 +102,22 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.videoPlayerWidth
           : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
               as double,
+      thumbnailFilePath: null == thumbnailFilePath
+          ? _value.thumbnailFilePath
+          : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      thumbnailFileDataList: null == thumbnailFileDataList
+          ? _value.thumbnailFileDataList
+          : thumbnailFileDataList // ignore: cast_nullable_to_non_nullable
+              as List<Uint8List?>,
+      videoPosition: null == videoPosition
+          ? _value.videoPosition
+          : videoPosition // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      isComplete: null == isComplete
+          ? _value.isComplete
+          : isComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -97,9 +133,14 @@ abstract class _$$_EditPageStateCopyWith<$Res>
   $Res call(
       {bool isPlaying,
       VideoPlayerService? videoPlayerService,
+      ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
       bool isAvatarActive,
-      double videoPlayerWidth});
+      double videoPlayerWidth,
+      String thumbnailFilePath,
+      List<Uint8List?> thumbnailFileDataList,
+      Duration videoPosition,
+      bool isComplete});
 }
 
 /// @nodoc
@@ -115,9 +156,14 @@ class __$$_EditPageStateCopyWithImpl<$Res>
   $Res call({
     Object? isPlaying = null,
     Object? videoPlayerService = freezed,
+    Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
+    Object? thumbnailFilePath = null,
+    Object? thumbnailFileDataList = null,
+    Object? videoPosition = null,
+    Object? isComplete = null,
   }) {
     return _then(_$_EditPageState(
       isPlaying: null == isPlaying
@@ -128,6 +174,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
               as VideoPlayerService?,
+      thumbnailService: freezed == thumbnailService
+          ? _value.thumbnailService
+          : thumbnailService // ignore: cast_nullable_to_non_nullable
+              as ThumbnailService?,
       subtitleTexts: null == subtitleTexts
           ? _value._subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
@@ -140,6 +190,22 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.videoPlayerWidth
           : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
               as double,
+      thumbnailFilePath: null == thumbnailFilePath
+          ? _value.thumbnailFilePath
+          : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      thumbnailFileDataList: null == thumbnailFileDataList
+          ? _value._thumbnailFileDataList
+          : thumbnailFileDataList // ignore: cast_nullable_to_non_nullable
+              as List<Uint8List?>,
+      videoPosition: null == videoPosition
+          ? _value.videoPosition
+          : videoPosition // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      isComplete: null == isComplete
+          ? _value.isComplete
+          : isComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -150,10 +216,16 @@ class _$_EditPageState implements _EditPageState {
   const _$_EditPageState(
       {this.isPlaying = false,
       this.videoPlayerService = null,
+      this.thumbnailService = null,
       final List<SubtitleText> subtitleTexts = const [],
       this.isAvatarActive = false,
-      this.videoPlayerWidth = 0.0})
-      : _subtitleTexts = subtitleTexts;
+      this.videoPlayerWidth = 0.0,
+      this.thumbnailFilePath = '',
+      final List<Uint8List?> thumbnailFileDataList = const [],
+      this.videoPosition = Duration.zero,
+      this.isComplete = false})
+      : _subtitleTexts = subtitleTexts,
+        _thumbnailFileDataList = thumbnailFileDataList;
 
   @override
   @JsonKey()
@@ -161,6 +233,9 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final VideoPlayerService? videoPlayerService;
+  @override
+  @JsonKey()
+  final ThumbnailService? thumbnailService;
   final List<SubtitleText> _subtitleTexts;
   @override
   @JsonKey()
@@ -176,10 +251,29 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final double videoPlayerWidth;
+  @override
+  @JsonKey()
+  final String thumbnailFilePath;
+  final List<Uint8List?> _thumbnailFileDataList;
+  @override
+  @JsonKey()
+  List<Uint8List?> get thumbnailFileDataList {
+    if (_thumbnailFileDataList is EqualUnmodifiableListView)
+      return _thumbnailFileDataList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_thumbnailFileDataList);
+  }
+
+  @override
+  @JsonKey()
+  final Duration videoPosition;
+  @override
+  @JsonKey()
+  final bool isComplete;
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth)';
+    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
   }
 
   @override
@@ -191,12 +285,22 @@ class _$_EditPageState implements _EditPageState {
                 other.isPlaying == isPlaying) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
                 other.videoPlayerService == videoPlayerService) &&
+            (identical(other.thumbnailService, thumbnailService) ||
+                other.thumbnailService == thumbnailService) &&
             const DeepCollectionEquality()
                 .equals(other._subtitleTexts, _subtitleTexts) &&
             (identical(other.isAvatarActive, isAvatarActive) ||
                 other.isAvatarActive == isAvatarActive) &&
             (identical(other.videoPlayerWidth, videoPlayerWidth) ||
-                other.videoPlayerWidth == videoPlayerWidth));
+                other.videoPlayerWidth == videoPlayerWidth) &&
+            (identical(other.thumbnailFilePath, thumbnailFilePath) ||
+                other.thumbnailFilePath == thumbnailFilePath) &&
+            const DeepCollectionEquality()
+                .equals(other._thumbnailFileDataList, _thumbnailFileDataList) &&
+            (identical(other.videoPosition, videoPosition) ||
+                other.videoPosition == videoPosition) &&
+            (identical(other.isComplete, isComplete) ||
+                other.isComplete == isComplete));
   }
 
   @override
@@ -204,9 +308,14 @@ class _$_EditPageState implements _EditPageState {
       runtimeType,
       isPlaying,
       videoPlayerService,
+      thumbnailService,
       const DeepCollectionEquality().hash(_subtitleTexts),
       isAvatarActive,
-      videoPlayerWidth);
+      videoPlayerWidth,
+      thumbnailFilePath,
+      const DeepCollectionEquality().hash(_thumbnailFileDataList),
+      videoPosition,
+      isComplete);
 
   @JsonKey(ignore: true)
   @override
@@ -219,20 +328,35 @@ abstract class _EditPageState implements EditPageState {
   const factory _EditPageState(
       {final bool isPlaying,
       final VideoPlayerService? videoPlayerService,
+      final ThumbnailService? thumbnailService,
       final List<SubtitleText> subtitleTexts,
       final bool isAvatarActive,
-      final double videoPlayerWidth}) = _$_EditPageState;
+      final double videoPlayerWidth,
+      final String thumbnailFilePath,
+      final List<Uint8List?> thumbnailFileDataList,
+      final Duration videoPosition,
+      final bool isComplete}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
   @override
   VideoPlayerService? get videoPlayerService;
   @override
+  ThumbnailService? get thumbnailService;
+  @override
   List<SubtitleText> get subtitleTexts;
   @override
   bool get isAvatarActive;
   @override
   double get videoPlayerWidth;
+  @override
+  String get thumbnailFilePath;
+  @override
+  List<Uint8List?> get thumbnailFileDataList;
+  @override
+  Duration get videoPosition;
+  @override
+  bool get isComplete;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>

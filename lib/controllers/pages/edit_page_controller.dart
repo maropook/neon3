@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
+import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
@@ -17,9 +19,14 @@ class EditPageState with _$EditPageState {
   const factory EditPageState({
     @Default(false) bool isPlaying,
     @Default(null) VideoPlayerService? videoPlayerService,
+    @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
     @Default(false) bool isAvatarActive,
     @Default(0.0) double videoPlayerWidth,
+    @Default('') String thumbnailFilePath,
+    @Default([]) List<Uint8List?> thumbnailFileDataList,
+    @Default(Duration.zero) Duration videoPosition,
+    @Default(false) bool isComplete,
   }) = _EditPageState;
 }
 
@@ -33,9 +40,11 @@ class EditPageController extends StateNotifier<EditPageState> {
     required String videoFilePath,
     required String audioFilePath,
     required List<Map<String, double>> activeFrames,
+    required double shortestSide,
   })  : _videoFilePath = videoFilePath,
         _audioFilePath = audioFilePath,
         _activeFrames = activeFrames,
+        _shortestSide = shortestSide,
         super(const EditPageState()) {
     init();
   }
@@ -43,8 +52,10 @@ class EditPageController extends StateNotifier<EditPageState> {
   final String _videoFilePath;
   final String _audioFilePath;
   final List<Map<String, double>> _activeFrames;
+  final double _shortestSide;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final SpeechToTextService _speechToTextService = SpeechToTextService();
+  ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
 
   List<Map<String, double>> sampleActiveFrames = [
@@ -62,17 +73,32 @@ class EditPageController extends StateNotifier<EditPageState> {
       });
       _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
-        state = state.copyWith(isPlaying: _videoPlayerService!.isPlaying);
+        videoCompleteCallback(_videoPlayerService!);
         state = state.copyWith(
+            // isComplete: isVideoComplete(_videoPlayerService!),
+            isPlaying: _videoPlayerService!.isPlaying,
+            videoPosition: _videoPlayerService!.position,
             isAvatarActive:
                 isAvatarActive(_videoPlayerService!.currentSeconds));
       });
 
-      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      _thumbnailService = ThumbnailService(
+          videoFilePath: _videoFilePath,
+          aspectRatio: _videoPlayerService!.aspectRatio,
+          shortestSide: _shortestSide,
+          videoDurationMs: _videoPlayerService!.videoDurationInMilliseconds);
 
-      state = state.copyWith(videoPlayerService: _videoPlayerService);
+      state = state.copyWith(
+          videoPlayerService: _videoPlayerService,
+          thumbnailService: _thumbnailService);
+
+      _thumbnailService!.generateThumbnails().listen((event) {
+        state = state.copyWith(thumbnailFileDataList: [...event]);
+      });
+
       await play();
-      getVideoPlayerWidth(editVideoPlayerKey);
+      getVideoPlayerWidth(editVideoPlayerKey); //playのあとじゃないとうまく行かない
     } catch (e) {
       Logger.logError('edit_controller:init', e.toString());
     }
@@ -92,6 +118,11 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _audioPlayer.play(UrlSource(_audioFilePath));
   }
 
+  Future<void> seek({required Duration duration}) async {
+    await _audioPlayer.seek(duration);
+    await _videoPlayerService!.seek(duration: duration);
+  }
+
   Future<void> pause() async {
     await _audioPlayer.pause();
     await _videoPlayerService!.pause();
@@ -102,6 +133,18 @@ class EditPageController extends StateNotifier<EditPageState> {
     _audioPlayer.dispose();
     _videoPlayerService!.dispose();
     super.dispose();
+  }
+
+  Future<void> videoCompleteCallback(
+      VideoPlayerService videoPlayerService) async {
+    bool isVideoComplete = !videoPlayerService.isPlaying &&
+        videoPlayerService.position > Duration.zero &&
+        videoPlayerService.position.inMicroseconds >=
+            videoPlayerService.duration.inMicroseconds;
+
+    if (!isVideoComplete) return;
+    await seek(duration: Duration.zero);
+    await play();
   }
 
   bool isAvatarActive(double currentSeconds) {
