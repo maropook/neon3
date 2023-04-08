@@ -78,7 +78,6 @@ class AvatarEditSheetController extends StateNotifier<AvatarEditSheetState> {
     }
 
     await fireAvatarService.updateAvatar(avatar: newAvatar);
-    state = state.copyWith(avatar: newAvatar);
     return newAvatar;
   }
 }

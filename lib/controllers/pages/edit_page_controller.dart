@@ -25,6 +25,8 @@ class EditPageState with _$EditPageState {
     @Default(0.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
+    @Default(Duration.zero) Duration videoPosition,
+    @Default(false) bool isComplete,
   }) = _EditPageState;
 }
 
@@ -71,13 +73,16 @@ class EditPageController extends StateNotifier<EditPageState> {
       });
       _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
+        videoCompleteCallback(_videoPlayerService!);
         state = state.copyWith(
+            // isComplete: isVideoComplete(_videoPlayerService!),
             isPlaying: _videoPlayerService!.isPlaying,
+            videoPosition: _videoPlayerService!.position,
             isAvatarActive:
                 isAvatarActive(_videoPlayerService!.currentSeconds));
       });
 
-      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       _thumbnailService = ThumbnailService(
           videoFilePath: _videoFilePath,
           aspectRatio: _videoPlayerService!.aspectRatio,
@@ -113,6 +118,11 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _audioPlayer.play(UrlSource(_audioFilePath));
   }
 
+  Future<void> seek({required Duration duration}) async {
+    await _audioPlayer.seek(duration);
+    await _videoPlayerService!.seek(duration: duration);
+  }
+
   Future<void> pause() async {
     await _audioPlayer.pause();
     await _videoPlayerService!.pause();
@@ -123,6 +133,18 @@ class EditPageController extends StateNotifier<EditPageState> {
     _audioPlayer.dispose();
     _videoPlayerService!.dispose();
     super.dispose();
+  }
+
+  Future<void> videoCompleteCallback(
+      VideoPlayerService videoPlayerService) async {
+    bool isVideoComplete = !videoPlayerService.isPlaying &&
+        videoPlayerService.position > Duration.zero &&
+        videoPlayerService.position.inMicroseconds >=
+            videoPlayerService.duration.inMicroseconds;
+
+    if (!isVideoComplete) return;
+    await seek(duration: Duration.zero);
+    await play();
   }
 
   bool isAvatarActive(double currentSeconds) {

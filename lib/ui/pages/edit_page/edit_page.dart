@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -50,6 +51,10 @@ class EditPage extends HookConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final Duration videoPosition =
+          ref.watch(editPageProvider.select((s) => s.videoPosition));
+      final Duration videoDuration = ref.watch(editPageProvider
+          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,6 +68,13 @@ class EditPage extends HookConsumerWidget {
               ],
             ),
             _buildThumbnail(),
+            ProgressBar(
+              progress: videoPosition,
+              total: videoDuration,
+              onSeek: (duration) {
+                ref.read(editPageProvider.notifier).seek(duration: duration);
+              },
+            ),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
                   style: const TextStyle(color: Colors.white)),
