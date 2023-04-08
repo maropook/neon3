@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,9 +18,6 @@ class RecordingPage extends ConsumerWidget {
           IconButton(
               onPressed: () => context.go('/import'),
               icon: const Icon(Icons.download_rounded)),
-          IconButton(
-              onPressed: () => context.go('/edit/path'),
-              icon: const Icon(Icons.chevron_right)),
         ],
         leading: IconButton(
             onPressed: () => context.go('/avatar/list'),

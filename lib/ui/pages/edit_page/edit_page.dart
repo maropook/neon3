@@ -202,14 +202,17 @@ class EditPage extends HookConsumerWidget {
       onTap: () async {
         await showModalBottomSheet(context);
       },
-      child: Column(
-        children: [
-          SvgPicture.asset(iconPath),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white),
-          )
-        ],
+      child: SizedBox(
+        width: MediaQuery.of(context).size.shortestSide / 4,
+        child: Column(
+          children: [
+            SvgPicture.asset(iconPath),
+            Text(
+              text,
+              style: const TextStyle(color: Colors.black, fontSize: 10),
+            )
+          ],
+        ),
       ),
     );
   }
