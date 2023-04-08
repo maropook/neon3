@@ -51,10 +51,6 @@ class EditPage extends HookConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-      final Duration videoPosition =
-          ref.watch(editPageProvider.select((s) => s.videoPosition));
-      final Duration videoDuration = ref.watch(editPageProvider
-          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
 
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,18 +64,39 @@ class EditPage extends HookConsumerWidget {
               ],
             ),
             _buildThumbnail(),
-            ProgressBar(
-              progress: videoPosition,
-              total: videoDuration,
-              onSeek: (duration) {
-                ref.read(editPageProvider.notifier).seek(duration: duration);
-              },
-            ),
+            _buildTimeline(),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
                   style: const TextStyle(color: Colors.white)),
             _buildEditContentIcons(),
           ]);
+    });
+  }
+
+  Widget _buildTimeline() {
+    return Consumer(builder: (context, ref, _) {
+      final Duration videoPosition =
+          ref.watch(editPageProvider.select((s) => s.videoPosition));
+      final Duration videoDuration = ref.watch(editPageProvider
+          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
+      final timelineWidth = ref.watch(editPageProvider
+              .select((s) => s.thumbnailService?.timelineWidth)) ??
+          0;
+
+      return SizedBox(
+        width: timelineWidth,
+        child: ProgressBar(
+          progress: videoPosition,
+          total: videoDuration,
+          onSeek: (duration) {
+            ref.read(editPageProvider.notifier).seek(duration: duration);
+          },
+          baseBarColor: Colors.grey.withOpacity(0.24),
+          barHeight: 15.0,
+          thumbRadius: 7.5,
+          barCapShape: BarCapShape.square,
+        ),
+      );
     });
   }
 
