@@ -6,7 +6,6 @@ import 'package:neon3/services/fire_avatar_service.dart';
 import 'package:neon3/services/fire_storage_service.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 
 part 'avatar_detail_page_controller.freezed.dart';
 
@@ -64,52 +63,7 @@ class AvatarDetailPageController extends StateNotifier<AvatarDetailPageState> {
         avatar: await fireAvatarService.fetchAvatarFromUuid(id: _avatar.id));
   }
 
-  void clearNewImagePath() {
-    state = state.copyWith(newActiveImagePath: '', newStopImagePath: '');
-  }
-
-  Future<void> setNewImage({required bool isActive}) async {
-    String imageFilePath = await fireStorageService.getNewImagePath();
-    if (imageFilePath.isEmpty) return;
-
-    if (isActive) {
-      state = state.copyWith(newActiveImagePath: imageFilePath);
-      return;
-    }
-    state = state.copyWith(newStopImagePath: imageFilePath);
-  }
-
-  Future<void> updateAvatar({required Avatar previousAvatar}) async {
-    final id = previousAvatar.id;
-    var newAvatar = Avatar(
-      activeImageUrl: previousAvatar.activeImageUrl,
-      stopImageUrl: previousAvatar.stopImageUrl,
-      id: previousAvatar.id,
-      created: previousAvatar.created,
-      updated: DateTime.now(),
-    );
-
-    if (state.newActiveImagePath.isNotEmpty) {
-      await fireStorageService.deleteImage(
-          id: id, imageName: FieldName.activeAvatar);
-      final activeImageUrl = await fireStorageService.uploadImage(
-          id: id,
-          imageName: FieldName.activeAvatar,
-          imagePath: state.newActiveImagePath);
-      newAvatar = newAvatar.copyWith(activeImageUrl: activeImageUrl);
-    }
-
-    if (state.newStopImagePath.isNotEmpty) {
-      await fireStorageService.deleteImage(
-          id: id, imageName: FieldName.stopAvatar);
-      final stopImageUrl = await fireStorageService.uploadImage(
-          id: id,
-          imageName: FieldName.stopAvatar,
-          imagePath: state.newStopImagePath);
-      newAvatar = newAvatar.copyWith(stopImageUrl: stopImageUrl);
-    }
-
-    await fireAvatarService.updateAvatar(avatar: newAvatar);
+  Future<void> update({required Avatar newAvatar}) async {
     state = state.copyWith(avatar: newAvatar);
   }
 

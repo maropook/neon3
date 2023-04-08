@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/avatar_detail_page_controller.dart';
 import 'package:neon3/controllers/pages/avatar_list_page_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/avatar_detail_page/avatar_edit_sheet.dart';
 
 class AvatarDetailPage extends ConsumerWidget {
   AvatarDetailPage({super.key, required Avatar avatar}) : _avatar = avatar;
@@ -87,13 +87,13 @@ class AvatarDetailPage extends ConsumerWidget {
 
     return Column(
       children: [
-        _buildShowModalButton(context, ref),
+        _buildShowModalButton(context, avatar, ref),
         IconButton(
             onPressed: () async {
               if (avatar == null) {
                 return;
               }
-              await goToAvatarListCallBack(ref, avatar.id);
+              await deleteAndGoToAvatarListCallBack(ref, avatar.id);
               context.go('/avatar/list');
             },
             icon: const Icon(
@@ -105,28 +105,21 @@ class AvatarDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildShowModalButton(BuildContext context, WidgetRef ref) {
+  Widget _buildShowModalButton(
+      BuildContext context, Avatar? avatar, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
-        ref.read(avatarDetailPageProvider.notifier).clearNewImagePath();
-        showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            context: context,
-            isDismissible: true,
-            builder: (BuildContext context) {
-              return Container(
-                  height: MediaQuery.of(context).size.longestSide - 64,
-                  margin: const EdgeInsets.only(top: 64),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(109, 0, 0, 0),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: _buildEditAvatarModalBody(context, ref));
-            });
+      onTap: () async {
+        if (avatar == null) {
+          return;
+        }
+        final newAvatar = await showAvatarEditSheet(
+          context,
+          avatar: avatar,
+        );
+        if (newAvatar == null) return;
+        ref
+            .read(avatarDetailPageProvider.notifier)
+            .update(newAvatar: newAvatar);
       },
       child: const Icon(
         Icons.edit,
@@ -136,85 +129,8 @@ class AvatarDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildEditAvatarModalBody(BuildContext context, WidgetRef ref) {
-    final avatar = ref.watch(avatarDetailPageProvider.select((s) => s.avatar));
-
-    final activeImagePath =
-        ref.watch(avatarDetailPageProvider.select((s) => s.newActiveImagePath));
-    final stopImagePath =
-        ref.watch(avatarDetailPageProvider.select((s) => s.newStopImagePath));
-    return avatar != null
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  //TODO: setNewImageしてもFile(activeImagePath)が更新されない(https://github.com/maropook/neon3/issues/63)
-
-                  GestureDetector(
-                    child: stopImagePath.isNotEmpty
-                        ? SizedBox(
-                            width: 150, child: Image.file(File(stopImagePath)))
-                        : SizedBox(
-                            width: 150,
-                            child: UniversalImage(avatar.stopImageUrl)),
-                    onTap: () async {
-                      await ref
-                          .read(avatarDetailPageProvider.notifier)
-                          .setNewImage(isActive: true);
-                    },
-                  ),
-                  GestureDetector(
-                    child: activeImagePath.isNotEmpty
-                        ? SizedBox(
-                            width: 150,
-                            child: Image.file(File(activeImagePath)))
-                        : SizedBox(
-                            width: 150,
-                            child: UniversalImage(avatar.activeImageUrl)),
-                    onTap: () async {
-                      await ref
-                          .read(avatarDetailPageProvider.notifier)
-                          .setNewImage(isActive: false);
-                    },
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      EasyLoading.show();
-                      await ref
-                          .read(avatarDetailPageProvider.notifier)
-                          .updateAvatar(previousAvatar: _avatar);
-                      EasyLoading.dismiss();
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: const CircleBorder(),
-                    ),
-                    child: const Text(
-                      '完了',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-        : const CircularProgressIndicator();
-  }
-
-  Future<void> goToAvatarListCallBack(WidgetRef ref, String avatarId) async {
+  Future<void> deleteAndGoToAvatarListCallBack(
+      WidgetRef ref, String avatarId) async {
     await ref
         .read(avatarDetailPageProvider.notifier)
         .deleteAvatar(id: avatarId);
