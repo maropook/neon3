@@ -7,8 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
-import 'package:neon3/themes/styles.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -178,48 +180,27 @@ class EditPage extends HookConsumerWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          _buildEditContentIcon('アバターを変更', Assets.images.changeAvatarIcon,
+              context, showChangeAvatarSheet),
+          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context,
+              showSubtitleEditSheet),
           _buildEditContentIcon(
-              'アバターを変更', Assets.images.changeAvatarIcon, context),
-          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context),
-          _buildEditContentIcon('BGMを追加', Assets.images.addBgmIcon, context),
-          _buildEditContentIcon(
-              '人工音声', Assets.images.artificialVoiceIcon, context),
+              'BGMを追加', Assets.images.addBgmIcon, context, showMusicEditSheet),
+          _buildEditContentIcon('人工音声', Assets.images.artificialVoiceIcon,
+              context, showSubtitleEditSheet),
         ],
       );
     });
   }
 
   Widget _buildEditContentIcon(
-      String text, String iconPath, BuildContext context) {
+      String text,
+      String iconPath,
+      BuildContext context,
+      Future<void> Function(BuildContext) showModalBottomSheet) {
     return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-            backgroundColor: Styles.editModalBottomSheetBackGroundColor,
-            isScrollControlled: true,
-            context: context,
-            isDismissible: true,
-            builder: (BuildContext context) {
-              return Container(
-                  height: MediaQuery.of(context).size.longestSide - 64,
-                  margin: const EdgeInsets.only(top: 64),
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      Text(
-                        text,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ));
-            });
+      onTap: () async {
+        await showModalBottomSheet(context);
       },
       child: Column(
         children: [
