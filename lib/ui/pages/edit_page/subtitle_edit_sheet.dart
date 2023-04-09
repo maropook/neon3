@@ -96,41 +96,43 @@ class _SubtitleEditSheet extends StatelessWidget {
 
       ref.watch(subtitleEditSheetProvider.select((s) => s.thumbnailService));
 
-      return Container(
-        color: Colors.grey[150],
+      return SizedBox(
         width: timelineWidth,
-        child: Column(
-          children: [
-            for (int index = 0; index < texts.length; ++index)
-              GestureDetector(
-                onHorizontalDragStart: (DragStartDetails details) {
-                  ref
-                      .read(subtitleEditSheetProvider.notifier)
-                      .dragStart(details, index);
-                },
-                onHorizontalDragUpdate: (DragUpdateDetails details) {
-                  ref
-                      .read(subtitleEditSheetProvider.notifier)
-                      .dragUpdate(details, index);
-                },
-                child: CustomPaint(
-                  foregroundPainter: EditSubtitleTextsPainter(
-                    texts[index],
-                    videoDuration,
-                    timelineWidth,
-                    thumbnailHeight,
-                  ),
-                  child: Container(
-                    color: const Color.fromARGB(255, 50, 50, 50),
-                    height: thumbnailHeight,
-                    width: timelineWidth + 6,
+        height: thumbnailHeight * 4,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              for (int index = 0; index < texts.length; ++index)
+                GestureDetector(
+                  onHorizontalDragStart: (DragStartDetails details) {
+                    ref
+                        .read(subtitleEditSheetProvider.notifier)
+                        .dragStart(details, index);
+                  },
+                  onHorizontalDragUpdate: (DragUpdateDetails details) {
+                    ref
+                        .read(subtitleEditSheetProvider.notifier)
+                        .dragUpdate(details, index);
+                  },
+                  child: CustomPaint(
+                    foregroundPainter: EditSubtitleTextsPainter(
+                      texts[index],
+                      videoDuration,
+                      timelineWidth,
+                      thumbnailHeight,
+                    ),
+                    child: Container(
+                      color: const Color.fromARGB(255, 50, 50, 50),
+                      height: thumbnailHeight,
+                      width: timelineWidth + 6,
+                    ),
                   ),
                 ),
-              ),
-            for (int i = 0; i < texts.length; i++)
-              Text("${texts[i].startTime}:${texts[i].word}",
-                  style: const TextStyle(color: Colors.black)),
-          ],
+              for (int i = 0; i < texts.length; i++)
+                Text("${texts[i].startTime}:${texts[i].word}",
+                    style: const TextStyle(color: Colors.black)),
+            ],
+          ),
         ),
       );
     });
