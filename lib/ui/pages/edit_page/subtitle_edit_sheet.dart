@@ -106,12 +106,12 @@ class _SubtitleEditSheet extends StatelessWidget {
                 onHorizontalDragStart: (DragStartDetails details) {
                   ref
                       .read(subtitleEditSheetProvider.notifier)
-                      .startDrag(details, index);
+                      .dragStart(details, index);
                 },
                 onHorizontalDragUpdate: (DragUpdateDetails details) {
                   ref
                       .read(subtitleEditSheetProvider.notifier)
-                      .updateDrag(details, index);
+                      .dragUpdate(details, index);
                 },
                 child: CustomPaint(
                   foregroundPainter: EditSubtitleTextsPainter(

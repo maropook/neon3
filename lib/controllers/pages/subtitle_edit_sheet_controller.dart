@@ -179,17 +179,18 @@ class SubtitleEditSheetController
   //subtitle_edit
   EditorDragType _dragType = EditorDragType.left;
 
-  Offset _startPos(int i) {
+  Offset dragStartPosition(int index) {
     final double startTimeInMilliseconds =
-        state.subtitleTexts[i].startTime * 1000;
+        state.subtitleTexts[index].startTime * 1000;
     final Offset startPos = Offset(
         startTimeInMilliseconds / videoDuration.inMilliseconds * timelineWidth,
         0);
     return startPos;
   }
 
-  Offset _endPos(int i) {
-    final double endTimeInMilliseconds = state.subtitleTexts[i].endTime * 1000;
+  Offset dragEndPosition(int index) {
+    final double endTimeInMilliseconds =
+        state.subtitleTexts[index].endTime * 1000;
     final Offset endPos = Offset(
         endTimeInMilliseconds / videoDuration.inMilliseconds * timelineWidth,
         0);
@@ -197,9 +198,9 @@ class SubtitleEditSheetController
   }
 
   void startTimeDragged(int index, Offset startPos) {
-    final int videoStartPos =
-        videoDurationInMilliseconds * startPos.dx ~/ timelineWidth;
-    final startTime = videoStartPos.toDouble() / 1000;
+    final startTimeInMilliseconds =
+        videoDurationInMilliseconds * startPos.dx / timelineWidth;
+    final startTime = startTimeInMilliseconds / 1000;
     _subtitleEditSheetProviderArg.activeFrames[index]['startTime'] = startTime;
 
     final texts = state.subtitleTexts; //TODO:もう少しうまくできそう
@@ -208,34 +209,33 @@ class SubtitleEditSheetController
   }
 
   void endTimeDragged(int index, Offset endPos) {
-    final int videoEndPos =
-        videoDurationInMilliseconds * endPos.dx ~/ timelineWidth;
-    final endTime =
-        videoEndPos.toDouble() / 1000; //_videoEndPosはmillisecondsのため
+    final endTimeInMilliseconds =
+        videoDurationInMilliseconds * endPos.dx / timelineWidth;
+    final endTime = endTimeInMilliseconds / 1000; //_videoEndPosはmillisecondsのため
 
     _subtitleEditSheetProviderArg.activeFrames[index]['endTime'] = endTime;
-    state.subtitleTexts[index].endTime = endTime;
 
     final texts = state.subtitleTexts; //TODO:
     texts[index].endTime = endTime;
     state = state.copyWith(subtitleTexts: [...texts]);
   }
 
-  void startDrag(DragStartDetails details, int index) {
+  void dragStart(DragStartDetails details, int index) {
     const int sideSize = 24;
 
-    if (details.localPosition.dx <= _startPos(index).dx + sideSize) {
+    if (details.localPosition.dx <= dragStartPosition(index).dx + sideSize) {
       _dragType = EditorDragType.left;
-    } else if (details.localPosition.dx <= _endPos(index).dx - sideSize) {
+    } else if (details.localPosition.dx <=
+        dragEndPosition(index).dx - sideSize) {
       _dragType = EditorDragType.center;
     } else {
       _dragType = EditorDragType.right;
     }
   }
 
-  void updateDrag(DragUpdateDetails details, int index) {
-    var startPos = _startPos(index);
-    var endPos = _endPos(index);
+  void dragUpdate(DragUpdateDetails details, int index) {
+    Offset startPos = dragStartPosition(index);
+    Offset endPos = dragEndPosition(index);
     if (_dragType == EditorDragType.left) {
       if (((startPos.dx + details.delta.dx >= 0) &&
               (startPos.dx + details.delta.dx <= endPos.dx)) &&
