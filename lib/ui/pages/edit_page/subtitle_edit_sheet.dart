@@ -101,18 +101,30 @@ class _SubtitleEditSheet extends StatelessWidget {
         width: timelineWidth,
         child: Column(
           children: [
-            for (SubtitleText text in texts)
-              CustomPaint(
-                foregroundPainter: EditSubtitleTextsPainter(
-                  text,
-                  videoDuration,
-                  timelineWidth,
-                  thumbnailHeight,
-                ),
-                child: Container(
-                  color: const Color.fromARGB(255, 50, 50, 50),
-                  height: thumbnailHeight,
-                  width: timelineWidth + 6,
+            for (int index = 0; index < texts.length; ++index)
+              GestureDetector(
+                onHorizontalDragStart: (DragStartDetails details) {
+                  ref
+                      .read(subtitleEditSheetProvider.notifier)
+                      .startDrag(details, index);
+                },
+                onHorizontalDragUpdate: (DragUpdateDetails details) {
+                  ref
+                      .read(subtitleEditSheetProvider.notifier)
+                      .updateDrag(details, index);
+                },
+                child: CustomPaint(
+                  foregroundPainter: EditSubtitleTextsPainter(
+                    texts[index],
+                    videoDuration,
+                    timelineWidth,
+                    thumbnailHeight,
+                  ),
+                  child: Container(
+                    color: const Color.fromARGB(255, 50, 50, 50),
+                    height: thumbnailHeight,
+                    width: timelineWidth + 6,
+                  ),
                 ),
               ),
             for (int i = 0; i < texts.length; i++)

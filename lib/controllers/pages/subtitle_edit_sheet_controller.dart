@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/services/logger.dart';
-import 'package:neon3/services/speech_to_text_service.dart';
 import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:neon3/ui/pages/edit_page/edit_page.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'subtitle_edit_sheet_controller.freezed.dart';
+
+enum EditorDragType { left, center, right }
 
 @freezed
 class SubtitleEditSheetState with _$SubtitleEditSheetState {
@@ -76,6 +76,9 @@ class SubtitleEditSheetController
       numberOfThumbnails * thumbnailHeight * aspectRatio;
   double get eachPart => _thumbnailService?.eachPart ?? 0;
   double get shortestSide => _subtitleEditSheetProviderArg.shortestSide;
+
+  Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
+  int get videoDurationInMilliseconds => videoDuration.inMilliseconds;
 
   Future<void> init() async {
     try {
@@ -171,5 +174,90 @@ class SubtitleEditSheetController
       }
     }
     return false;
+  }
+
+  //subtitle_edit
+  EditorDragType _dragType = EditorDragType.left;
+
+  Offset _startPos(int i) {
+    final double startTimeInMilliseconds =
+        state.subtitleTexts[i].startTime * 1000;
+    final Offset startPos = Offset(
+        startTimeInMilliseconds / videoDuration.inMilliseconds * timelineWidth,
+        0);
+    return startPos;
+  }
+
+  Offset _endPos(int i) {
+    final double endTimeInMilliseconds = state.subtitleTexts[i].endTime * 1000;
+    final Offset endPos = Offset(
+        endTimeInMilliseconds / videoDuration.inMilliseconds * timelineWidth,
+        0);
+    return endPos;
+  }
+
+  void startTimeDragged(int index, Offset startPos) {
+    final int videoStartPos =
+        videoDurationInMilliseconds * startPos.dx ~/ timelineWidth;
+    final startTime = videoStartPos.toDouble() / 1000;
+    _subtitleEditSheetProviderArg.activeFrames[index]['startTime'] = startTime;
+
+    final texts = state.subtitleTexts; //TODO:もう少しうまくできそう
+    texts[index].startTime = startTime;
+    state = state.copyWith(subtitleTexts: [...texts]);
+  }
+
+  void endTimeDragged(int index, Offset endPos) {
+    final int videoEndPos =
+        videoDurationInMilliseconds * endPos.dx ~/ timelineWidth;
+    final endTime =
+        videoEndPos.toDouble() / 1000; //_videoEndPosはmillisecondsのため
+
+    _subtitleEditSheetProviderArg.activeFrames[index]['endTime'] = endTime;
+    state.subtitleTexts[index].endTime = endTime;
+
+    final texts = state.subtitleTexts; //TODO:
+    texts[index].endTime = endTime;
+    state = state.copyWith(subtitleTexts: [...texts]);
+  }
+
+  void startDrag(DragStartDetails details, int index) {
+    const int sideSize = 24;
+
+    if (details.localPosition.dx <= _startPos(index).dx + sideSize) {
+      _dragType = EditorDragType.left;
+    } else if (details.localPosition.dx <= _endPos(index).dx - sideSize) {
+      _dragType = EditorDragType.center;
+    } else {
+      _dragType = EditorDragType.right;
+    }
+  }
+
+  void updateDrag(DragUpdateDetails details, int index) {
+    var startPos = _startPos(index);
+    var endPos = _endPos(index);
+    if (_dragType == EditorDragType.left) {
+      if (((startPos.dx + details.delta.dx >= 0) &&
+              (startPos.dx + details.delta.dx <= endPos.dx)) &&
+          !(endPos.dx - startPos.dx - details.delta.dx > timelineWidth)) {
+        startPos += details.delta;
+        startTimeDragged(index, startPos);
+      }
+    } else if (_dragType == EditorDragType.center) {
+      if ((startPos.dx + details.delta.dx >= 0) &&
+          (endPos.dx + details.delta.dx <= timelineWidth)) {
+        startPos += details.delta;
+        endPos += details.delta;
+        startTimeDragged(index, startPos);
+        endTimeDragged(index, endPos);
+      }
+    } else {
+      if ((endPos.dx + details.delta.dx <= timelineWidth) &&
+          (endPos.dx + details.delta.dx >= startPos.dx) &&
+          !(endPos.dx - startPos.dx + details.delta.dx > timelineWidth)) {
+        endPos += details.delta;
+        endTimeDragged(index, endPos);
+      }
+    }
   }
 }
