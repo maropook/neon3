@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/encode_service.dart';
-import 'package:neon3/services/fire_avatar_service.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'encode_page_controller.freezed.dart';
 
@@ -14,25 +14,36 @@ class EncodePageState with _$EncodePageState {
   }) = _EncodePageState;
 }
 
+class EncodePageProviderArg {
+  EncodePageProviderArg(
+      {required this.videoFilePath,
+      required this.audioFilePath,
+      required this.avatar,
+      required this.subtitleTexts,
+      required this.activeFrames});
+
+  final String videoFilePath;
+  final String audioFilePath;
+  final Avatar avatar;
+  final List<SubtitleText> subtitleTexts;
+  final List<Map<String, double>> activeFrames;
+}
+
 final encodePageProvider =
-    StateNotifierProvider.autoDispose<EncodeController, EncodePageState>((ref) {
+    StateNotifierProvider.autoDispose<EncodePageController, EncodePageState>(
+        (ref) {
   return throw UnimplementedError();
 });
 
-class EncodeController extends StateNotifier<EncodePageState> {
-  EncodeController(
-      {required String videoFilePath,
-      required String audioFilePath,
-      required Avatar avatar})
-      : _videoFilePath = videoFilePath,
-        _audioFilePath = audioFilePath,
-        _avatar = avatar,
+class EncodePageController extends StateNotifier<EncodePageState> {
+  EncodePageController({
+    required EncodePageProviderArg encodePageProviderArg,
+  })  : _encodePageProviderArg = encodePageProviderArg,
         super(const EncodePageState()) {
     init();
   }
-  final String _videoFilePath;
-  final String _audioFilePath;
-  final Avatar _avatar;
+  final EncodePageProviderArg _encodePageProviderArg;
+
   final EncodeService _encodeService = EncodeService();
 
   Future<void> init() async {
@@ -40,13 +51,11 @@ class EncodeController extends StateNotifier<EncodePageState> {
         addListenersFunction: (dynamic value) {
           state = state.copyWith(progressRate: value as double);
         },
-        audioFilePath: _audioFilePath,
-        videoFilePath: _videoFilePath,
-        activeFrames: [
-          {"startTime": 1.3, "endTime": 2.0},
-          {"startTime": 3.0, "endTime": 4.5}
-        ],
-        avatar: _avatar);
+        audioFilePath: _encodePageProviderArg.audioFilePath,
+        videoFilePath: _encodePageProviderArg.videoFilePath,
+        activeFrames: _encodePageProviderArg.activeFrames,
+        subtitleTexts: _encodePageProviderArg.subtitleTexts,
+        avatar: _encodePageProviderArg.avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }

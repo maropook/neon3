@@ -30,48 +30,59 @@ class EditPageState with _$EditPageState {
   }) = _EditPageState;
 }
 
+class EditPageProviderArg {
+  EditPageProviderArg({
+    required this.videoFilePath,
+    required this.audioFilePath,
+    required this.activeFrames,
+    required this.shortestSide,
+  });
+
+  final String videoFilePath;
+  final String audioFilePath;
+  final List<Map<String, double>> activeFrames;
+  final double shortestSide;
+}
+
 final editPageProvider =
     StateNotifierProvider.autoDispose<EditPageController, EditPageState>((ref) {
   return throw UnimplementedError();
 });
 
 class EditPageController extends StateNotifier<EditPageState> {
-  EditPageController({
-    required String videoFilePath,
-    required String audioFilePath,
-    required List<Map<String, double>> activeFrames,
-    required double shortestSide,
-  })  : _videoFilePath = videoFilePath,
-        _audioFilePath = audioFilePath,
-        _activeFrames = activeFrames,
-        _shortestSide = shortestSide,
+  EditPageController({required EditPageProviderArg editPageProviderArg})
+      : _editPageProviderArg = editPageProviderArg,
         super(const EditPageState()) {
     init();
   }
 
-  final String _videoFilePath;
-  final String _audioFilePath;
-  final List<Map<String, double>> _activeFrames;
-  final double _shortestSide;
+  final EditPageProviderArg _editPageProviderArg;
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   final SpeechToTextService _speechToTextService = SpeechToTextService();
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
 
-  List<Map<String, double>> sampleActiveFrames = [
-    {"startTime": 0, "endTime": 1.0},
-    {"startTime": 0, "endTime": 1.0},
-    {"startTime": 0, "endTime": 1.5}
-  ];
+//thumbnail_service
+  double get thumbnailHeight => shortestSide / 7;
+  double get thumbnailWidth => thumbnailHeight * aspectRatio;
+  int get numberOfThumbnails => shortestSide ~/ thumbnailWidth;
+  double get aspectRatio => _thumbnailService?.aspectRatio ?? 1;
+  double get timelineWidth =>
+      numberOfThumbnails * thumbnailHeight * aspectRatio;
+  double get eachPart => _thumbnailService?.eachPart ?? 0;
+  double get shortestSide => _editPageProviderArg.shortestSide;
 
   Future<void> init() async {
     try {
       // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,
-      await _speechToTextService.buildTexts(_activeFrames, _audioFilePath,
+      await _speechToTextService.buildTexts(
+          _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
         state = state.copyWith(subtitleTexts: texts);
       });
-      _videoPlayerService = VideoPlayerService(videoFilePath: _videoFilePath);
+      _videoPlayerService =
+          VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         videoCompleteCallback(_videoPlayerService!);
         state = state.copyWith(
@@ -84,9 +95,9 @@ class EditPageController extends StateNotifier<EditPageState> {
 
       // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       _thumbnailService = ThumbnailService(
-          videoFilePath: _videoFilePath,
+          videoFilePath: _editPageProviderArg.videoFilePath,
           aspectRatio: _videoPlayerService!.aspectRatio,
-          shortestSide: _shortestSide,
+          shortestSide: _editPageProviderArg.shortestSide,
           videoDurationMs: _videoPlayerService!.videoDurationInMilliseconds);
 
       state = state.copyWith(
@@ -115,7 +126,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> play() async {
     await _videoPlayerService!.play();
-    await _audioPlayer.play(UrlSource(_audioFilePath));
+    await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
   }
 
   Future<void> seek({required Duration duration}) async {
@@ -148,9 +159,10 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   bool isAvatarActive(double currentSeconds) {
-    for (int i = 0; i < _activeFrames.length; ++i) {
-      if (_activeFrames[i]['startTime']! <= currentSeconds &&
-          _activeFrames[i]['endTime']! >= currentSeconds) {
+    for (int i = 0; i < _editPageProviderArg.activeFrames.length; ++i) {
+      if (_editPageProviderArg.activeFrames[i]['startTime']! <=
+              currentSeconds &&
+          _editPageProviderArg.activeFrames[i]['endTime']! >= currentSeconds) {
         return true;
       }
     }

@@ -12,6 +12,7 @@ import 'package:neon3/ui/pages/encoding_page/encode_page.dart';
 import 'package:neon3/ui/pages/import_page/import_page.dart';
 import 'package:neon3/ui/pages/login_page/login_page.dart';
 import 'package:neon3/ui/pages/recording_page/recording_page.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -65,7 +66,7 @@ final routerProvider = Provider((ref) {
       GoRoute(
         path: '/encoding',
         builder: (BuildContext context, GoRouterState state) {
-          return EncodePage(encodePageArgs: state.extra as EditPageArgs);
+          return EncodePage(encodePageArgs: state.extra as EncodePageArgs);
         },
       ),
       GoRoute(
@@ -84,3 +85,46 @@ final routerProvider = Provider((ref) {
     },
   );
 });
+
+class EditPageArgs {
+  EditPageArgs(
+      {required this.audioFilePath,
+      required this.videoFilePath,
+      required this.activeFrames,
+      required this.avatar});
+
+  String audioFilePath;
+  String videoFilePath;
+  List<Map<String, double>> activeFrames;
+  Avatar avatar;
+}
+
+class SubtitleEditPageArgs {
+  SubtitleEditPageArgs(
+      {required this.audioFilePath,
+      required this.videoFilePath,
+      required this.activeFrames,
+      required this.subtitleTexts,
+      required this.avatar});
+
+  String audioFilePath;
+  String videoFilePath;
+  List<Map<String, double>> activeFrames;
+  List<SubtitleText> subtitleTexts;
+  Avatar avatar;
+}
+
+class EncodePageArgs {
+  EncodePageArgs(
+      {required this.audioFilePath,
+      required this.videoFilePath,
+      required this.activeFrames,
+      required this.subtitleTexts,
+      required this.avatar});
+
+  String audioFilePath;
+  String videoFilePath;
+  List<Map<String, double>> activeFrames;
+  List<SubtitleText> subtitleTexts;
+  Avatar avatar;
+}

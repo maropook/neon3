@@ -12,21 +12,6 @@ import 'package:neon_video_encoder/subtitle_text.dart';
 class SpeechToTextService {
   SpeechToTextService();
 
-  final List<SubtitleText> subtitleTexts = [
-    SubtitleText(
-      startTime: 1.0,
-      endTime: 2.0,
-      word: "word1",
-      // voiceFilePath: voiceFilePath1
-    ),
-    SubtitleText(
-      startTime: 2.0,
-      endTime: 3.0,
-      word: "word2",
-      // voiceFilePath: voiceFilePath2
-    ),
-  ];
-
   final NeonSpeechToText _neonSpeechToTextPlugin = NeonSpeechToText();
   EncodeService encodeService = EncodeService();
   FileService fileService = FileService();
@@ -38,17 +23,12 @@ class SpeechToTextService {
       void Function(List<SubtitleText> texts) completeCallBack) async {
     final List<String> trimmedAudioFilePathList =
         await trimAudio(activeFrames, audioFilePath);
-    // if (trimmedAudioFilePathList.isEmpty) {
-    //   completeCallBack([]);
-    //   return;
-    // }
 
-    //TODO:一旦activeFramesとsubtitleTextはサンプルの値にする
-    if (true) {
-      completeCallBack(subtitleTexts);
+    if (trimmedAudioFilePathList.isEmpty) {
+      Logger.log("build_texts", "trimmedAudioFilePathList.isEmpty");
+      completeCallBack([]);
       return;
     }
-    //TODO:一旦activeFramesとsubtitleTextはサンプルの値にする
 
     if (trimmedAudioFilePathList.length != activeFrames.length) {
       Logger.logError("build_texts",
@@ -114,6 +94,7 @@ class SpeechToTextService {
     }
 
     try {
+      //TODO:テスト値
       final String voiceFilePath1 = (await fileService.saveFile(
               inputFilePath: Assets.audio.voiceFile1,
               outputFilePath: "audio1.mp3"))
@@ -128,8 +109,8 @@ class SpeechToTextService {
           .path;
 
       await _neonSpeechToTextPlugin.speechToTexts(
-        // inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],
-        inputFilePathList: inputFilePathList, //TODO
+        // inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],//TODO:テスト値
+        inputFilePathList: inputFilePathList,
         completeCallBack: setSubtitleTexts,
         addListenersFunction: (LinkedHashMap map) async {},
       );

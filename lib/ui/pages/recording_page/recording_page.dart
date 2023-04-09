@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -96,12 +97,17 @@ class RecordingPage extends ConsumerWidget {
                 videoFilePath != null &&
                 avatar != null) {
               ref.read(recordingPageProvider.notifier).disposeTimer();
-              context.go('/edit',
-                  extra: EditPageArgs(
-                      audioFilePath: audioFilePath,
-                      videoFilePath: videoFilePath,
-                      activeFrames: activeFrames,
-                      avatar: avatar));
+              final editPageArgs = EditPageArgs(
+                  audioFilePath: audioFilePath,
+                  videoFilePath: videoFilePath,
+                  activeFrames: [
+                    //TODO:仮の値
+                    {"startTime": 0.2, "endTime": 0.7},
+                    {"startTime": 1.2, "endTime": 1.6},
+                    {"startTime": 2.0, "endTime": 2.2}
+                  ],
+                  avatar: avatar);
+              context.go('/edit', extra: editPageArgs);
             }
             return;
           }
@@ -148,17 +154,4 @@ class RecordingPage extends ConsumerWidget {
       );
     });
   }
-}
-
-class EditPageArgs {
-  EditPageArgs(
-      {required this.audioFilePath,
-      required this.videoFilePath,
-      required this.activeFrames,
-      required this.avatar});
-
-  String audioFilePath;
-  String videoFilePath;
-  List<Map<String, double>> activeFrames;
-  Avatar avatar;
 }

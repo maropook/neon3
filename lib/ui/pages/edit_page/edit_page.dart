@@ -8,70 +8,129 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
-import 'package:neon3/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 final GlobalKey editVideoPlayerKey = GlobalKey();
 
-class EditPage extends HookConsumerWidget {
+class EditPage extends StatelessWidget {
   const EditPage({required this.editPageArgs, super.key});
 
   final EditPageArgs editPageArgs;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        editPageProvider.overrideWith((ref) => EditPageController(
-              videoFilePath: editPageArgs.videoFilePath,
-              audioFilePath: editPageArgs.audioFilePath,
-              activeFrames: editPageArgs.activeFrames,
-              shortestSide: MediaQuery.of(context).size.shortestSide,
-            ))
+        editPageProvider.overrideWith((ref) {
+          final editPageProviderArg = EditPageProviderArg(
+            videoFilePath: editPageArgs.videoFilePath,
+            audioFilePath: editPageArgs.audioFilePath,
+            activeFrames: editPageArgs.activeFrames,
+            shortestSide: MediaQuery.of(context).size.shortestSide,
+          );
+          return EditPageController(editPageProviderArg: editPageProviderArg);
+        })
       ],
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text('エディット'),
-            actions: [
-              IconButton(
-                  onPressed: () => context.go('/encoding', extra: editPageArgs),
-                  icon: const Icon(Icons.chevron_right)),
-            ],
-            leading: IconButton(
-                onPressed: () => context.go('/'),
-                icon: const Icon(Icons.chevron_left)),
-          ),
+          appBar: _buildAppBar(context),
           backgroundColor: Colors.white,
           body: _buildBody()),
     );
   }
 
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('エディット'),
+      actions: [
+        Consumer(builder: (context, ref, _) {
+          return IconButton(
+              onPressed: () async {
+                final List<SubtitleText> subtitleTexts =
+                    ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+
+                final encodePageArgs = EncodePageArgs(
+                    videoFilePath: editPageArgs.videoFilePath,
+                    audioFilePath: editPageArgs.audioFilePath,
+                    activeFrames: editPageArgs.activeFrames,
+                    subtitleTexts: subtitleTexts,
+                    avatar: editPageArgs.avatar);
+
+                context.go('/encoding', extra: encodePageArgs);
+              },
+              icon: const Icon(Icons.chevron_right));
+        }),
+      ],
+      leading: IconButton(
+          onPressed: () => context.go('/'),
+          icon: const Icon(Icons.chevron_left)),
+    );
+  }
+
   Widget _buildBody() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              _buildVideoPlayer(),
+              _buildAvatar(),
+            ],
+          ),
+          // _buildThumbnail(),
+          // _buildTimeline(),
+          // _buildSubtitleTextsTimeline(),
+          _buildEditContentIcons(),
+        ]);
+  }
+
+  Widget _buildSubtitleTextsTimeline() {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final Duration videoPosition =
+          ref.watch(editPageProvider.select((s) => s.videoPosition));
+      final Duration videoDuration = ref.watch(editPageProvider
+          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
+      final timelineWidth =
+          ref.watch(editPageProvider.notifier.select((s) => s.timelineWidth));
+      final thumbnailHeight =
+          ref.watch(editPageProvider.notifier.select((s) => s.thumbnailHeight));
 
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      ref.watch(editPageProvider.select((s) => s.thumbnailService));
+
+      return Container(
+        color: Colors.grey[150],
+        width: timelineWidth,
+        child: Column(
           children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                _buildVideoPlayer(),
-                _buildAvatar(),
-              ],
-            ),
-            _buildThumbnail(),
-            _buildTimeline(),
+            for (SubtitleText text in texts)
+              CustomPaint(
+                foregroundPainter: EditSubtitleTextsPainter(
+                  text,
+                  videoDuration,
+                  timelineWidth,
+                  thumbnailHeight,
+                ),
+                child: Container(
+                  color: const Color.fromARGB(255, 50, 50, 50),
+                  height: thumbnailHeight,
+                  width: timelineWidth + 6,
+                ),
+              ),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
-                  style: const TextStyle(color: Colors.white)),
-            _buildEditContentIcons(),
-          ]);
+                  style: const TextStyle(color: Colors.black)),
+          ],
+        ),
+      );
     });
   }
 
@@ -177,20 +236,56 @@ class EditPage extends HookConsumerWidget {
 
   Widget _buildEditContentIcons() {
     return Consumer(builder: (context, ref, _) {
+      final videoController =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildEditContentIcon('アバターを変更', Assets.images.changeAvatarIcon,
               context, showChangeAvatarSheet),
-          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context,
-              showSubtitleEditSheet),
+          GestureDetector(
+            onTap: () async {
+              if (videoController == null) return;
+              await ref.read(editPageProvider.notifier).pause();
+              final subtitleEditPageArgs = SubtitleEditPageArgs(
+                  audioFilePath: editPageArgs.audioFilePath,
+                  videoFilePath: editPageArgs.videoFilePath,
+                  activeFrames: editPageArgs.activeFrames,
+                  avatar: editPageArgs.avatar,
+                  subtitleTexts: texts);
+              await showSubtitleEditSheet(context, subtitleEditPageArgs);
+            },
+            child: _buildSubtitleEditContentIcon(
+              'テキストを編集',
+              Assets.images.textEditIcon,
+              context,
+            ),
+          ),
           _buildEditContentIcon(
               'BGMを追加', Assets.images.addBgmIcon, context, showMusicEditSheet),
           _buildEditContentIcon('人工音声', Assets.images.artificialVoiceIcon,
-              context, showSubtitleEditSheet),
+              context, showArtificialVoiceEditSheet),
         ],
       );
     });
+  }
+
+  Widget _buildSubtitleEditContentIcon(
+      String text, String iconPath, BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.shortestSide / 4,
+      child: Column(
+        children: [
+          SvgPicture.asset(iconPath),
+          Text(
+            text,
+            style: const TextStyle(color: Colors.black, fontSize: 10),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildEditContentIcon(

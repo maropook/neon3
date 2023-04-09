@@ -1,5 +1,7 @@
 # neon3
 
+trimServiceするから、trimする時間(サンプルの時間の)
+
 ## 参考
 ### riverpod+camera
 [【Flutter】Cameraライブラリを使用してインカメラ（内カメ）で写真を撮影する方法](https://qiita.com/pikatyu3/items/fedfa27ab889b0d07b37)
