@@ -25,12 +25,15 @@ class EditPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        editPageProvider.overrideWith((ref) => EditPageController(
-              videoFilePath: editPageArgs.videoFilePath,
-              audioFilePath: editPageArgs.audioFilePath,
-              activeFrames: editPageArgs.activeFrames,
-              shortestSide: MediaQuery.of(context).size.shortestSide,
-            ))
+        editPageProvider.overrideWith((ref) {
+          final editPageProviderArg = EditPageProviderArg(
+            videoFilePath: editPageArgs.videoFilePath,
+            audioFilePath: editPageArgs.audioFilePath,
+            activeFrames: editPageArgs.activeFrames,
+            shortestSide: MediaQuery.of(context).size.shortestSide,
+          );
+          return EditPageController(editPageProviderArg: editPageProviderArg);
+        })
       ],
       child: Scaffold(
           appBar: _buildAppBar(context),

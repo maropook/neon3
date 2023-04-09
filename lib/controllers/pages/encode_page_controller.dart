@@ -14,31 +14,36 @@ class EncodePageState with _$EncodePageState {
   }) = _EncodePageState;
 }
 
+class EncodePageProviderArg {
+  EncodePageProviderArg(
+      {required this.videoFilePath,
+      required this.audioFilePath,
+      required this.avatar,
+      required this.subtitleTexts,
+      required this.activeFrames});
+
+  final String videoFilePath;
+  final String audioFilePath;
+  final Avatar avatar;
+  final List<SubtitleText> subtitleTexts;
+  final List<Map<String, double>> activeFrames;
+}
+
 final encodePageProvider =
-    StateNotifierProvider.autoDispose<EncodeController, EncodePageState>((ref) {
+    StateNotifierProvider.autoDispose<EncodePageController, EncodePageState>(
+        (ref) {
   return throw UnimplementedError();
 });
 
-class EncodeController extends StateNotifier<EncodePageState> {
-  EncodeController(
-      {required String videoFilePath,
-      required String audioFilePath,
-      required Avatar avatar,
-      required List<SubtitleText> subtitleTexts,
-      required List<Map<String, double>> activeFrames})
-      : _videoFilePath = videoFilePath,
-        _audioFilePath = audioFilePath,
-        _avatar = avatar,
-        _subtitleTexts = subtitleTexts,
-        _activeFrames = activeFrames,
+class EncodePageController extends StateNotifier<EncodePageState> {
+  EncodePageController({
+    required EncodePageProviderArg encodePageProviderArg,
+  })  : _encodePageProviderArg = encodePageProviderArg,
         super(const EncodePageState()) {
     init();
   }
-  final String _videoFilePath;
-  final String _audioFilePath;
-  final Avatar _avatar;
-  final List<SubtitleText> _subtitleTexts;
-  final List<Map<String, double>> _activeFrames;
+  final EncodePageProviderArg _encodePageProviderArg;
+
   final EncodeService _encodeService = EncodeService();
 
   Future<void> init() async {
@@ -46,11 +51,11 @@ class EncodeController extends StateNotifier<EncodePageState> {
         addListenersFunction: (dynamic value) {
           state = state.copyWith(progressRate: value as double);
         },
-        audioFilePath: _audioFilePath,
-        videoFilePath: _videoFilePath,
-        activeFrames: _activeFrames,
-        subtitleTexts: _subtitleTexts,
-        avatar: _avatar);
+        audioFilePath: _encodePageProviderArg.audioFilePath,
+        videoFilePath: _encodePageProviderArg.videoFilePath,
+        activeFrames: _encodePageProviderArg.activeFrames,
+        subtitleTexts: _encodePageProviderArg.subtitleTexts,
+        avatar: _encodePageProviderArg.avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }
