@@ -11,7 +11,7 @@ import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
-import 'package:neon3/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 final GlobalKey editVideoPlayerKey = GlobalKey();
@@ -33,19 +33,37 @@ class EditPage extends HookConsumerWidget {
             ))
       ],
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text('エディット'),
-            actions: [
-              IconButton(
-                  onPressed: () => context.go('/encoding', extra: editPageArgs),
-                  icon: const Icon(Icons.chevron_right)),
-            ],
-            leading: IconButton(
-                onPressed: () => context.go('/'),
-                icon: const Icon(Icons.chevron_left)),
-          ),
+          appBar: _buildAppBar(context),
           backgroundColor: Colors.white,
           body: _buildBody()),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('エディット'),
+      actions: [
+        Consumer(builder: (context, ref, _) {
+          return IconButton(
+              onPressed: () async {
+                final List<SubtitleText> subtitleTexts =
+                    ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+
+                final encodePageArgs = EncodePageArgs(
+                    videoFilePath: editPageArgs.videoFilePath,
+                    audioFilePath: editPageArgs.audioFilePath,
+                    activeFrames: editPageArgs.activeFrames,
+                    subtitleTexts: subtitleTexts,
+                    avatar: editPageArgs.avatar);
+
+                context.go('/encoding', extra: encodePageArgs);
+              },
+              icon: const Icon(Icons.chevron_right));
+        }),
+      ],
+      leading: IconButton(
+          onPressed: () => context.go('/'),
+          icon: const Icon(Icons.chevron_left)),
     );
   }
 
@@ -69,7 +87,7 @@ class EditPage extends HookConsumerWidget {
             _buildTimeline(),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
-                  style: const TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.black)),
             _buildEditContentIcons(),
           ]);
     });

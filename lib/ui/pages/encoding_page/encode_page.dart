@@ -3,21 +3,24 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/encode_page_controller.dart';
-import 'package:neon3/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 
 class EncodePage extends ConsumerWidget {
   const EncodePage({required this.encodePageArgs, super.key});
 
-  final EditPageArgs encodePageArgs;
+  final EncodePageArgs encodePageArgs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
         encodePageProvider.overrideWith((ref) => EncodeController(
-            videoFilePath: encodePageArgs.videoFilePath,
-            audioFilePath: encodePageArgs.audioFilePath,
-            avatar: encodePageArgs.avatar))
+              videoFilePath: encodePageArgs.videoFilePath,
+              audioFilePath: encodePageArgs.audioFilePath,
+              avatar: encodePageArgs.avatar,
+              subtitleTexts: encodePageArgs.subtitleTexts,
+              activeFrames: encodePageArgs.activeFrames,
+            ))
       ],
       child: Scaffold(
           backgroundColor: Colors.black,

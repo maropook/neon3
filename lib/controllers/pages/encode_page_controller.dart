@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/encode_service.dart';
-import 'package:neon3/services/fire_avatar_service.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'encode_page_controller.freezed.dart';
 
@@ -23,16 +23,22 @@ class EncodeController extends StateNotifier<EncodePageState> {
   EncodeController(
       {required String videoFilePath,
       required String audioFilePath,
-      required Avatar avatar})
+      required Avatar avatar,
+      required List<SubtitleText> subtitleTexts,
+      required List<Map<String, double>> activeFrames})
       : _videoFilePath = videoFilePath,
         _audioFilePath = audioFilePath,
         _avatar = avatar,
+        _subtitleTexts = subtitleTexts,
+        _activeFrames = activeFrames,
         super(const EncodePageState()) {
     init();
   }
   final String _videoFilePath;
   final String _audioFilePath;
   final Avatar _avatar;
+  final List<SubtitleText> _subtitleTexts;
+  final List<Map<String, double>> _activeFrames;
   final EncodeService _encodeService = EncodeService();
 
   Future<void> init() async {
@@ -42,10 +48,8 @@ class EncodeController extends StateNotifier<EncodePageState> {
         },
         audioFilePath: _audioFilePath,
         videoFilePath: _videoFilePath,
-        activeFrames: [
-          {"startTime": 1.3, "endTime": 2.0},
-          {"startTime": 3.0, "endTime": 4.5}
-        ],
+        activeFrames: _activeFrames,
+        subtitleTexts: _subtitleTexts,
         avatar: _avatar);
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);

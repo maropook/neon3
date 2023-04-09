@@ -58,12 +58,6 @@ class EditPageController extends StateNotifier<EditPageState> {
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
 
-  List<Map<String, double>> sampleActiveFrames = [
-    {"startTime": 0, "endTime": 1.0},
-    {"startTime": 0, "endTime": 1.0},
-    {"startTime": 0, "endTime": 1.5}
-  ];
-
   Future<void> init() async {
     try {
       // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,

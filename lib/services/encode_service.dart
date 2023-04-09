@@ -78,10 +78,12 @@ class EncodeService {
     return trimmedAudioFilePath;
   }
 
+  //TODO:現在、recording_pageから渡されたaudio_fileとactive_framesが仮の値になっている
   Future<String> encode({
     required String videoFilePath,
     required String audioFilePath,
     required List<Map<String, double>> activeFrames,
+    required List<SubtitleText> subtitleTexts,
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
   }) async {
@@ -101,19 +103,23 @@ class EncodeService {
             outputFilePath: "audio2.mp3"))
         .path;
 
+    //TODO:人工音声を追加できるようになったら変更する
+    for (int i = 0; i < subtitleTexts.length; ++i) {
+      subtitleTexts[i].word = 'word${i}';
+    }
     //SubtitleText
-    final List<SubtitleText> subtitleTexts = [
-      SubtitleText(
-          startTime: 1.0,
-          endTime: 2.0,
-          word: "word1",
-          voiceFilePath: voiceFilePath1),
-      SubtitleText(
-          startTime: 2.0,
-          endTime: 3.0,
-          word: "word2",
-          voiceFilePath: voiceFilePath2),
-    ];
+    // final List<SubtitleText> subtitleTexts = [
+    //   SubtitleText(
+    //       startTime: 1.0,
+    //       endTime: 2.0,
+    //       word: "word1",
+    //       voiceFilePath: voiceFilePath1),
+    //   SubtitleText(
+    //       startTime: 2.0,
+    //       endTime: 3.0,
+    //       word: "word2",
+    //       voiceFilePath: voiceFilePath2),
+    // ];
 
     // AvatarAnimation
 
