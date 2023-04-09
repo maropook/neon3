@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
@@ -83,9 +84,9 @@ class EditPage extends StatelessWidget {
               _buildAvatar(),
             ],
           ),
-          _buildThumbnail(),
-          _buildTimeline(),
-          _buildSubtitleTextsTimeline(),
+          // _buildThumbnail(),
+          // _buildTimeline(),
+          // _buildSubtitleTextsTimeline(),
           _buildEditContentIcons(),
         ]);
   }
@@ -235,20 +236,56 @@ class EditPage extends StatelessWidget {
 
   Widget _buildEditContentIcons() {
     return Consumer(builder: (context, ref, _) {
+      final videoController =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildEditContentIcon('アバターを変更', Assets.images.changeAvatarIcon,
               context, showChangeAvatarSheet),
-          _buildEditContentIcon('テキストを編集', Assets.images.textEditIcon, context,
-              showSubtitleEditSheet),
+          GestureDetector(
+            onTap: () async {
+              if (videoController == null) return;
+              await ref.read(editPageProvider.notifier).pause();
+              final subtitleEditPageArgs = SubtitleEditPageArgs(
+                  audioFilePath: editPageArgs.audioFilePath,
+                  videoFilePath: editPageArgs.videoFilePath,
+                  activeFrames: editPageArgs.activeFrames,
+                  avatar: editPageArgs.avatar,
+                  subtitleTexts: texts);
+              await showSubtitleEditSheet(context, subtitleEditPageArgs);
+            },
+            child: _buildSubtitleEditContentIcon(
+              'テキストを編集',
+              Assets.images.textEditIcon,
+              context,
+            ),
+          ),
           _buildEditContentIcon(
               'BGMを追加', Assets.images.addBgmIcon, context, showMusicEditSheet),
           _buildEditContentIcon('人工音声', Assets.images.artificialVoiceIcon,
-              context, showSubtitleEditSheet),
+              context, showArtificialVoiceEditSheet),
         ],
       );
     });
+  }
+
+  Widget _buildSubtitleEditContentIcon(
+      String text, String iconPath, BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.shortestSide / 4,
+      child: Column(
+        children: [
+          SvgPicture.asset(iconPath),
+          Text(
+            text,
+            style: const TextStyle(color: Colors.black, fontSize: 10),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildEditContentIcon(

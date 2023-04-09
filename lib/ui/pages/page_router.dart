@@ -99,6 +99,21 @@ class EditPageArgs {
   Avatar avatar;
 }
 
+class SubtitleEditPageArgs {
+  SubtitleEditPageArgs(
+      {required this.audioFilePath,
+      required this.videoFilePath,
+      required this.activeFrames,
+      required this.subtitleTexts,
+      required this.avatar});
+
+  String audioFilePath;
+  String videoFilePath;
+  List<Map<String, double>> activeFrames;
+  List<SubtitleText> subtitleTexts;
+  Avatar avatar;
+}
+
 class EncodePageArgs {
   EncodePageArgs(
       {required this.audioFilePath,

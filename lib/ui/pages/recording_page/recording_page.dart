@@ -97,16 +97,17 @@ class RecordingPage extends ConsumerWidget {
                 videoFilePath != null &&
                 avatar != null) {
               ref.read(recordingPageProvider.notifier).disposeTimer();
-              final editArgs = EditPageArgs(
+              final editPageArgs = EditPageArgs(
                   audioFilePath: audioFilePath,
                   videoFilePath: videoFilePath,
                   activeFrames: [
+                    //TODO:仮の値
                     {"startTime": 0.2, "endTime": 0.7},
                     {"startTime": 1.2, "endTime": 1.6},
                     {"startTime": 2.0, "endTime": 2.2}
                   ],
                   avatar: avatar);
-              context.go('/edit', extra: editArgs);
+              context.go('/edit', extra: editPageArgs);
             }
             return;
           }
