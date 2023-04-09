@@ -9,6 +9,7 @@ import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -16,13 +17,13 @@ import 'package:neon_video_encoder/subtitle_text.dart';
 
 final GlobalKey editVideoPlayerKey = GlobalKey();
 
-class EditPage extends HookConsumerWidget {
+class EditPage extends StatelessWidget {
   const EditPage({required this.editPageArgs, super.key});
 
   final EditPageArgs editPageArgs;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
         editPageProvider.overrideWith((ref) {
@@ -71,28 +72,64 @@ class EditPage extends HookConsumerWidget {
   }
 
   Widget _buildBody() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              _buildVideoPlayer(),
+              _buildAvatar(),
+            ],
+          ),
+          _buildThumbnail(),
+          _buildTimeline(),
+          _buildSubtitleTextsTimeline(),
+          _buildEditContentIcons(),
+        ]);
+  }
+
+  Widget _buildSubtitleTextsTimeline() {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final Duration videoPosition =
+          ref.watch(editPageProvider.select((s) => s.videoPosition));
+      final Duration videoDuration = ref.watch(editPageProvider
+          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
+      final timelineWidth =
+          ref.watch(editPageProvider.notifier.select((s) => s.timelineWidth));
+      final thumbnailHeight =
+          ref.watch(editPageProvider.notifier.select((s) => s.thumbnailHeight));
 
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      ref.watch(editPageProvider.select((s) => s.thumbnailService));
+
+      return Container(
+        color: Colors.grey[150],
+        width: timelineWidth,
+        child: Column(
           children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                _buildVideoPlayer(),
-                _buildAvatar(),
-              ],
-            ),
-            _buildThumbnail(),
-            _buildTimeline(),
+            for (SubtitleText text in texts)
+              CustomPaint(
+                foregroundPainter: EditSubtitleTextsPainter(
+                  text,
+                  videoDuration,
+                  timelineWidth,
+                  thumbnailHeight,
+                ),
+                child: Container(
+                  color: const Color.fromARGB(255, 50, 50, 50),
+                  height: thumbnailHeight,
+                  width: timelineWidth + 6,
+                ),
+              ),
             for (int i = 0; i < texts.length; i++)
               Text("${texts[i].startTime}:${texts[i].word}",
                   style: const TextStyle(color: Colors.black)),
-            _buildEditContentIcons(),
-          ]);
+          ],
+        ),
+      );
     });
   }
 

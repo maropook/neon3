@@ -63,6 +63,16 @@ class EditPageController extends StateNotifier<EditPageState> {
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
 
+//thumbnail_service
+  double get thumbnailHeight => shortestSide / 7;
+  double get thumbnailWidth => thumbnailHeight * aspectRatio;
+  int get numberOfThumbnails => shortestSide ~/ thumbnailWidth;
+  double get aspectRatio => _thumbnailService?.aspectRatio ?? 1;
+  double get timelineWidth =>
+      numberOfThumbnails * thumbnailHeight * aspectRatio;
+  double get eachPart => _thumbnailService?.eachPart ?? 0;
+  double get shortestSide => _editPageProviderArg.shortestSide;
+
   Future<void> init() async {
     try {
       // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,

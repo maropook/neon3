@@ -26,6 +26,8 @@ class ThumbnailService {
   double get eachPart => _videoDurationMs / numberOfThumbnails;
   double get aspectRatio => _aspectRatio;
 
+  double get shortestSide => _shortestSide;
+
   final List<Uint8List?> byteList = <Uint8List?>[];
 
   Stream<List<Uint8List?>> generateThumbnails() async* {
