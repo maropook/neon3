@@ -56,10 +56,13 @@ class EditPage extends StatelessWidget {
                     ref.read(editPageProvider.select((s) => s.subtitleTexts));
                 final avatar =
                     ref.read(editPageProvider.select((s) => s.avatar));
+                final musicFilePath =
+                    ref.read(editPageProvider.select((s) => s.musicFilePath));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                     videoFilePath: editPageArgs.videoFilePath,
                     audioFilePath: editPageArgs.audioFilePath,
+                    musicFilePath: musicFilePath,
                     activeFrames: editPageArgs.activeFrames,
                     subtitleTexts: subtitleTexts,
                     avatar: avatar);

@@ -118,12 +118,14 @@ class EncodePageArgs {
   EncodePageArgs(
       {required this.audioFilePath,
       required this.videoFilePath,
+      required this.musicFilePath,
       required this.activeFrames,
       required this.subtitleTexts,
       required this.avatar});
 
   String audioFilePath;
   String videoFilePath;
+  String musicFilePath;
   List<Map<String, double>> activeFrames;
   List<SubtitleText> subtitleTexts;
   Avatar avatar;
