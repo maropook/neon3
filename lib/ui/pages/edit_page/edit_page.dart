@@ -33,6 +33,7 @@ class EditPage extends StatelessWidget {
             audioFilePath: editPageArgs.audioFilePath,
             activeFrames: editPageArgs.activeFrames,
             shortestSide: MediaQuery.of(context).size.shortestSide,
+            avatar: editPageArgs.avatar,
           );
           return EditPageController(editPageProviderArg: editPageProviderArg);
         })
@@ -52,14 +53,16 @@ class EditPage extends StatelessWidget {
           return IconButton(
               onPressed: () async {
                 final List<SubtitleText> subtitleTexts =
-                    ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-
+                    ref.read(editPageProvider.select((s) => s.subtitleTexts));
+                final avatar =
+                    ref.read(editPageProvider.select((s) => s.avatar));
+                if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                     videoFilePath: editPageArgs.videoFilePath,
                     audioFilePath: editPageArgs.audioFilePath,
                     activeFrames: editPageArgs.activeFrames,
                     subtitleTexts: subtitleTexts,
-                    avatar: editPageArgs.avatar);
+                    avatar: avatar);
 
                 context.go('/encoding', extra: encodePageArgs);
               },
@@ -224,13 +227,15 @@ class EditPage extends StatelessWidget {
           ref.watch(editPageProvider.select((s) => s.isAvatarActive));
       final videoPlayerWidth =
           ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
 
-      return SizedBox(
-        width: videoPlayerWidth / 2,
-        child: UniversalImage(isAvatarActive
-            ? editPageArgs.avatar.activeImageUrl
-            : editPageArgs.avatar.stopImageUrl),
-      );
+      return avatar != null
+          ? SizedBox(
+              width: videoPlayerWidth / 2,
+              child: UniversalImage(
+                  isAvatarActive ? avatar.activeImageUrl : avatar.stopImageUrl),
+            )
+          : const CircularProgressIndicator();
     });
   }
 
@@ -240,20 +245,31 @@ class EditPage extends StatelessWidget {
           ref.watch(editPageProvider.select((s) => s.videoPlayerService));
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
+
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildEditContentIcon('アバターを変更', Assets.images.changeAvatarIcon,
-              context, showChangeAvatarSheet),
           GestureDetector(
             onTap: () async {
-              if (videoController == null) return;
+              final newAvatar = await showChangeAvatarSheet(context);
+              ref.read(editPageProvider.notifier).setSelectedAvatar(newAvatar);
+            },
+            child: _buildSubtitleEditContentIcon(
+              'アバターを変更',
+              Assets.images.changeAvatarIcon,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              if (videoController == null || avatar == null) return;
               await ref.read(editPageProvider.notifier).pause();
               final subtitleEditPageArgs = SubtitleEditPageArgs(
                   audioFilePath: editPageArgs.audioFilePath,
                   videoFilePath: editPageArgs.videoFilePath,
                   activeFrames: editPageArgs.activeFrames,
-                  avatar: editPageArgs.avatar,
+                  avatar: avatar,
                   subtitleTexts: texts);
               await showSubtitleEditSheet(context, subtitleEditPageArgs);
             },

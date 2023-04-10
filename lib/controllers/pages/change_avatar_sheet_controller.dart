@@ -3,28 +3,25 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
 
-part 'avatar_list_page_controller.freezed.dart';
+part 'change_avatar_sheet_controller.freezed.dart';
 
 @freezed
-class AvatarListPageState with _$AvatarListPageState {
-  const factory AvatarListPageState({
-    @Default(null) Avatar? newAvatar,
-    @Default("") String newActiveImagePath,
-    @Default("") String newStopImagePath,
+class ChangeAvatarSheetState with _$ChangeAvatarSheetState {
+  const factory ChangeAvatarSheetState({
     @Default([]) List<Avatar> avatarList,
     @Default(null) Avatar? selectedAvatar,
-  }) = _AvatarListPageState;
+  }) = _ChangeAvatarSheetState;
 }
 
-final avatarListPageProvider = StateNotifierProvider.autoDispose<
-    AvatarListPageController,
-    AvatarListPageState>((ref) => AvatarListPageController());
+final changeAvatarSheetProvider = StateNotifierProvider.autoDispose<
+    ChangeAvatarSheetController,
+    ChangeAvatarSheetState>((ref) => ChangeAvatarSheetController());
 
-class AvatarListPageController extends StateNotifier<AvatarListPageState> {
-  AvatarListPageController() : super(const AvatarListPageState()) {
+class ChangeAvatarSheetController
+    extends StateNotifier<ChangeAvatarSheetState> {
+  ChangeAvatarSheetController() : super(const ChangeAvatarSheetState()) {
     init();
   }
-
   final FireAvatarService fireAvatarService = FireAvatarService();
 
   Future<void> init() async {
@@ -51,9 +48,12 @@ class AvatarListPageController extends StateNotifier<AvatarListPageState> {
     return avatarList;
   }
 
-  Future<void> addNewAvatar({required Avatar newAvatar}) async {
-    state = state.copyWith(
-      avatarList: [newAvatar, ...state.avatarList],
-    );
+  Future<Avatar> selectAvatar(Avatar avatar) async {
+    if (avatar.id == state.selectedAvatar?.id) {
+      return avatar;
+    }
+    await fireAvatarService.setSelectAvatarId(id: avatar.id);
+    state = state.copyWith(selectedAvatar: avatar);
+    return avatar;
   }
 }

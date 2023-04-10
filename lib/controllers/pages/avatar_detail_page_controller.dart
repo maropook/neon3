@@ -5,8 +5,6 @@ import 'package:neon3/services/common/field_name.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
 import 'package:neon3/services/fire_storage_service.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 part 'avatar_detail_page_controller.freezed.dart';
 
 @freezed
@@ -33,8 +31,6 @@ class AvatarDetailPageController extends StateNotifier<AvatarDetailPageState> {
   final Avatar _avatar;
   final FireStorageService fireStorageService = FireStorageService();
   final FireAvatarService fireAvatarService = FireAvatarService();
-  final uid = FirebaseAuth.instance.currentUser?.uid ??
-      FieldName.noAccount; //currentUser==nullのときは匿名認証すらしていない
 
   Future<void> init() async {
     await fetchAvatarFromId();

@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EditPageState {
   bool get isPlaying => throw _privateConstructorUsedError;
+  Avatar? get avatar => throw _privateConstructorUsedError;
   VideoPlayerService? get videoPlayerService =>
       throw _privateConstructorUsedError;
   ThumbnailService? get thumbnailService => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $EditPageStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isPlaying,
+      Avatar? avatar,
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
@@ -51,6 +53,8 @@ abstract class $EditPageStateCopyWith<$Res> {
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       bool isComplete});
+
+  $AvatarCopyWith<$Res>? get avatar;
 }
 
 /// @nodoc
@@ -67,6 +71,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
   @override
   $Res call({
     Object? isPlaying = null,
+    Object? avatar = freezed,
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
@@ -82,6 +87,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
       videoPlayerService: freezed == videoPlayerService
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
@@ -120,6 +129,18 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
               as bool,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AvatarCopyWith<$Res>? get avatar {
+    if (_value.avatar == null) {
+      return null;
+    }
+
+    return $AvatarCopyWith<$Res>(_value.avatar!, (value) {
+      return _then(_value.copyWith(avatar: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -132,6 +153,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
   @useResult
   $Res call(
       {bool isPlaying,
+      Avatar? avatar,
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
@@ -141,6 +163,9 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       bool isComplete});
+
+  @override
+  $AvatarCopyWith<$Res>? get avatar;
 }
 
 /// @nodoc
@@ -155,6 +180,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isPlaying = null,
+    Object? avatar = freezed,
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
@@ -170,6 +196,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as Avatar?,
       videoPlayerService: freezed == videoPlayerService
           ? _value.videoPlayerService
           : videoPlayerService // ignore: cast_nullable_to_non_nullable
@@ -215,6 +245,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
 class _$_EditPageState implements _EditPageState {
   const _$_EditPageState(
       {this.isPlaying = false,
+      this.avatar = null,
       this.videoPlayerService = null,
       this.thumbnailService = null,
       final List<SubtitleText> subtitleTexts = const [],
@@ -230,6 +261,9 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final bool isPlaying;
+  @override
+  @JsonKey()
+  final Avatar? avatar;
   @override
   @JsonKey()
   final VideoPlayerService? videoPlayerService;
@@ -273,7 +307,7 @@ class _$_EditPageState implements _EditPageState {
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
   }
 
   @override
@@ -283,6 +317,7 @@ class _$_EditPageState implements _EditPageState {
             other is _$_EditPageState &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
                 other.videoPlayerService == videoPlayerService) &&
             (identical(other.thumbnailService, thumbnailService) ||
@@ -307,6 +342,7 @@ class _$_EditPageState implements _EditPageState {
   int get hashCode => Object.hash(
       runtimeType,
       isPlaying,
+      avatar,
       videoPlayerService,
       thumbnailService,
       const DeepCollectionEquality().hash(_subtitleTexts),
@@ -327,6 +363,7 @@ class _$_EditPageState implements _EditPageState {
 abstract class _EditPageState implements EditPageState {
   const factory _EditPageState(
       {final bool isPlaying,
+      final Avatar? avatar,
       final VideoPlayerService? videoPlayerService,
       final ThumbnailService? thumbnailService,
       final List<SubtitleText> subtitleTexts,
@@ -339,6 +376,8 @@ abstract class _EditPageState implements EditPageState {
 
   @override
   bool get isPlaying;
+  @override
+  Avatar? get avatar;
   @override
   VideoPlayerService? get videoPlayerService;
   @override
