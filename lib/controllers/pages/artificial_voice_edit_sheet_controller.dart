@@ -14,6 +14,9 @@ enum AudioType { original, artificial }
 class ArtificialVoiceEditSheetState with _$ArtificialVoiceEditSheetState {
   const factory ArtificialVoiceEditSheetState({
     @Default(AudioType.original) AudioType audioType,
+    @Default([]) List<SubtitleText> subtitleTexts,
+    @Default(false) bool isMergeTtsAudio,
+    @Default('') String ttsAudioFilePath,
   }) = _ArtificialVoiceEditSheetState;
 }
 
