@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/change_avatar_sheet_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
 
-Future<void> showChangeAvatarSheet(
+Future<Avatar?> showChangeAvatarSheet(
   BuildContext context,
 ) {
-  return showModalBottomSheet<void>(
+  return showModalBottomSheet<Avatar?>(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
@@ -36,15 +41,57 @@ class _ChangeAvatarSheet extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Column(
-      children: const [
-        SizedBox(height: 10),
-        Text(
-          'アバターを変更',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white),
+    return Consumer(builder: (context, ref, _) {
+      final avatarList =
+          ref.watch(changeAvatarSheetProvider.select((s) => s.avatarList));
+      final selectedAvatar = ref.watch(
+              changeAvatarSheetProvider.select((s) => s.selectedAvatar)) ??
+          defaultAvatar;
+
+      return GridView.builder(
+        padding: const EdgeInsets.all(10), //4辺すべて同じ値の余白
+        itemCount: avatarList.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: 2,
         ),
-      ],
-    );
+        itemBuilder: (context, index) {
+          return Container(
+              color: Colors.white,
+              child: GestureDetector(
+                  onTap: () async {
+                    final newSelectAvatar = await ref
+                        .read(changeAvatarSheetProvider.notifier)
+                        .selectAvatar(avatarList[index]);
+                    Navigator.of(context).pop(newSelectAvatar);
+                  },
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    fit: StackFit.loose,
+                    children: [
+                      avatarList[index].stopImageUrl.isNotEmpty
+                          ? AspectRatio(
+                              aspectRatio: 1,
+                              child: UniversalImage(
+                                avatarList[index].stopImageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : UniversalImage(
+                              Assets.images.faceSmile,
+                              fit: BoxFit.cover,
+                            ),
+                      if (avatarList[index].id == selectedAvatar.id)
+                        const Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 30,
+                        ),
+                    ],
+                  )));
+        },
+      );
+    });
   }
 }

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
 import 'package:neon3/services/thumbnail_service.dart';
@@ -18,6 +19,7 @@ part 'edit_page_controller.freezed.dart';
 class EditPageState with _$EditPageState {
   const factory EditPageState({
     @Default(false) bool isPlaying,
+    @Default(null) Avatar? avatar,
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
@@ -36,12 +38,14 @@ class EditPageProviderArg {
     required this.audioFilePath,
     required this.activeFrames,
     required this.shortestSide,
+    required this.avatar,
   });
 
   final String videoFilePath;
   final String audioFilePath;
   final List<Map<String, double>> activeFrames;
   final double shortestSide;
+  final Avatar avatar;
 }
 
 final editPageProvider =
@@ -76,6 +80,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   Future<void> init() async {
     try {
       // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,
+      state = state.copyWith(avatar: _editPageProviderArg.avatar);
       await _speechToTextService.buildTexts(
           _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
@@ -167,5 +172,11 @@ class EditPageController extends StateNotifier<EditPageState> {
       }
     }
     return false;
+  }
+
+  void setSelectedAvatar(Avatar? newAvatar) {
+    if (newAvatar == null) return;
+
+    state = state.copyWith(avatar: newAvatar);
   }
 }
