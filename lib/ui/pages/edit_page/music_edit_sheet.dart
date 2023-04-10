@@ -42,13 +42,8 @@ class _MusicEditSheet extends StatelessWidget {
       return Column(
         children: [
           const SizedBox(height: 10),
-          const Text(
-            'BGMを追加',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white),
-          ),
-          ElevatedButton(
-            onPressed: () async {
+          GestureDetector(
+            onTap: () async {
               final pickedFile = await ref
                   .read(musicEditSheetProvider.notifier)
                   .getPickedFilePath();
@@ -60,7 +55,18 @@ class _MusicEditSheet extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
-          )
+          ),
+          const SizedBox(height: 50),
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).pop('delete');
+            },
+            child: const Text(
+              'BGMを削除',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ],
       );
     });

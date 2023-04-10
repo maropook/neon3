@@ -197,6 +197,12 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> setMusicFile(String musicFilePath) async {
     if (musicFilePath.isEmpty) return;
+    if (musicFilePath == 'delete') {
+      //TODO:musicFileにdeleteを入れるのは良くない
+      await _musicPlayer.dispose();
+      state = state.copyWith(musicFilePath: '');
+      return;
+    }
 
     await _musicPlayer.dispose();
     _musicPlayer = AudioPlayer();

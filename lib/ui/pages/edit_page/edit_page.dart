@@ -285,6 +285,7 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).pause();
               final musicFilePath = await showMusicEditSheet(context) ?? '';
               ref.read(editPageProvider.notifier).setMusicFile(musicFilePath);
+              //''のときはreturnされるので現状維持
             },
             child: _buildShowModalIcon(
                 'BGMを追加', Assets.images.addBgmIcon, context),
