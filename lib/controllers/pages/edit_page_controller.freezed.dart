@@ -25,6 +25,7 @@ mixin _$EditPageState {
   bool get isAvatarActive => throw _privateConstructorUsedError;
   double get videoPlayerWidth => throw _privateConstructorUsedError;
   String get thumbnailFilePath => throw _privateConstructorUsedError;
+  String get musicFilePath => throw _privateConstructorUsedError;
   List<Uint8List?> get thumbnailFileDataList =>
       throw _privateConstructorUsedError;
   Duration get videoPosition => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $EditPageStateCopyWith<$Res> {
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
+      String musicFilePath,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       bool isComplete});
@@ -78,6 +80,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
+    Object? musicFilePath = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? isComplete = null,
@@ -114,6 +117,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
       thumbnailFilePath: null == thumbnailFilePath
           ? _value.thumbnailFilePath
           : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      musicFilePath: null == musicFilePath
+          ? _value.musicFilePath
+          : musicFilePath // ignore: cast_nullable_to_non_nullable
               as String,
       thumbnailFileDataList: null == thumbnailFileDataList
           ? _value.thumbnailFileDataList
@@ -160,6 +167,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
+      String musicFilePath,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       bool isComplete});
@@ -187,6 +195,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
+    Object? musicFilePath = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? isComplete = null,
@@ -224,6 +233,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.thumbnailFilePath
           : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      musicFilePath: null == musicFilePath
+          ? _value.musicFilePath
+          : musicFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
       thumbnailFileDataList: null == thumbnailFileDataList
           ? _value._thumbnailFileDataList
           : thumbnailFileDataList // ignore: cast_nullable_to_non_nullable
@@ -252,6 +265,7 @@ class _$_EditPageState implements _EditPageState {
       this.isAvatarActive = false,
       this.videoPlayerWidth = 0.0,
       this.thumbnailFilePath = '',
+      this.musicFilePath = '',
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,
       this.isComplete = false})
@@ -288,6 +302,9 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final String thumbnailFilePath;
+  @override
+  @JsonKey()
+  final String musicFilePath;
   final List<Uint8List?> _thumbnailFileDataList;
   @override
   @JsonKey()
@@ -307,7 +324,7 @@ class _$_EditPageState implements _EditPageState {
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
   }
 
   @override
@@ -330,6 +347,8 @@ class _$_EditPageState implements _EditPageState {
                 other.videoPlayerWidth == videoPlayerWidth) &&
             (identical(other.thumbnailFilePath, thumbnailFilePath) ||
                 other.thumbnailFilePath == thumbnailFilePath) &&
+            (identical(other.musicFilePath, musicFilePath) ||
+                other.musicFilePath == musicFilePath) &&
             const DeepCollectionEquality()
                 .equals(other._thumbnailFileDataList, _thumbnailFileDataList) &&
             (identical(other.videoPosition, videoPosition) ||
@@ -349,6 +368,7 @@ class _$_EditPageState implements _EditPageState {
       isAvatarActive,
       videoPlayerWidth,
       thumbnailFilePath,
+      musicFilePath,
       const DeepCollectionEquality().hash(_thumbnailFileDataList),
       videoPosition,
       isComplete);
@@ -370,6 +390,7 @@ abstract class _EditPageState implements EditPageState {
       final bool isAvatarActive,
       final double videoPlayerWidth,
       final String thumbnailFilePath,
+      final String musicFilePath,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
       final bool isComplete}) = _$_EditPageState;
@@ -390,6 +411,8 @@ abstract class _EditPageState implements EditPageState {
   double get videoPlayerWidth;
   @override
   String get thumbnailFilePath;
+  @override
+  String get musicFilePath;
   @override
   List<Uint8List?> get thumbnailFileDataList;
   @override

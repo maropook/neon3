@@ -18,12 +18,14 @@ class EncodePageProviderArg {
   EncodePageProviderArg(
       {required this.videoFilePath,
       required this.audioFilePath,
+      required this.musicFilePath,
       required this.avatar,
       required this.subtitleTexts,
       required this.activeFrames});
 
   final String videoFilePath;
   final String audioFilePath;
+  final String musicFilePath;
   final Avatar avatar;
   final List<SubtitleText> subtitleTexts;
   final List<Map<String, double>> activeFrames;
@@ -52,6 +54,7 @@ class EncodePageController extends StateNotifier<EncodePageState> {
           state = state.copyWith(progressRate: value as double);
         },
         audioFilePath: _encodePageProviderArg.audioFilePath,
+        musicFilePath: _encodePageProviderArg.musicFilePath,
         videoFilePath: _encodePageProviderArg.videoFilePath,
         activeFrames: _encodePageProviderArg.activeFrames,
         subtitleTexts: _encodePageProviderArg.subtitleTexts,

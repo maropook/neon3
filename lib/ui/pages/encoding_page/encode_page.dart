@@ -21,6 +21,7 @@ class EncodePage extends ConsumerWidget {
             avatar: encodePageArgs.avatar,
             subtitleTexts: encodePageArgs.subtitleTexts,
             activeFrames: encodePageArgs.activeFrames,
+            musicFilePath: encodePageArgs.musicFilePath,
           );
           return EncodePageController(
               encodePageProviderArg: encodePageProviderArgs);

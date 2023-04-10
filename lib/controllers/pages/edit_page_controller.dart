@@ -26,6 +26,7 @@ class EditPageState with _$EditPageState {
     @Default(false) bool isAvatarActive,
     @Default(0.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
+    @Default('') String musicFilePath,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
@@ -63,6 +64,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   final EditPageProviderArg _editPageProviderArg;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+  AudioPlayer _musicPlayer = AudioPlayer();
   final SpeechToTextService _speechToTextService = SpeechToTextService();
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
@@ -132,22 +134,35 @@ class EditPageController extends StateNotifier<EditPageState> {
   Future<void> play() async {
     await _videoPlayerService!.play();
     await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
+
+    if (state.musicFilePath.isEmpty) return;
+    await _musicPlayer.play(UrlSource(state.musicFilePath));
   }
 
   Future<void> seek({required Duration duration}) async {
     await _audioPlayer.seek(duration);
     await _videoPlayerService!.seek(duration: duration);
+
+    if (state.musicFilePath.isEmpty) return;
+    await _musicPlayer.seek(duration);
   }
 
   Future<void> pause() async {
     await _audioPlayer.pause();
     await _videoPlayerService!.pause();
+
+    if (state.musicFilePath.isEmpty) return;
+    await _musicPlayer.pause();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
     _videoPlayerService!.dispose();
+    if (state.musicFilePath.isNotEmpty) {
+      _musicPlayer.dispose();
+    }
+
     super.dispose();
   }
 
@@ -178,5 +193,20 @@ class EditPageController extends StateNotifier<EditPageState> {
     if (newAvatar == null) return;
 
     state = state.copyWith(avatar: newAvatar);
+  }
+
+  Future<void> setMusicFile(String musicFilePath) async {
+    if (musicFilePath.isEmpty) return;
+    if (musicFilePath == 'delete') {
+      //TODO:musicFileにdeleteを入れるのは良くない
+      await _musicPlayer.dispose();
+      state = state.copyWith(musicFilePath: '');
+      return;
+    }
+
+    await _musicPlayer.dispose();
+    _musicPlayer = AudioPlayer();
+    await _musicPlayer.setSourceDeviceFile(musicFilePath);
+    state = state.copyWith(musicFilePath: musicFilePath);
   }
 }

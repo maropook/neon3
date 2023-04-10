@@ -82,6 +82,7 @@ class EncodeService {
   Future<String> encode({
     required String videoFilePath,
     required String audioFilePath,
+    required String musicFilePath,
     required List<Map<String, double>> activeFrames,
     required List<SubtitleText> subtitleTexts,
     required Avatar avatar,
@@ -134,10 +135,10 @@ class EncodeService {
         positionX: 0.5);
 
     //AudioSetting
-    final musicFilePath = (await fileService.saveFile(
-            inputFilePath: Assets.audio.musicFile,
-            outputFilePath: 'music_file.mp3'))
-        .path;
+    // final musicFilePath = (await fileService.saveFile(
+    //         inputFilePath: Assets.audio.musicFile,
+    //         outputFilePath: 'music_file.mp3'))
+    //     .path;
 
     AudioSetting audioSetting = AudioSetting(
         // defaultAudioPath: _audioFilePath,
@@ -148,7 +149,7 @@ class EncodeService {
         isMutedDefaultAudio: false,
 
         //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
-        backgroundAudioPath: musicFilePath,
+        backgroundAudioPath: musicFilePath.isNotEmpty ? musicFilePath : null,
         backgroundAudioVolume: 0.1);
 
     // Encode
