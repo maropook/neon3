@@ -16,7 +16,7 @@ class FireStorageService {
   // final ImagePicker picker = ImagePicker();
   final FirebaseStorage storage = FirebaseStorage.instance;
 
-  Future<String> getNewImagePath() async {
+  Future<String> getPickedFilePath() async {
     final FilePickerResult? pickedImageFile =
         await FilePicker.platform.pickFiles();
     if (pickedImageFile == null) {

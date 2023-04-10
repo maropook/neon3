@@ -252,10 +252,11 @@ class EditPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () async {
+              await ref.read(editPageProvider.notifier).pause();
               final newAvatar = await showChangeAvatarSheet(context);
               ref.read(editPageProvider.notifier).setSelectedAvatar(newAvatar);
             },
-            child: _buildSubtitleEditContentIcon(
+            child: _buildShowModalIcon(
               'アバターを変更',
               Assets.images.changeAvatarIcon,
               context,
@@ -273,57 +274,39 @@ class EditPage extends StatelessWidget {
                   subtitleTexts: texts);
               await showSubtitleEditSheet(context, subtitleEditPageArgs);
             },
-            child: _buildSubtitleEditContentIcon(
-              'テキストを編集',
-              Assets.images.textEditIcon,
-              context,
-            ),
+            child: _buildShowModalIcon(
+                'テキストを編集', Assets.images.textEditIcon, context),
           ),
-          _buildEditContentIcon(
-              'BGMを追加', Assets.images.addBgmIcon, context, showMusicEditSheet),
-          _buildEditContentIcon('人工音声', Assets.images.artificialVoiceIcon,
-              context, showArtificialVoiceEditSheet),
+          GestureDetector(
+            onTap: () async {
+              await ref.read(editPageProvider.notifier).pause();
+              final musicFilePath = await showMusicEditSheet(context) ?? '';
+              ref.read(editPageProvider.notifier).setMusicFile(musicFilePath);
+            },
+            child: _buildShowModalIcon(
+                'BGMを追加', Assets.images.addBgmIcon, context),
+          ),
+          GestureDetector(
+            onTap: () async {
+              await showArtificialVoiceEditSheet(context);
+            },
+            child: _buildShowModalIcon(
+                '人工音声', Assets.images.artificialVoiceIcon, context),
+          ),
         ],
       );
     });
   }
 
-  Widget _buildSubtitleEditContentIcon(
+  Widget _buildShowModalIcon(
       String text, String iconPath, BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.shortestSide / 4,
       child: Column(
         children: [
           SvgPicture.asset(iconPath),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.black, fontSize: 10),
-          )
+          Text(text, style: const TextStyle(color: Colors.black, fontSize: 10))
         ],
-      ),
-    );
-  }
-
-  Widget _buildEditContentIcon(
-      String text,
-      String iconPath,
-      BuildContext context,
-      Future<void> Function(BuildContext) showModalBottomSheet) {
-    return GestureDetector(
-      onTap: () async {
-        await showModalBottomSheet(context);
-      },
-      child: SizedBox(
-        width: MediaQuery.of(context).size.shortestSide / 4,
-        child: Column(
-          children: [
-            SvgPicture.asset(iconPath),
-            Text(
-              text,
-              style: const TextStyle(color: Colors.black, fontSize: 10),
-            )
-          ],
-        ),
       ),
     );
   }

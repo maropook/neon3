@@ -31,7 +31,7 @@ class AvatarAddSheetController extends StateNotifier<AvatarAddSheetState> {
   Future<void> init() async {}
 
   Future<void> setNewImage({required bool isActive}) async {
-    String imageFilePath = await fireStorageService.getNewImagePath();
+    String imageFilePath = await fireStorageService.getPickedFilePath();
     if (imageFilePath.isEmpty) return;
 
     if (isActive) {

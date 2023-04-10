@@ -23,6 +23,11 @@ class FileService {
 
     final String fullOutputFilePath =
         join((await getApplicationDocumentsDirectory()).path, outputFilePath);
+
+    if (await File(fullOutputFilePath).exists()) {
+      await File(fullOutputFilePath).delete();
+    }
+
     final File fileFuture = await File(fullOutputFilePath)
         .writeAsBytes(byteList, mode: FileMode.writeOnly, flush: false);
 
