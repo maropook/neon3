@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:neon_video_encoder/subtitle_text.dart';
 
 Future<void> showArtificialVoiceEditSheet(
   BuildContext context,
+  List<SubtitleText> subtitleTexts,
 ) {
   return showModalBottomSheet<void>(
       backgroundColor: Colors.transparent,
@@ -9,13 +11,15 @@ Future<void> showArtificialVoiceEditSheet(
       context: context,
       isDismissible: true,
       builder: (BuildContext context) {
-        return const _ArtificialVoiceEditSheet();
+        return _ArtificialVoiceEditSheet(subtitleTexts: subtitleTexts);
       });
 }
 
 class _ArtificialVoiceEditSheet extends StatelessWidget {
-  const _ArtificialVoiceEditSheet({Key? key}) : super(key: key);
+  const _ArtificialVoiceEditSheet(
+      {required List<SubtitleText> this.subtitleTexts, super.key});
 
+  final List<SubtitleText> subtitleTexts;
   @override
   Widget build(BuildContext context) {
     return _buildModal(context);

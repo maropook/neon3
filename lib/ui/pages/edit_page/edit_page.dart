@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -292,7 +293,9 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              await showArtificialVoiceEditSheet(context);
+              final subtitleTexts =
+                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
+              await showArtificialVoiceEditSheet(context, subtitleTexts);
             },
             child: _buildShowModalIcon(
                 '人工音声', Assets.images.artificialVoiceIcon, context),
