@@ -203,7 +203,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   Future<void> setMusicFile(String musicFilePath) async {
     if (musicFilePath.isEmpty) return;
     if (musicFilePath == 'delete') {
-      //TODO:musicFileにdeleteを入れるのは良くない
+      //TODO: originalにされたときはdeleteとかじゃないやり方でやりたい。musicFilePathにdeleteをいれるのはおかしい
       await _musicPlayerService?.dispose();
       _musicPlayerService = null;
       state = state.copyWith(musicFilePath: '');
@@ -217,11 +217,13 @@ class EditPageController extends StateNotifier<EditPageState> {
   Future<void> setTtsAudioFile(String ttsAudioFilePath) async {
     if (ttsAudioFilePath.isEmpty) return;
     if (ttsAudioFilePath == 'delete') {
-      //TODO:ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたらせっかくつくったttsAudioFileがなくなってしまう。
-      //stateにaudioTypeをいれておいて、artificialのときはstate.ttsAudioFilePathをもってきて、・・・
-      //originalにされたときはdeleteとかじゃなくて
-      //setTtsAudioFileでstate = ttsAudioFilePathする switchtypeするたびに_ttsAudioPlayerServiceは呼び出し直してもいいから
-      //wordがいっこもないisWordExistがfalseのときはそもそもartificialにできないようにして、encode_controllerにもswitchTypeで渡そう
+      //TODO: originalにされたときはdeleteとかじゃないやり方でやりたい。ttsAudioFilePathにdeleteをいれるのはおかしい
+
+      //TODO: ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたらせっかくつくったttsAudioFileがなくなってしまう。
+      //artificialのまま字幕の文字全部消えて、そのままencode_controllerにaudioTypeを渡すとエラーになるとおもうが、
+      //セーフ(いまのところ反映されない。一回字幕作成を押さないとつくりなおされないから。)&audioTypeではなく人工音声のfilePathを渡していて、
+      //isEmptyのときはoriginalとみなしてencodeされるようにしているから
+
       await _ttsAudioPlayerService?.dispose();
       _ttsAudioPlayerService = null;
       state =
