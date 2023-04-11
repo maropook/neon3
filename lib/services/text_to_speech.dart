@@ -9,7 +9,8 @@ class TextToSpeechService {
   int waitingWord = 0;
   int completeWord = 0;
 
-  Future<void> generateSpeechFile(List<SubtitleText> texts) async {
+  Future<List<SubtitleText>> generateSpeechFile(
+      List<SubtitleText> texts) async {
     waitingWord = 0;
     completeWord = 0;
     for (int i = 0; i < texts.length; ++i) {
@@ -19,11 +20,13 @@ class TextToSpeechService {
       ++waitingWord;
       final String filePath = 'speak_$i.caf';
       await _speakToFile(texts[i].word, filePath);
-      texts[i].voiceFilePath = await fileService.getAppDocFilePath('filePath');
+      texts[i].voiceFilePath = await fileService.getAppDocFilePath(filePath);
     }
     while (waitingWord != completeWord) {
-      await Future<void>.delayed(const Duration(milliseconds: 10));
+      await Future<void>.delayed(const Duration(milliseconds: 60));
     }
+
+    return texts;
   }
 
   Future<void> _speakToFile(String word, String fileName) async {

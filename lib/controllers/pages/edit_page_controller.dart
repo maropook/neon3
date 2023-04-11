@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/services/audio_player_service.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
 import 'package:neon3/services/thumbnail_service.dart';
@@ -27,6 +28,7 @@ class EditPageState with _$EditPageState {
     @Default(0.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
+    @Default('') String ttsAudioFile,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
@@ -62,12 +64,13 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   final EditPageProviderArg _editPageProviderArg;
-
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  AudioPlayer _musicPlayer = AudioPlayer();
   final SpeechToTextService _speechToTextService = SpeechToTextService();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
+  AudioPlayerService? _musicPlayerService;
+  AudioPlayerService? _ttsAudioPlayerService;
 
 //thumbnail_service
   double get thumbnailHeight => shortestSide / 7;
@@ -135,33 +138,33 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _videoPlayerService!.play();
     await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
 
-    if (state.musicFilePath.isEmpty) return;
-    await _musicPlayer.play(UrlSource(state.musicFilePath));
+    await _musicPlayerService?.play(state.musicFilePath);
+    await _ttsAudioPlayerService?.play(state.ttsAudioFile);
   }
 
   Future<void> seek({required Duration duration}) async {
     await _audioPlayer.seek(duration);
     await _videoPlayerService!.seek(duration: duration);
 
-    if (state.musicFilePath.isEmpty) return;
-    await _musicPlayer.seek(duration);
+    await _musicPlayerService?.seek(duration: duration);
+    await _ttsAudioPlayerService?.seek(duration: duration);
   }
 
   Future<void> pause() async {
     await _audioPlayer.pause();
     await _videoPlayerService!.pause();
 
-    if (state.musicFilePath.isEmpty) return;
-    await _musicPlayer.pause();
+    await _musicPlayerService?.pause();
+    await _ttsAudioPlayerService?.pause();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
     _videoPlayerService!.dispose();
-    if (state.musicFilePath.isNotEmpty) {
-      _musicPlayer.dispose();
-    }
+
+    _musicPlayerService?.pause();
+    _ttsAudioPlayerService?.pause();
 
     super.dispose();
   }
@@ -199,14 +202,27 @@ class EditPageController extends StateNotifier<EditPageState> {
     if (musicFilePath.isEmpty) return;
     if (musicFilePath == 'delete') {
       //TODO:musicFileにdeleteを入れるのは良くない
-      await _musicPlayer.dispose();
+      await _musicPlayerService?.dispose();
+      _musicPlayerService = null;
       state = state.copyWith(musicFilePath: '');
       return;
     }
 
-    await _musicPlayer.dispose();
-    _musicPlayer = AudioPlayer();
-    await _musicPlayer.setSourceDeviceFile(musicFilePath);
+    _musicPlayerService = AudioPlayerService(musicFilePath);
     state = state.copyWith(musicFilePath: musicFilePath);
+  }
+
+  Future<void> setTtsAudioFile(String ttsAudioFile) async {
+    if (ttsAudioFile.isEmpty) return;
+    if (ttsAudioFile == 'delete') {
+      //TODO:musicFileにdeleteを入れるのは良くない
+      await _ttsAudioPlayerService?.dispose();
+      _ttsAudioPlayerService = null;
+      state = state.copyWith(ttsAudioFile: '');
+      return;
+    }
+
+    _ttsAudioPlayerService = AudioPlayerService(ttsAudioFile);
+    state = state.copyWith(ttsAudioFile: ttsAudioFile);
   }
 }

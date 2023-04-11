@@ -1,10 +1,11 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/file_service.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
+import 'package:neon3/services/text_to_speech.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
-import 'package:uuid/uuid.dart';
 
 part 'artificial_voice_edit_sheet_controller.freezed.dart';
 
@@ -48,18 +49,38 @@ class ArtificialVoiceEditSheetController
 
   final FireAvatarService fireAvatarService = FireAvatarService();
   final FileService fileService = FileService();
+  final TextToSpeechService textToSpeechService = TextToSpeechService();
+  final EncodeService encodeService = EncodeService();
+  Future<void> init() async {
+    state = state.copyWith(
+        subtitleTexts: _artificialVoiceEditSheetProviderArg.subtitleTexts);
+  }
 
-  Future<void> init() async {}
-  Future<String> getPickedFilePath() async {
-    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles();
-    if (pickedFile == null) {
-      return '';
+  bool isExistTexts() {
+    for (final SubtitleText text in state.subtitleTexts) {
+      return text.word != '';
     }
-    final String pickedFilePath = pickedFile.files.single.path!;
-    final String outputFilePath = (await fileService.saveFile(
-            inputFilePath: pickedFilePath, outputFilePath: 'musicFile.mp3'))
-        .path;
+    return false;
+  }
 
-    return outputFilePath;
+  Future<String?> switchAudioType(AudioType targetAudioType) async {
+    state = state.copyWith(audioType: targetAudioType);
+
+    if (targetAudioType == AudioType.artificial && isExistTexts()) {
+      if (state.isMergeTtsAudio) {
+        return state.ttsAudioFilePath;
+      }
+      EasyLoading.show();
+      final subtitleTexts =
+          await textToSpeechService.generateSpeechFile(state.subtitleTexts);
+      final ttsAudioFilePath = await encodeService.mergeAudio(subtitleTexts);
+      state = state.copyWith(
+          ttsAudioFilePath: ttsAudioFilePath,
+          isMergeTtsAudio: true,
+          subtitleTexts: subtitleTexts);
+      EasyLoading.dismiss();
+      return ttsAudioFilePath;
+    }
+    return 'delete';
   }
 }

@@ -293,9 +293,13 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
+              await ref.read(editPageProvider.notifier).pause();
               final subtitleTexts =
                   ref.read(editPageProvider.select((s) => s.subtitleTexts));
-              await showArtificialVoiceEditSheet(context, subtitleTexts);
+              final ttsAudioFile =
+                  await showArtificialVoiceEditSheet(context, subtitleTexts) ??
+                      '';
+              ref.read(editPageProvider.notifier).setTtsAudioFile(ttsAudioFile);
             },
             child: _buildShowModalIcon(
                 '人工音声', Assets.images.artificialVoiceIcon, context),

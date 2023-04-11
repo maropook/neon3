@@ -30,25 +30,19 @@ class EncodeService {
     return videoFilePath;
   }
 
-  Future<String> mergeAudio() async {
+  Future<String> mergeAudio(List<SubtitleText> subtitleTexts) async {
     NeonVoiceFileList neonVoiceFileList = NeonVoiceFileList();
-    String voiceFilePath1 = (await fileService.saveFile(
-            inputFilePath: Assets.audio.voiceFile1,
-            outputFilePath: "audio1.mp3"))
-        .path;
-    String voiceFilePath2 = (await fileService.saveFile(
-            inputFilePath: Assets.audio.voiceFile2,
-            outputFilePath: "audio2.mp3"))
-        .path;
-
-    neonVoiceFileList.add(voiceFilePath: voiceFilePath1, startTime: 1.0);
-
-    neonVoiceFileList.add(voiceFilePath: voiceFilePath2, startTime: 3.0);
-
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
-    double progressRate = 0;
+    for (SubtitleText text in subtitleTexts) {
+      if (text.voiceFilePath == null) {
+        continue;
+      }
+      neonVoiceFileList.add(
+          voiceFilePath: text.voiceFilePath!, startTime: text.startTime);
+    }
 
+    double progressRate = 0;
     neonVideoEncoder.getProgressStatus.listen((dynamic value) {
       progressRate = value as double;
       Logger.log('encode', 'mergeAudio  =>  $progressRate %');
@@ -89,9 +83,9 @@ class EncodeService {
     required void Function(dynamic value) addListenersFunction,
   }) async {
     EasyLoading.show();
-    final String mergedAudioFilePath = await mergeAudio();
-    final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
-        await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
+    // final String mergedAudioFilePath = await mergeAudio(subtitleTexts);
+    // final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
+    //     await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
     final DownloadImageService downloadImageService = DownloadImageService();
 
