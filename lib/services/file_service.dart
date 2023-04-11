@@ -12,6 +12,12 @@ class FileService {
     return '${documentsDirectory.path}/$fileName';
   }
 
+  Future<String> getAppDocFilePath(String fileName) async {
+    final Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    return '${documentsDirectory.path}/$fileName';
+  }
+
   Future<File> saveFile({
     required String inputFilePath,
     required String outputFilePath,

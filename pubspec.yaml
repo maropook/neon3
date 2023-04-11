@@ -49,6 +49,7 @@ dependencies:
   file_picker: ^5.2.7
   video_thumbnail: ^0.5.3
   audio_video_progress_bar: ^1.0.1
+  flutter_tts: ^3.6.3
 
   neon_video_encoder:
     git:

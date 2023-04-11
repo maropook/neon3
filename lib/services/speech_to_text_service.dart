@@ -86,7 +86,8 @@ class SpeechToTextService {
         texts.add(SubtitleText(
             startTime: activeFrames[index]['startTime']!,
             endTime: activeFrames[index]['endTime']!,
-            word: speechTextsList[index]));
+            word: 'ハロー')); //TODO:!!いまは人工音声のため
+        // word: speechTextsList[index]));//TODO:!!いまは人工音声のため
         // Logger.log(
         //     "speechToTexts_complete_call_back", speechTextsList[index]);
         completeCallBack(texts);

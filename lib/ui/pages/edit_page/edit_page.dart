@@ -58,11 +58,14 @@ class EditPage extends StatelessWidget {
                     ref.read(editPageProvider.select((s) => s.avatar));
                 final musicFilePath =
                     ref.read(editPageProvider.select((s) => s.musicFilePath));
+                final ttsAudioFilePath = ref
+                    .read(editPageProvider.select((s) => s.ttsAudioFilePath));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                     videoFilePath: editPageArgs.videoFilePath,
                     audioFilePath: editPageArgs.audioFilePath,
                     musicFilePath: musicFilePath,
+                    ttsAudioFilePath: ttsAudioFilePath,
                     activeFrames: editPageArgs.activeFrames,
                     subtitleTexts: subtitleTexts,
                     avatar: avatar);
@@ -292,7 +295,15 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              await showArtificialVoiceEditSheet(context);
+              await ref.read(editPageProvider.notifier).pause();
+              final subtitleTexts =
+                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
+              final audioType =
+                  ref.read(editPageProvider.select((s) => s.audioType));
+              final ttsAudioFile = await showArtificialVoiceEditSheet(
+                      context, subtitleTexts, audioType) ??
+                  '';
+              ref.read(editPageProvider.notifier).setTtsAudioFile(ttsAudioFile);
             },
             child: _buildShowModalIcon(
                 '人工音声', Assets.images.artificialVoiceIcon, context),
