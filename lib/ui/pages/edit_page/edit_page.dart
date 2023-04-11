@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -59,11 +58,14 @@ class EditPage extends StatelessWidget {
                     ref.read(editPageProvider.select((s) => s.avatar));
                 final musicFilePath =
                     ref.read(editPageProvider.select((s) => s.musicFilePath));
+                final ttsAudioFilePath = ref
+                    .read(editPageProvider.select((s) => s.ttsAudioFilePath));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                     videoFilePath: editPageArgs.videoFilePath,
                     audioFilePath: editPageArgs.audioFilePath,
                     musicFilePath: musicFilePath,
+                    ttsAudioFilePath: ttsAudioFilePath,
                     activeFrames: editPageArgs.activeFrames,
                     subtitleTexts: subtitleTexts,
                     avatar: avatar);

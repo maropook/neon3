@@ -28,7 +28,7 @@ class EditPageState with _$EditPageState {
     @Default(0.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
-    @Default('') String ttsAudioFile,
+    @Default('') String ttsAudioFilePath,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
@@ -139,7 +139,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
 
     await _musicPlayerService?.play(state.musicFilePath);
-    await _ttsAudioPlayerService?.play(state.ttsAudioFile);
+    await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
 
   Future<void> seek({required Duration duration}) async {
@@ -212,17 +212,17 @@ class EditPageController extends StateNotifier<EditPageState> {
     state = state.copyWith(musicFilePath: musicFilePath);
   }
 
-  Future<void> setTtsAudioFile(String ttsAudioFile) async {
-    if (ttsAudioFile.isEmpty) return;
-    if (ttsAudioFile == 'delete') {
+  Future<void> setTtsAudioFile(String ttsAudioFilePath) async {
+    if (ttsAudioFilePath.isEmpty) return;
+    if (ttsAudioFilePath == 'delete') {
       //TODO:musicFileにdeleteを入れるのは良くない
       await _ttsAudioPlayerService?.dispose();
       _ttsAudioPlayerService = null;
-      state = state.copyWith(ttsAudioFile: '');
+      state = state.copyWith(ttsAudioFilePath: '');
       return;
     }
 
-    _ttsAudioPlayerService = AudioPlayerService(ttsAudioFile);
-    state = state.copyWith(ttsAudioFile: ttsAudioFile);
+    _ttsAudioPlayerService = AudioPlayerService(ttsAudioFilePath);
+    state = state.copyWith(ttsAudioFilePath: ttsAudioFilePath);
   }
 }

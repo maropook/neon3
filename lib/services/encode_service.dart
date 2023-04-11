@@ -1,4 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/download_image_service.dart';
@@ -77,47 +78,23 @@ class EncodeService {
     required String videoFilePath,
     required String audioFilePath,
     required String musicFilePath,
+    required String ttsAudioFilePath,
     required List<Map<String, double>> activeFrames,
     required List<SubtitleText> subtitleTexts,
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
   }) async {
     EasyLoading.show();
-    // final String mergedAudioFilePath = await mergeAudio(subtitleTexts);
-    // final String trimmedAudioFilePath = await trimAudio(mergedAudioFilePath,
-    //     await fileService.getTempFilePath('trim-audio.m4a'), 0.0, 40.0);
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
     final DownloadImageService downloadImageService = DownloadImageService();
 
-    String voiceFilePath1 = (await fileService.saveFile(
-            inputFilePath: Assets.audio.voiceFile1,
-            outputFilePath: "audio1.mp3"))
-        .path;
-    String voiceFilePath2 = (await fileService.saveFile(
-            inputFilePath: Assets.audio.voiceFile2,
-            outputFilePath: "audio2.mp3"))
-        .path;
-
+    //SubtitleText
     //TODO:人工音声を追加できるようになったら変更する
     for (int i = 0; i < subtitleTexts.length; ++i) {
       subtitleTexts[i].word = 'word${i}';
     }
-    //SubtitleText
-    // final List<SubtitleText> subtitleTexts = [
-    //   SubtitleText(
-    //       startTime: 1.0,
-    //       endTime: 2.0,
-    //       word: "word1",
-    //       voiceFilePath: voiceFilePath1),
-    //   SubtitleText(
-    //       startTime: 2.0,
-    //       endTime: 3.0,
-    //       word: "word2",
-    //       voiceFilePath: voiceFilePath2),
-    // ];
 
     // AvatarAnimation
-
     AvatarAnimation avatarAnimation = AvatarAnimation(
         activeImagePath: await downloadImageService.downloadImage(
             downloadUrl: avatar.activeImageUrl),
@@ -129,20 +106,14 @@ class EncodeService {
         positionX: 0.5);
 
     //AudioSetting
-    // final musicFilePath = (await fileService.saveFile(
-    //         inputFilePath: Assets.audio.musicFile,
-    //         outputFilePath: 'music_file.mp3'))
-    //     .path;
+    //isMutedDefaultAudio→ true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
+    // isMutedDefaultAudio:trueの場合は、voiceFileにある音声たちより、動画が短かったらExport failed: Operation Stoppedになる
 
+    AudioType audioType =
+        ttsAudioFilePath.isEmpty ? AudioType.original : AudioType.artificial;
     AudioSetting audioSetting = AudioSetting(
-        // defaultAudioPath: _audioFilePath,
-        // isMutedDefaultAudio:
-        //     true, //この場合は、voiceFileにある音声たちより、動画が短かったらExport failed: Operation Stoppedになる
-
-        defaultAudioPath: audioFilePath,
-        isMutedDefaultAudio: false,
-
-        //true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
+        defaultAudioPath: audioType == AudioType.original ? audioFilePath : '',
+        isMutedDefaultAudio: audioType == AudioType.original ? false : true,
         backgroundAudioPath: musicFilePath.isNotEmpty ? musicFilePath : null,
         backgroundAudioVolume: 0.1);
 

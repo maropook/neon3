@@ -19,6 +19,7 @@ class EncodePageProviderArg {
       {required this.videoFilePath,
       required this.audioFilePath,
       required this.musicFilePath,
+      required this.ttsAudioFilePath,
       required this.avatar,
       required this.subtitleTexts,
       required this.activeFrames});
@@ -26,6 +27,7 @@ class EncodePageProviderArg {
   final String videoFilePath;
   final String audioFilePath;
   final String musicFilePath;
+  final String ttsAudioFilePath;
   final Avatar avatar;
   final List<SubtitleText> subtitleTexts;
   final List<Map<String, double>> activeFrames;
@@ -55,6 +57,7 @@ class EncodePageController extends StateNotifier<EncodePageState> {
         },
         audioFilePath: _encodePageProviderArg.audioFilePath,
         musicFilePath: _encodePageProviderArg.musicFilePath,
+        ttsAudioFilePath: _encodePageProviderArg.ttsAudioFilePath,
         videoFilePath: _encodePageProviderArg.videoFilePath,
         activeFrames: _encodePageProviderArg.activeFrames,
         subtitleTexts: _encodePageProviderArg.subtitleTexts,
