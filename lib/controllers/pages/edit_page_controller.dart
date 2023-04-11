@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
 import 'package:neon3/services/logger.dart';
@@ -29,6 +30,7 @@ class EditPageState with _$EditPageState {
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
     @Default('') String ttsAudioFilePath,
+    @Default(AudioType.original) AudioType audioType,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
@@ -215,14 +217,20 @@ class EditPageController extends StateNotifier<EditPageState> {
   Future<void> setTtsAudioFile(String ttsAudioFilePath) async {
     if (ttsAudioFilePath.isEmpty) return;
     if (ttsAudioFilePath == 'delete') {
-      //TODO:musicFileにdeleteを入れるのは良くない
+      //TODO:ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたらせっかくつくったttsAudioFileがなくなってしまう。
+      //stateにaudioTypeをいれておいて、artificialのときはstate.ttsAudioFilePathをもってきて、・・・
+      //originalにされたときはdeleteとかじゃなくて
+      //setTtsAudioFileでstate = ttsAudioFilePathする switchtypeするたびに_ttsAudioPlayerServiceは呼び出し直してもいいから
+      //wordがいっこもないisWordExistがfalseのときはそもそもartificialにできないようにして、encode_controllerにもswitchTypeで渡そう
       await _ttsAudioPlayerService?.dispose();
       _ttsAudioPlayerService = null;
-      state = state.copyWith(ttsAudioFilePath: '');
+      state =
+          state.copyWith(ttsAudioFilePath: '', audioType: AudioType.original);
       return;
     }
 
     _ttsAudioPlayerService = AudioPlayerService(ttsAudioFilePath);
-    state = state.copyWith(ttsAudioFilePath: ttsAudioFilePath);
+    state = state.copyWith(
+        ttsAudioFilePath: ttsAudioFilePath, audioType: AudioType.artificial);
   }
 }

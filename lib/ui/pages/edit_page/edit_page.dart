@@ -298,9 +298,11 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).pause();
               final subtitleTexts =
                   ref.read(editPageProvider.select((s) => s.subtitleTexts));
-              final ttsAudioFile =
-                  await showArtificialVoiceEditSheet(context, subtitleTexts) ??
-                      '';
+              final audioType =
+                  ref.read(editPageProvider.select((s) => s.audioType));
+              final ttsAudioFile = await showArtificialVoiceEditSheet(
+                      context, subtitleTexts, audioType) ??
+                  '';
               ref.read(editPageProvider.notifier).setTtsAudioFile(ttsAudioFile);
             },
             child: _buildShowModalIcon(

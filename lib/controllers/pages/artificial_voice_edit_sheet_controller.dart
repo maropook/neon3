@@ -24,9 +24,11 @@ class ArtificialVoiceEditSheetState with _$ArtificialVoiceEditSheetState {
 class ArtificialVoiceEditSheetProviderArg {
   ArtificialVoiceEditSheetProviderArg({
     required this.subtitleTexts,
+    required this.audioType,
   });
 
   final List<SubtitleText> subtitleTexts;
+  final AudioType audioType;
 }
 
 final artificialVoiceEditSheetProvider = StateNotifierProvider.autoDispose<
@@ -53,7 +55,8 @@ class ArtificialVoiceEditSheetController
   final EncodeService encodeService = EncodeService();
   Future<void> init() async {
     state = state.copyWith(
-        subtitleTexts: _artificialVoiceEditSheetProviderArg.subtitleTexts);
+        subtitleTexts: _artificialVoiceEditSheetProviderArg.subtitleTexts,
+        audioType: _artificialVoiceEditSheetProviderArg.audioType);
   }
 
   bool isExistTexts() {
@@ -64,9 +67,17 @@ class ArtificialVoiceEditSheetController
   }
 
   Future<String?> switchAudioType(AudioType targetAudioType) async {
-    state = state.copyWith(audioType: targetAudioType);
-
+    //というかttsAudioFileをわたせばよいのでは？
+    //あとあと字幕変えた時にこまるのか・・字幕の文字変わってるかもしれないから。
+    //頻繁に押す人いない
+    //ttsAudioTypeだけ渡したらいいんじゃないか？
+    //というかこれ字幕変えてすぐは人工音声アップデートされないね、自分で押しに行かないと
+    //でもgenerate
+    //sheetにisMergeTtsAudioをわたして、arg.isMergeTtsAudioがtrueのときは
+    //generateSpeechFileをしない
+    //sheetから最初にttsFileをもらう、そのあとはtargetAudioTypeをもらう・・
     if (targetAudioType == AudioType.artificial && isExistTexts()) {
+      state = state.copyWith(audioType: AudioType.artificial);
       if (state.isMergeTtsAudio) {
         return state.ttsAudioFilePath;
       }
@@ -81,6 +92,7 @@ class ArtificialVoiceEditSheetController
       EasyLoading.dismiss();
       return ttsAudioFilePath;
     }
+    state = state.copyWith(audioType: AudioType.original);
     return 'delete';
   }
 }
