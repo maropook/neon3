@@ -170,6 +170,7 @@ class EditPage extends StatelessWidget {
                 context, SubtitleEditPageArgs(subtitleText: texts[index]));
             if (subtitleText == null) return;
             ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
+            await ref.read(editPageProvider.notifier).closeModalCallback();
           },
           child: Text(
             texts[index].word.isNotEmpty ? texts[index].word : 'none',
@@ -320,7 +321,10 @@ class EditPage extends StatelessWidget {
             onTap: () async {
               await ref.read(editPageProvider.notifier).showModalCallback();
               final musicFilePath = await showMusicEditSheet(context) ?? '';
-              ref.read(editPageProvider.notifier).setMusicFile(musicFilePath);
+              await ref
+                  .read(editPageProvider.notifier)
+                  .setMusicFile(musicFilePath);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
               //''のときはreturnされるので現状維持
             },
             child: _buildShowModalIcon(
@@ -336,7 +340,10 @@ class EditPage extends StatelessWidget {
               final ttsAudioFile = await showArtificialVoiceEditSheet(
                       context, subtitleTexts, audioType) ??
                   '';
-              ref.read(editPageProvider.notifier).setTtsAudioFile(ttsAudioFile);
+              await ref
+                  .read(editPageProvider.notifier)
+                  .setTtsAudioFile(ttsAudioFile);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
                 '人工音声', Assets.images.artificialVoiceIcon, context),

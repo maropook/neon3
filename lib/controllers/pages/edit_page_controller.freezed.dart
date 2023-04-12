@@ -32,6 +32,7 @@ mixin _$EditPageState {
   List<Uint8List?> get thumbnailFileDataList =>
       throw _privateConstructorUsedError;
   Duration get videoPosition => throw _privateConstructorUsedError;
+  Duration get beforeShowingVideoPosition => throw _privateConstructorUsedError;
   bool get isComplete => throw _privateConstructorUsedError;
   bool get isExistSubtitleTextNow => throw _privateConstructorUsedError;
   int get focusTextsIndex => throw _privateConstructorUsedError;
@@ -62,6 +63,7 @@ abstract class $EditPageStateCopyWith<$Res> {
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
+      Duration beforeShowingVideoPosition,
       bool isComplete,
       bool isExistSubtitleTextNow,
       int focusTextsIndex});
@@ -96,6 +98,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
+    Object? beforeShowingVideoPosition = null,
     Object? isComplete = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
@@ -157,6 +160,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.videoPosition
           : videoPosition // ignore: cast_nullable_to_non_nullable
               as Duration,
+      beforeShowingVideoPosition: null == beforeShowingVideoPosition
+          ? _value.beforeShowingVideoPosition
+          : beforeShowingVideoPosition // ignore: cast_nullable_to_non_nullable
+              as Duration,
       isComplete: null == isComplete
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
@@ -208,6 +215,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
+      Duration beforeShowingVideoPosition,
       bool isComplete,
       bool isExistSubtitleTextNow,
       int focusTextsIndex});
@@ -241,6 +249,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
+    Object? beforeShowingVideoPosition = null,
     Object? isComplete = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
@@ -302,6 +311,10 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.videoPosition
           : videoPosition // ignore: cast_nullable_to_non_nullable
               as Duration,
+      beforeShowingVideoPosition: null == beforeShowingVideoPosition
+          ? _value.beforeShowingVideoPosition
+          : beforeShowingVideoPosition // ignore: cast_nullable_to_non_nullable
+              as Duration,
       isComplete: null == isComplete
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
@@ -336,6 +349,7 @@ class _$_EditPageState implements _EditPageState {
       this.audioType = AudioType.original,
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,
+      this.beforeShowingVideoPosition = Duration.zero,
       this.isComplete = false,
       this.isExistSubtitleTextNow = false,
       this.focusTextsIndex = 0})
@@ -407,6 +421,9 @@ class _$_EditPageState implements _EditPageState {
   final Duration videoPosition;
   @override
   @JsonKey()
+  final Duration beforeShowingVideoPosition;
+  @override
+  @JsonKey()
   final bool isComplete;
   @override
   @JsonKey()
@@ -417,7 +434,7 @@ class _$_EditPageState implements _EditPageState {
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, displaySubtitleIndexList: $displaySubtitleIndexList, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, displaySubtitleIndexList: $displaySubtitleIndexList, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex)';
   }
 
   @override
@@ -452,6 +469,10 @@ class _$_EditPageState implements _EditPageState {
                 .equals(other._thumbnailFileDataList, _thumbnailFileDataList) &&
             (identical(other.videoPosition, videoPosition) ||
                 other.videoPosition == videoPosition) &&
+            (identical(other.beforeShowingVideoPosition,
+                    beforeShowingVideoPosition) ||
+                other.beforeShowingVideoPosition ==
+                    beforeShowingVideoPosition) &&
             (identical(other.isComplete, isComplete) ||
                 other.isComplete == isComplete) &&
             (identical(other.isExistSubtitleTextNow, isExistSubtitleTextNow) ||
@@ -477,6 +498,7 @@ class _$_EditPageState implements _EditPageState {
       audioType,
       const DeepCollectionEquality().hash(_thumbnailFileDataList),
       videoPosition,
+      beforeShowingVideoPosition,
       isComplete,
       isExistSubtitleTextNow,
       focusTextsIndex);
@@ -504,6 +526,7 @@ abstract class _EditPageState implements EditPageState {
       final AudioType audioType,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
+      final Duration beforeShowingVideoPosition,
       final bool isComplete,
       final bool isExistSubtitleTextNow,
       final int focusTextsIndex}) = _$_EditPageState;
@@ -536,6 +559,8 @@ abstract class _EditPageState implements EditPageState {
   List<Uint8List?> get thumbnailFileDataList;
   @override
   Duration get videoPosition;
+  @override
+  Duration get beforeShowingVideoPosition;
   @override
   bool get isComplete;
   @override

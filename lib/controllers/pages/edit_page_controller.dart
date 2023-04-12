@@ -34,6 +34,7 @@ class EditPageState with _$EditPageState {
     @Default(AudioType.original) AudioType audioType,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
+    @Default(Duration.zero) Duration beforeShowingVideoPosition,
     @Default(false) bool isComplete,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
@@ -176,7 +177,12 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> showModalCallback() async {
     await pause();
-    await seek(duration: Duration.zero);
+    state = state.copyWith(beforeShowingVideoPosition: position);
+  }
+
+  Future<void> closeModalCallback() async {
+    await seek(duration: state.beforeShowingVideoPosition);
+    await play();
   }
 
   Future<void> videoCompleteCallback() async {
