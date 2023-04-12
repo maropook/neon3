@@ -170,6 +170,11 @@ class EditPageController extends StateNotifier<EditPageState> {
     super.dispose();
   }
 
+  Future<void> showModalCallback() async {
+    await pause();
+    await seek(duration: Duration.zero);
+  }
+
   Future<void> videoCompleteCallback() async {
     bool isVideoComplete = !isPlaying &&
         position > Duration.zero &&

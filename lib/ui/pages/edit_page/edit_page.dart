@@ -285,7 +285,7 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              await ref.read(editPageProvider.notifier).pause();
+              await ref.read(editPageProvider.notifier).showModalCallback();
               final musicFilePath = await showMusicEditSheet(context) ?? '';
               ref.read(editPageProvider.notifier).setMusicFile(musicFilePath);
               //''のときはreturnされるので現状維持
@@ -295,7 +295,7 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              await ref.read(editPageProvider.notifier).pause();
+              await ref.read(editPageProvider.notifier).showModalCallback();
               final subtitleTexts =
                   ref.read(editPageProvider.select((s) => s.subtitleTexts));
               final audioType =
