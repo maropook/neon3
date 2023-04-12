@@ -71,17 +71,57 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              _buildVideoPlayer(),
-              _buildAvatar(),
-            ],
-          ),
+          _buildPreview(),
           _buildThumbnail(),
           _buildTimeline(),
           _buildSubtitleTextsTimeline(),
         ]);
+  }
+
+  Widget _buildPreview() {
+    return Consumer(builder: (context, ref, _) {
+      final videoController = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerService));
+      final subtitleTimingEditSheetController =
+          ref.read(subtitleTimingEditSheetProvider.notifier);
+      final isPlaying =
+          ref.watch(subtitleTimingEditSheetProvider.select((s) => s.isPlaying));
+
+      return videoController != null
+          ? GestureDetector(
+              onTap: () {
+                isPlaying
+                    ? subtitleTimingEditSheetController.pause()
+                    : subtitleTimingEditSheetController.play();
+              },
+              child: Stack(alignment: Alignment.bottomRight, children: [
+                RepaintBoundary(
+                    key: subtitleTimingEditVideoPlayerKey,
+                    child: SizedBox(
+                      height: 250,
+                      child: videoController.buildVideoPlayer(),
+                    )),
+                _buildAvatar(),
+              ]),
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final isAvatarActive = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.isAvatarActive));
+      final videoPlayerWidth = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerWidth));
+
+      return SizedBox(
+        width: videoPlayerWidth / 2,
+        child: UniversalImage(isAvatarActive
+            ? subtitleTimingEditPageArgs.avatar.activeImageUrl
+            : subtitleTimingEditPageArgs.avatar.stopImageUrl),
+      );
+    });
   }
 
   Widget _buildSubtitleTextsTimeline() {
@@ -200,50 +240,6 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
               ),
             )
           : const CircularProgressIndicator();
-    });
-  }
-
-  Widget _buildVideoPlayer() {
-    return Consumer(builder: (context, ref, _) {
-      final videoController = ref.watch(
-          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerService));
-      final editPageController =
-          ref.read(subtitleTimingEditSheetProvider.notifier);
-      final isPlaying =
-          ref.watch(subtitleTimingEditSheetProvider.select((s) => s.isPlaying));
-
-      return RepaintBoundary(
-        key: subtitleTimingEditVideoPlayerKey,
-        child: videoController != null
-            ? SizedBox(
-                height: 250,
-                child: GestureDetector(
-                  onTap: () {
-                    isPlaying
-                        ? editPageController.pause()
-                        : editPageController.play();
-                  },
-                  child: videoController.buildVideoPlayer(),
-                ),
-              )
-            : const CircularProgressIndicator(),
-      );
-    });
-  }
-
-  Widget _buildAvatar() {
-    return Consumer(builder: (context, ref, _) {
-      final isAvatarActive = ref.watch(
-          subtitleTimingEditSheetProvider.select((s) => s.isAvatarActive));
-      final videoPlayerWidth = ref.watch(
-          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerWidth));
-
-      return SizedBox(
-        width: videoPlayerWidth / 2,
-        child: UniversalImage(isAvatarActive
-            ? subtitleTimingEditPageArgs.avatar.activeImageUrl
-            : subtitleTimingEditPageArgs.avatar.stopImageUrl),
-      );
     });
   }
 }

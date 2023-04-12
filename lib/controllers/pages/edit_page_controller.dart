@@ -103,7 +103,7 @@ class EditPageController extends StateNotifier<EditPageState> {
       await _speechToTextService.buildTexts(
           _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
-        state = state.copyWith(subtitleTexts: texts);
+        state = state.copyWith(subtitleTexts: [...texts]);
       });
       _videoPlayerService =
           VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
@@ -256,10 +256,6 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   //subtitle_display
-  TextEditingController subtitleTextEditController =
-      TextEditingController(text: '');
-
-  final FocusNode focusNode = FocusNode();
 
   void setDisplaySubtitleTextIndex() {
     //video_player_listenerよりtimerでやったほうがいい？
@@ -272,13 +268,7 @@ class EditPageController extends StateNotifier<EditPageState> {
           texts[i].endTime >= currentSeconds) {
         displaySubtitleIndexList.add(i);
         isExistSubtitleTextNow = true;
-        subtitleTextEditController.text = texts[i].word;
       }
-    }
-
-    if (!state.isExistSubtitleTextNow &&
-        subtitleTextEditController.text.isNotEmpty) {
-      subtitleTextEditController.text = '';
     }
 
     state = state.copyWith(
@@ -286,14 +276,11 @@ class EditPageController extends StateNotifier<EditPageState> {
         displaySubtitleIndexList: [...displaySubtitleIndexList]);
   }
 
-  void changeFocus(int index) {
-    state = state.copyWith(focusTextsIndex: index);
-    subtitleTextEditController.text = state.subtitleTexts[index].word;
-  }
+  void updateSubtitle(SubtitleText newText) {
+    final subtitleTexts = state.subtitleTexts
+        .map((text) => text.id == newText.id ? newText : text)
+        .toList();
 
-  void onChanged(String text) {
-    final texts = state.subtitleTexts; //TODO:
-    texts[state.focusTextsIndex].word = text;
-    state = state.copyWith(subtitleTexts: [...texts]);
+    state = state.copyWith(subtitleTexts: [...subtitleTexts]);
   }
 }

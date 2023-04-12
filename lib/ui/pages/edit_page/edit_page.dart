@@ -12,6 +12,7 @@ import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
@@ -86,70 +87,96 @@ class EditPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              _buildVideoPlayer(),
-              _buildAvatar(),
-            ],
-          ),
-          // _buildThumbnail(),
-          // _buildTimeline(),
-          // _buildSubtitleTextsTimeline(),
-          _buildSubtitleTexts(),
+          _buildPreview(),
+          _buildThumbnail(),
+          _buildTimeline(),
           _buildEditContentIcons(),
         ]);
   }
 
+  Widget _buildPreview() {
+    return Consumer(builder: (context, ref, _) {
+      final videoController =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
+      final editPageController = ref.read(editPageProvider.notifier);
+      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
+
+      return videoController != null
+          ? Stack(
+              alignment: Alignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    isPlaying
+                        ? editPageController.pause()
+                        : editPageController.play();
+                  },
+                  child: Stack(alignment: Alignment.bottomRight, children: [
+                    RepaintBoundary(
+                        key: editVideoPlayerKey,
+                        child: SizedBox(
+                          height: 250,
+                          child: videoController.buildVideoPlayer(),
+                        )),
+                    _buildAvatar(),
+                  ]),
+                ),
+                _buildSubtitleTexts(),
+              ],
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final isAvatarActive =
+          ref.watch(editPageProvider.select((s) => s.isAvatarActive));
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
+
+      return avatar != null
+          ? SizedBox(
+              width: videoPlayerWidth / 2,
+              child: UniversalImage(
+                  isAvatarActive ? avatar.activeImageUrl : avatar.stopImageUrl),
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
   Widget _buildSubtitleTexts() {
     return Consumer(builder: (context, ref, _) {
-      final List<SubtitleText> texts =
-          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       final List<int> displaySubtitleIndexList =
           ref.watch(editPageProvider.select((s) => s.displaySubtitleIndexList));
       return Column(
         children: [
-          Text(displaySubtitleIndexList.length.toString()),
-          // for (int i = 0; i < texts.length; i++)
-          //   Text(texts[i].word.isEmpty ? texts[i].word : 'none'),
           for (int i = 0; i < displaySubtitleIndexList.length; i++)
-            Text(texts[i].word.isEmpty ? texts[i].word : 'none')
+            _buildShowTextFieldButton(context, displaySubtitleIndexList[i])
         ],
       );
     });
   }
 
-// TODO: text_fieldをどうするか
-  // Widget _buildSubtitlesTextField() {
-  //   Consumer(builder: (context, ref, _) {
-  //     final bool isEnableField =
-  //         ref.watch(editPageProvider.select((s) => s.isExistSubtitleTextNow));
-  //     final FocusNode focusNode =
-  //         ref.watch(editPageProvider.notifier).focusNode;
+  Widget _buildShowTextFieldButton(BuildContext context, int index) {
+    return Consumer(builder: (context, ref, _) {
+      final texts = ref.watch(editPageProvider.select((s) => s.subtitleTexts));
 
-  //     final emailController =
-  //         ref.watch(editPageProvider.notifier).subtitleTextEditController;
-  //     final passwordController = ref.watch(editPageProvider.notifier).focusNode;
-
-  //     return TextField(
-  //       keyboardType: TextInputType.multiline,
-  //       maxLines: null,
-  //       enabled: isEnableField,
-  //       style: const TextStyle(color: Colors.white),
-  //       textAlign: TextAlign.center,
-  //       obscureText: false,
-  //       autofocus: true,
-  //       focusNode: editTextFormService.focusNode,
-  //       onChanged: editTextFormService.onChanged,
-  //       controller: editTextFormService.controller,
-  //       decoration: InputDecoration(
-  //         filled: true,
-  //         fillColor: Colors.black.withOpacity(0),
-  //         border: InputBorder.none,
-  //       ),
-  //     );
-  //   });
-  // }
+      return GestureDetector(
+          onTap: () async {
+            await ref.read(editPageProvider.notifier).showModalCallback();
+            final subtitleText = await showSubtitleEditSheet(
+                context, SubtitleEditPageArgs(subtitleText: texts[index]));
+            if (subtitleText == null) return;
+            ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
+          },
+          child: Text(
+            texts[index].word.isNotEmpty ? texts[index].word : 'none',
+            style: const TextStyle(fontSize: 30, color: Colors.white),
+          ));
+    });
+  }
 
   Widget _buildSubtitleTextsTimeline() {
     return Consumer(builder: (context, ref, _) {
@@ -245,50 +272,6 @@ class EditPage extends StatelessWidget {
                       );
                     }),
               ),
-            )
-          : const CircularProgressIndicator();
-    });
-  }
-
-  Widget _buildVideoPlayer() {
-    return Consumer(builder: (context, ref, _) {
-      final videoController =
-          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
-      final editPageController = ref.read(editPageProvider.notifier);
-      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
-
-      return RepaintBoundary(
-        key: editVideoPlayerKey,
-        child: videoController != null
-            ? SizedBox(
-                height: 250,
-                child: GestureDetector(
-                  onTap: () {
-                    isPlaying
-                        ? editPageController.pause()
-                        : editPageController.play();
-                  },
-                  child: videoController.buildVideoPlayer(),
-                ),
-              )
-            : const CircularProgressIndicator(),
-      );
-    });
-  }
-
-  Widget _buildAvatar() {
-    return Consumer(builder: (context, ref, _) {
-      final isAvatarActive =
-          ref.watch(editPageProvider.select((s) => s.isAvatarActive));
-      final videoPlayerWidth =
-          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
-      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
-
-      return avatar != null
-          ? SizedBox(
-              width: videoPlayerWidth / 2,
-              child: UniversalImage(
-                  isAvatarActive ? avatar.activeImageUrl : avatar.stopImageUrl),
             )
           : const CircularProgressIndicator();
     });

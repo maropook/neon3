@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
@@ -36,5 +37,20 @@ class SubtitleEditSheetController
   }
 
   final SubtitleEditSheetProviderArg _subtitleEditSheetProviderArg;
-  Future<void> init() async {}
+  Future<void> init() async {
+    subtitleTextEditController.text =
+        _subtitleEditSheetProviderArg.subtitleText.word;
+    state = state.copyWith(
+        subtitleText: _subtitleEditSheetProviderArg.subtitleText);
+  }
+
+  FocusNode focusNode = FocusNode();
+  TextEditingController subtitleTextEditController =
+      TextEditingController(text: '');
+
+  void onChanged(String text) {
+    final subtitleText = state.subtitleText;
+    subtitleText?.word = text;
+    state = state.copyWith(subtitleText: subtitleText);
+  }
 }
