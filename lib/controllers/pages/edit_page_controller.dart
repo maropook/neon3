@@ -25,6 +25,7 @@ class EditPageState with _$EditPageState {
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
+    @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isAvatarActive,
     @Default(0.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
@@ -33,7 +34,10 @@ class EditPageState with _$EditPageState {
     @Default(AudioType.original) AudioType audioType,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
+    @Default(Duration.zero) Duration beforeShowingVideoPosition,
     @Default(false) bool isComplete,
+    @Default(false) bool isExistSubtitleTextNow,
+    @Default(0) int focusTextsIndex,
   }) = _EditPageState;
 }
 
@@ -74,11 +78,20 @@ class EditPageController extends StateNotifier<EditPageState> {
   AudioPlayerService? _musicPlayerService;
   AudioPlayerService? _ttsAudioPlayerService;
 
+//video_player_service
+  bool get isPlaying => _videoPlayerService?.isPlaying ?? false;
+  Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
+  Duration get position => _videoPlayerService?.position ?? Duration.zero;
+  double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
+  double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
+  int get videoDurationInMilliseconds =>
+      _videoPlayerService?.videoDurationInMilliseconds ?? 0;
+  double get videoDurationInSeconds => videoDurationInMilliseconds * 0.001;
+
 //thumbnail_service
   double get thumbnailHeight => shortestSide / 7;
   double get thumbnailWidth => thumbnailHeight * aspectRatio;
   int get numberOfThumbnails => shortestSide ~/ thumbnailWidth;
-  double get aspectRatio => _thumbnailService?.aspectRatio ?? 1;
   double get timelineWidth =>
       numberOfThumbnails * thumbnailHeight * aspectRatio;
   double get eachPart => _thumbnailService?.eachPart ?? 0;
@@ -91,26 +104,26 @@ class EditPageController extends StateNotifier<EditPageState> {
       await _speechToTextService.buildTexts(
           _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
-        state = state.copyWith(subtitleTexts: texts);
+        state = state.copyWith(subtitleTexts: [...texts]);
       });
       _videoPlayerService =
           VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
-        videoCompleteCallback(_videoPlayerService!);
+        videoCompleteCallback();
+        setDisplaySubtitleTextIndex();
         state = state.copyWith(
             // isComplete: isVideoComplete(_videoPlayerService!),
-            isPlaying: _videoPlayerService!.isPlaying,
-            videoPosition: _videoPlayerService!.position,
-            isAvatarActive:
-                isAvatarActive(_videoPlayerService!.currentSeconds));
+            isPlaying: isPlaying,
+            videoPosition: position,
+            isAvatarActive: isAvatarActive(currentSeconds));
       });
 
       // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       _thumbnailService = ThumbnailService(
           videoFilePath: _editPageProviderArg.videoFilePath,
-          aspectRatio: _videoPlayerService!.aspectRatio,
+          aspectRatio: aspectRatio,
           shortestSide: _editPageProviderArg.shortestSide,
-          videoDurationMs: _videoPlayerService!.videoDurationInMilliseconds);
+          videoDurationMs: videoDurationInMilliseconds);
 
       state = state.copyWith(
           videoPlayerService: _videoPlayerService,
@@ -127,17 +140,8 @@ class EditPageController extends StateNotifier<EditPageState> {
     }
   }
 
-  void getVideoPlayerWidth(GlobalKey globalKey) {
-    try {
-      state = state.copyWith(
-          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 0);
-    } catch (e) {
-      Logger.logError('get_video_player_width', e.toString());
-    }
-  }
-
   Future<void> play() async {
-    await _videoPlayerService!.play();
+    await _videoPlayerService?.play();
     await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
 
     await _musicPlayerService?.play(state.musicFilePath);
@@ -146,7 +150,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> seek({required Duration duration}) async {
     await _audioPlayer.seek(duration);
-    await _videoPlayerService!.seek(duration: duration);
+    await _videoPlayerService?.seek(duration: duration);
 
     await _musicPlayerService?.seek(duration: duration);
     await _ttsAudioPlayerService?.seek(duration: duration);
@@ -154,7 +158,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> pause() async {
     await _audioPlayer.pause();
-    await _videoPlayerService!.pause();
+    await _videoPlayerService?.pause();
 
     await _musicPlayerService?.pause();
     await _ttsAudioPlayerService?.pause();
@@ -163,7 +167,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _videoPlayerService!.dispose();
+    _videoPlayerService?.dispose();
 
     _musicPlayerService?.pause();
     _ttsAudioPlayerService?.pause();
@@ -171,16 +175,34 @@ class EditPageController extends StateNotifier<EditPageState> {
     super.dispose();
   }
 
-  Future<void> videoCompleteCallback(
-      VideoPlayerService videoPlayerService) async {
-    bool isVideoComplete = !videoPlayerService.isPlaying &&
-        videoPlayerService.position > Duration.zero &&
-        videoPlayerService.position.inMicroseconds >=
-            videoPlayerService.duration.inMicroseconds;
+  Future<void> showModalCallback() async {
+    await pause();
+    state = state.copyWith(beforeShowingVideoPosition: position);
+  }
+
+  Future<void> closeModalCallback() async {
+    await seek(duration: state.beforeShowingVideoPosition);
+    await play();
+  }
+
+  Future<void> videoCompleteCallback() async {
+    bool isVideoComplete = !isPlaying &&
+        position > Duration.zero &&
+        position.inMicroseconds >= videoDuration.inMicroseconds;
 
     if (!isVideoComplete) return;
     await seek(duration: Duration.zero);
     await play();
+  }
+
+  //avatar
+  void getVideoPlayerWidth(GlobalKey globalKey) {
+    try {
+      state = state.copyWith(
+          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 0);
+    } catch (e) {
+      Logger.logError('get_video_player_width', e.toString());
+    }
   }
 
   bool isAvatarActive(double currentSeconds) {
@@ -194,12 +216,14 @@ class EditPageController extends StateNotifier<EditPageState> {
     return false;
   }
 
+  //select_avatar_modal
   void setSelectedAvatar(Avatar? newAvatar) {
     if (newAvatar == null) return;
 
     state = state.copyWith(avatar: newAvatar);
   }
 
+  //music_edit_modal
   Future<void> setMusicFile(String musicFilePath) async {
     if (musicFilePath.isEmpty) return;
     if (musicFilePath == 'delete') {
@@ -214,6 +238,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     state = state.copyWith(musicFilePath: musicFilePath);
   }
 
+  //artificial_voice_edit_modal
   Future<void> setTtsAudioFile(String ttsAudioFilePath) async {
     if (ttsAudioFilePath.isEmpty) return;
     if (ttsAudioFilePath == 'delete') {
@@ -234,5 +259,34 @@ class EditPageController extends StateNotifier<EditPageState> {
     _ttsAudioPlayerService = AudioPlayerService(ttsAudioFilePath);
     state = state.copyWith(
         ttsAudioFilePath: ttsAudioFilePath, audioType: AudioType.artificial);
+  }
+
+  //subtitle_display
+
+  void setDisplaySubtitleTextIndex() {
+    //video_player_listenerよりtimerでやったほうがいい？
+    final texts = state.subtitleTexts;
+    bool isExistSubtitleTextNow = false;
+    List<int> displaySubtitleIndexList = [];
+
+    for (int i = 0; i < texts.length; ++i) {
+      if (texts[i].startTime <= currentSeconds &&
+          texts[i].endTime >= currentSeconds) {
+        displaySubtitleIndexList.add(i);
+        isExistSubtitleTextNow = true;
+      }
+    }
+
+    state = state.copyWith(
+        isExistSubtitleTextNow: isExistSubtitleTextNow,
+        displaySubtitleIndexList: [...displaySubtitleIndexList]);
+  }
+
+  void updateSubtitle(SubtitleText newText) {
+    final subtitleTexts = state.subtitleTexts
+        .map((text) => text.id == newText.id ? newText : text)
+        .toList();
+
+    state = state.copyWith(subtitleTexts: [...subtitleTexts]);
   }
 }

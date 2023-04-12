@@ -13,6 +13,7 @@ import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -86,26 +87,102 @@ class EditPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              _buildVideoPlayer(),
-              _buildAvatar(),
-            ],
-          ),
-          // _buildThumbnail(),
-          // _buildTimeline(),
-          // _buildSubtitleTextsTimeline(),
+          _buildPreview(),
+          _buildThumbnail(),
+          _buildTimeline(),
           _buildEditContentIcons(),
         ]);
+  }
+
+  Widget _buildPreview() {
+    return Consumer(builder: (context, ref, _) {
+      final videoController =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
+      final editPageController = ref.read(editPageProvider.notifier);
+      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
+
+      return videoController != null
+          ? Stack(
+              alignment: Alignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    isPlaying
+                        ? editPageController.pause()
+                        : editPageController.play();
+                  },
+                  child: Stack(alignment: Alignment.bottomRight, children: [
+                    RepaintBoundary(
+                        key: editVideoPlayerKey,
+                        child: SizedBox(
+                          height: 250,
+                          child: videoController.buildVideoPlayer(),
+                        )),
+                    _buildAvatar(),
+                  ]),
+                ),
+                _buildSubtitleTexts(),
+              ],
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
+  Widget _buildAvatar() {
+    return Consumer(builder: (context, ref, _) {
+      final isAvatarActive =
+          ref.watch(editPageProvider.select((s) => s.isAvatarActive));
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
+
+      return avatar != null
+          ? SizedBox(
+              width: videoPlayerWidth / 2,
+              child: UniversalImage(
+                  isAvatarActive ? avatar.activeImageUrl : avatar.stopImageUrl),
+            )
+          : const CircularProgressIndicator();
+    });
+  }
+
+  Widget _buildSubtitleTexts() {
+    return Consumer(builder: (context, ref, _) {
+      final List<int> displaySubtitleIndexList =
+          ref.watch(editPageProvider.select((s) => s.displaySubtitleIndexList));
+      return Column(
+        children: [
+          for (int i = 0; i < displaySubtitleIndexList.length; i++)
+            _buildShowTextFieldButton(context, displaySubtitleIndexList[i])
+        ],
+      );
+    });
+  }
+
+  Widget _buildShowTextFieldButton(BuildContext context, int index) {
+    return Consumer(builder: (context, ref, _) {
+      final texts = ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+
+      return GestureDetector(
+          onTap: () async {
+            await ref.read(editPageProvider.notifier).showModalCallback();
+            final subtitleText = await showSubtitleEditSheet(
+                context, SubtitleEditPageArgs(subtitleText: texts[index]));
+            if (subtitleText == null) return;
+            ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
+            await ref.read(editPageProvider.notifier).closeModalCallback();
+          },
+          child: Text(
+            texts[index].word.isNotEmpty ? texts[index].word : 'none',
+            style: const TextStyle(fontSize: 30, color: Colors.white),
+          ));
+    });
   }
 
   Widget _buildSubtitleTextsTimeline() {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-      final Duration videoPosition =
-          ref.watch(editPageProvider.select((s) => s.videoPosition));
       final Duration videoDuration = ref.watch(editPageProvider
           .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
       final timelineWidth =
@@ -201,50 +278,6 @@ class EditPage extends StatelessWidget {
     });
   }
 
-  Widget _buildVideoPlayer() {
-    return Consumer(builder: (context, ref, _) {
-      final videoController =
-          ref.watch(editPageProvider.select((s) => s.videoPlayerService));
-      final editPageController = ref.read(editPageProvider.notifier);
-      final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
-
-      return RepaintBoundary(
-        key: editVideoPlayerKey,
-        child: videoController != null
-            ? SizedBox(
-                height: 250,
-                child: GestureDetector(
-                  onTap: () {
-                    isPlaying
-                        ? editPageController.pause()
-                        : editPageController.play();
-                  },
-                  child: videoController.buildVideoPlayer(),
-                ),
-              )
-            : const CircularProgressIndicator(),
-      );
-    });
-  }
-
-  Widget _buildAvatar() {
-    return Consumer(builder: (context, ref, _) {
-      final isAvatarActive =
-          ref.watch(editPageProvider.select((s) => s.isAvatarActive));
-      final videoPlayerWidth =
-          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
-      final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
-
-      return avatar != null
-          ? SizedBox(
-              width: videoPlayerWidth / 2,
-              child: UniversalImage(
-                  isAvatarActive ? avatar.activeImageUrl : avatar.stopImageUrl),
-            )
-          : const CircularProgressIndicator();
-    });
-  }
-
   Widget _buildEditContentIcons() {
     return Consumer(builder: (context, ref, _) {
       final videoController =
@@ -272,22 +305,26 @@ class EditPage extends StatelessWidget {
             onTap: () async {
               if (videoController == null || avatar == null) return;
               await ref.read(editPageProvider.notifier).pause();
-              final subtitleEditPageArgs = SubtitleEditPageArgs(
+              final subtitleTimingEditPageArgs = SubtitleTimingEditPageArgs(
                   audioFilePath: editPageArgs.audioFilePath,
                   videoFilePath: editPageArgs.videoFilePath,
                   activeFrames: editPageArgs.activeFrames,
                   avatar: avatar,
                   subtitleTexts: texts);
-              await showSubtitleEditSheet(context, subtitleEditPageArgs);
+              await showSubtitleTimingEditSheet(
+                  context, subtitleTimingEditPageArgs);
             },
             child: _buildShowModalIcon(
                 'テキストを編集', Assets.images.textEditIcon, context),
           ),
           GestureDetector(
             onTap: () async {
-              await ref.read(editPageProvider.notifier).pause();
+              await ref.read(editPageProvider.notifier).showModalCallback();
               final musicFilePath = await showMusicEditSheet(context) ?? '';
-              ref.read(editPageProvider.notifier).setMusicFile(musicFilePath);
+              await ref
+                  .read(editPageProvider.notifier)
+                  .setMusicFile(musicFilePath);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
               //''のときはreturnされるので現状維持
             },
             child: _buildShowModalIcon(
@@ -295,7 +332,7 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
-              await ref.read(editPageProvider.notifier).pause();
+              await ref.read(editPageProvider.notifier).showModalCallback();
               final subtitleTexts =
                   ref.read(editPageProvider.select((s) => s.subtitleTexts));
               final audioType =
@@ -303,7 +340,10 @@ class EditPage extends StatelessWidget {
               final ttsAudioFile = await showArtificialVoiceEditSheet(
                       context, subtitleTexts, audioType) ??
                   '';
-              ref.read(editPageProvider.notifier).setTtsAudioFile(ttsAudioFile);
+              await ref
+                  .read(editPageProvider.notifier)
+                  .setTtsAudioFile(ttsAudioFile);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
                 '人工音声', Assets.images.artificialVoiceIcon, context),
