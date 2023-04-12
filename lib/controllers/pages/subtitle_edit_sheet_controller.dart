@@ -67,18 +67,23 @@ class SubtitleEditSheetController
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
 
+  //video_player_service
+  bool get isPlaying => _videoPlayerService?.isPlaying ?? false;
+  Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
+  Duration get position => _videoPlayerService?.position ?? Duration.zero;
+  double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
+  double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
+  int get videoDurationInMilliseconds =>
+      _videoPlayerService?.videoDurationInMilliseconds ?? 0;
+
 //thumbnail_service
   double get thumbnailHeight => shortestSide / 7;
   double get thumbnailWidth => thumbnailHeight * aspectRatio;
   int get numberOfThumbnails => shortestSide ~/ thumbnailWidth;
-  double get aspectRatio => _thumbnailService?.aspectRatio ?? 1;
   double get timelineWidth =>
       numberOfThumbnails * thumbnailHeight * aspectRatio;
   double get eachPart => _thumbnailService?.eachPart ?? 0;
   double get shortestSide => _subtitleEditSheetProviderArg.shortestSide;
-
-  Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
-  int get videoDurationInMilliseconds => videoDuration.inMilliseconds;
 
   Future<void> init() async {
     try {
@@ -87,21 +92,20 @@ class SubtitleEditSheetController
       _videoPlayerService = VideoPlayerService(
           videoFilePath: _subtitleEditSheetProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
-        videoCompleteCallback(_videoPlayerService!);
+        videoCompleteCallback();
         state = state.copyWith(
             // isComplete: isVideoComplete(_videoPlayerService!),
-            isPlaying: _videoPlayerService!.isPlaying,
-            videoPosition: _videoPlayerService!.position,
-            isAvatarActive:
-                isAvatarActive(_videoPlayerService!.currentSeconds));
+            isPlaying: isPlaying,
+            videoPosition: position,
+            isAvatarActive: isAvatarActive(currentSeconds));
       });
 
       // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       _thumbnailService = ThumbnailService(
           videoFilePath: _subtitleEditSheetProviderArg.videoFilePath,
-          aspectRatio: _videoPlayerService!.aspectRatio,
+          aspectRatio: aspectRatio,
           shortestSide: _subtitleEditSheetProviderArg.shortestSide,
-          videoDurationMs: _videoPlayerService!.videoDurationInMilliseconds);
+          videoDurationMs: videoDurationInMilliseconds);
 
       state = state.copyWith(
           videoPlayerService: _videoPlayerService,
@@ -128,34 +132,32 @@ class SubtitleEditSheetController
   }
 
   Future<void> play() async {
-    await _videoPlayerService!.play();
+    await _videoPlayerService?.play();
     await _audioPlayer
         .play(UrlSource(_subtitleEditSheetProviderArg.audioFilePath));
   }
 
   Future<void> seek({required Duration duration}) async {
     await _audioPlayer.seek(duration);
-    await _videoPlayerService!.seek(duration: duration);
+    await _videoPlayerService?.seek(duration: duration);
   }
 
   Future<void> pause() async {
     await _audioPlayer.pause();
-    await _videoPlayerService!.pause();
+    await _videoPlayerService?.pause();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
-    _videoPlayerService!.dispose();
+    _videoPlayerService?.dispose();
     super.dispose();
   }
 
-  Future<void> videoCompleteCallback(
-      VideoPlayerService videoPlayerService) async {
-    bool isVideoComplete = !videoPlayerService.isPlaying &&
-        videoPlayerService.position > Duration.zero &&
-        videoPlayerService.position.inMicroseconds >=
-            videoPlayerService.duration.inMicroseconds;
+  Future<void> videoCompleteCallback() async {
+    bool isVideoComplete = !isPlaying &&
+        position > Duration.zero &&
+        position.inMicroseconds >= videoDuration.inMicroseconds;
 
     if (!isVideoComplete) return;
     await seek(duration: Duration.zero);
