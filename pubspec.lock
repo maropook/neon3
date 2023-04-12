@@ -877,11 +877,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "refs/heads/fix/move_logic_plugin"
-      resolved-ref: "64a0061c2d38cc03a3d7ec69d9d7bc7fd58ca93c"
+      ref: "refs/heads/feature/add_subtitle_texts_id"
+      resolved-ref: cbbf33255e9fce23bebbf13b7e10e107d40c0590
       url: "https://github.com/ini-siro/neon_video_encoder.git"
     source: git
-    version: "0.0.8"
+    version: "0.0.9"
   octo_image:
     dependency: transitive
     description:

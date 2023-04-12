@@ -8,6 +8,7 @@ import 'package:neon3/services/file_service.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon_speech_to_text/neon_speech_to_text.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
+import 'package:uuid/uuid.dart';
 
 class SpeechToTextService {
   SpeechToTextService();
@@ -84,6 +85,7 @@ class SpeechToTextService {
       for (int index = 0; index < activeFrames.length; ++index) {
         //completeしてからじゃなくて、addListenersCallBackでtexts.addしたほうがいいのか？
         texts.add(SubtitleText(
+            id: const Uuid().v4(),
             startTime: activeFrames[index]['startTime']!,
             endTime: activeFrames[index]['endTime']!,
             word: 'ハロー')); //TODO:!!いまは人工音声のため

@@ -12,7 +12,7 @@ import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
-import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
+import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -96,16 +96,65 @@ class EditPage extends StatelessWidget {
           // _buildThumbnail(),
           // _buildTimeline(),
           // _buildSubtitleTextsTimeline(),
+          _buildSubtitleTexts(),
           _buildEditContentIcons(),
         ]);
   }
+
+  Widget _buildSubtitleTexts() {
+    return Consumer(builder: (context, ref, _) {
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final List<int> displaySubtitleIndexList =
+          ref.watch(editPageProvider.select((s) => s.displaySubtitleIndexList));
+      return Column(
+        children: [
+          Text(displaySubtitleIndexList.length.toString()),
+          // for (int i = 0; i < texts.length; i++)
+          //   Text(texts[i].word.isEmpty ? texts[i].word : 'none'),
+          for (int i = 0; i < displaySubtitleIndexList.length; i++)
+            Text(texts[i].word.isEmpty ? texts[i].word : 'none')
+        ],
+      );
+    });
+  }
+
+// TODO: text_fieldをどうするか
+  // Widget _buildSubtitlesTextField() {
+  //   Consumer(builder: (context, ref, _) {
+  //     final bool isEnableField =
+  //         ref.watch(editPageProvider.select((s) => s.isExistSubtitleTextNow));
+  //     final FocusNode focusNode =
+  //         ref.watch(editPageProvider.notifier).focusNode;
+
+  //     final emailController =
+  //         ref.watch(editPageProvider.notifier).subtitleTextEditController;
+  //     final passwordController = ref.watch(editPageProvider.notifier).focusNode;
+
+  //     return TextField(
+  //       keyboardType: TextInputType.multiline,
+  //       maxLines: null,
+  //       enabled: isEnableField,
+  //       style: const TextStyle(color: Colors.white),
+  //       textAlign: TextAlign.center,
+  //       obscureText: false,
+  //       autofocus: true,
+  //       focusNode: editTextFormService.focusNode,
+  //       onChanged: editTextFormService.onChanged,
+  //       controller: editTextFormService.controller,
+  //       decoration: InputDecoration(
+  //         filled: true,
+  //         fillColor: Colors.black.withOpacity(0),
+  //         border: InputBorder.none,
+  //       ),
+  //     );
+  //   });
+  // }
 
   Widget _buildSubtitleTextsTimeline() {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-      final Duration videoPosition =
-          ref.watch(editPageProvider.select((s) => s.videoPosition));
       final Duration videoDuration = ref.watch(editPageProvider
           .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
       final timelineWidth =
@@ -272,13 +321,14 @@ class EditPage extends StatelessWidget {
             onTap: () async {
               if (videoController == null || avatar == null) return;
               await ref.read(editPageProvider.notifier).pause();
-              final subtitleEditPageArgs = SubtitleEditPageArgs(
+              final subtitleTimingEditPageArgs = SubtitleTimingEditPageArgs(
                   audioFilePath: editPageArgs.audioFilePath,
                   videoFilePath: editPageArgs.videoFilePath,
                   activeFrames: editPageArgs.activeFrames,
                   avatar: avatar,
                   subtitleTexts: texts);
-              await showSubtitleEditSheet(context, subtitleEditPageArgs);
+              await showSubtitleTimingEditSheet(
+                  context, subtitleTimingEditPageArgs);
             },
             child: _buildShowModalIcon(
                 'テキストを編集', Assets.images.textEditIcon, context),

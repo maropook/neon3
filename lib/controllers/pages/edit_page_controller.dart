@@ -35,6 +35,8 @@ class EditPageState with _$EditPageState {
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
+    @Default(false) bool isExistSubtitleTextNow,
+    @Default(0) int focusTextsIndex,
   }) = _EditPageState;
 }
 
@@ -83,6 +85,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
   int get videoDurationInMilliseconds =>
       _videoPlayerService?.videoDurationInMilliseconds ?? 0;
+  double get videoDurationInSeconds => videoDurationInMilliseconds * 0.001;
 
 //thumbnail_service
   double get thumbnailHeight => shortestSide / 7;
@@ -106,6 +109,7 @@ class EditPageController extends StateNotifier<EditPageState> {
           VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         videoCompleteCallback();
+        setDisplaySubtitleTextIndex();
         state = state.copyWith(
             // isComplete: isVideoComplete(_videoPlayerService!),
             isPlaying: isPlaying,
@@ -252,18 +256,44 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   //subtitle_display
-  // void setDisplaySubtitleTextIndex() {
-  //   final Duration pos = _editVideoPlayerService.position;
-  //   final texts = state.subtitleTexts;
-  //   var list = [];
-  //   for (int i = 0; i < texts.length; ++i) {
-  //     if (texts[i].startTime <= pos && texts[i].endDuration >= pos) {
-  //       list.add(i);
-  //       hasText = true;
+  TextEditingController subtitleTextEditController =
+      TextEditingController(text: '');
 
-  //       // controller.text = texts[i].word;
-  //       notifyListeners();
-  //     }
-  //   }
-  // }
+  final FocusNode focusNode = FocusNode();
+
+  void setDisplaySubtitleTextIndex() {
+    //video_player_listenerよりtimerでやったほうがいい？
+    final texts = state.subtitleTexts;
+    bool isExistSubtitleTextNow = false;
+    List<int> displaySubtitleIndexList = [];
+
+    for (int i = 0; i < texts.length; ++i) {
+      if (texts[i].startTime <= currentSeconds &&
+          texts[i].endTime >= currentSeconds) {
+        displaySubtitleIndexList.add(i);
+        isExistSubtitleTextNow = true;
+        subtitleTextEditController.text = texts[i].word;
+      }
+    }
+
+    if (!state.isExistSubtitleTextNow &&
+        subtitleTextEditController.text.isNotEmpty) {
+      subtitleTextEditController.text = '';
+    }
+
+    state = state.copyWith(
+        isExistSubtitleTextNow: isExistSubtitleTextNow,
+        displaySubtitleIndexList: [...displaySubtitleIndexList]);
+  }
+
+  void changeFocus(int index) {
+    state = state.copyWith(focusTextsIndex: index);
+    subtitleTextEditController.text = state.subtitleTexts[index].word;
+  }
+
+  void onChanged(String text) {
+    final texts = state.subtitleTexts; //TODO:
+    texts[state.focusTextsIndex].word = text;
+    state = state.copyWith(subtitleTexts: [...texts]);
+  }
 }

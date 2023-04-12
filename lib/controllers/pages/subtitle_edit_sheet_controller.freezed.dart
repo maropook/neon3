@@ -16,18 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SubtitleEditSheetState {
-  bool get isPlaying => throw _privateConstructorUsedError;
-  VideoPlayerService? get videoPlayerService =>
-      throw _privateConstructorUsedError;
-  ThumbnailService? get thumbnailService => throw _privateConstructorUsedError;
-  List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
-  bool get isAvatarActive => throw _privateConstructorUsedError;
-  double get videoPlayerWidth => throw _privateConstructorUsedError;
-  String get thumbnailFilePath => throw _privateConstructorUsedError;
-  List<Uint8List?> get thumbnailFileDataList =>
-      throw _privateConstructorUsedError;
-  Duration get videoPosition => throw _privateConstructorUsedError;
-  bool get isComplete => throw _privateConstructorUsedError;
+  SubtitleText? get subtitleText => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SubtitleEditSheetStateCopyWith<SubtitleEditSheetState> get copyWith =>
@@ -40,17 +29,7 @@ abstract class $SubtitleEditSheetStateCopyWith<$Res> {
           $Res Function(SubtitleEditSheetState) then) =
       _$SubtitleEditSheetStateCopyWithImpl<$Res, SubtitleEditSheetState>;
   @useResult
-  $Res call(
-      {bool isPlaying,
-      VideoPlayerService? videoPlayerService,
-      ThumbnailService? thumbnailService,
-      List<SubtitleText> subtitleTexts,
-      bool isAvatarActive,
-      double videoPlayerWidth,
-      String thumbnailFilePath,
-      List<Uint8List?> thumbnailFileDataList,
-      Duration videoPosition,
-      bool isComplete});
+  $Res call({SubtitleText? subtitleText});
 }
 
 /// @nodoc
@@ -67,58 +46,13 @@ class _$SubtitleEditSheetStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isPlaying = null,
-    Object? videoPlayerService = freezed,
-    Object? thumbnailService = freezed,
-    Object? subtitleTexts = null,
-    Object? isAvatarActive = null,
-    Object? videoPlayerWidth = null,
-    Object? thumbnailFilePath = null,
-    Object? thumbnailFileDataList = null,
-    Object? videoPosition = null,
-    Object? isComplete = null,
+    Object? subtitleText = freezed,
   }) {
     return _then(_value.copyWith(
-      isPlaying: null == isPlaying
-          ? _value.isPlaying
-          : isPlaying // ignore: cast_nullable_to_non_nullable
-              as bool,
-      videoPlayerService: freezed == videoPlayerService
-          ? _value.videoPlayerService
-          : videoPlayerService // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerService?,
-      thumbnailService: freezed == thumbnailService
-          ? _value.thumbnailService
-          : thumbnailService // ignore: cast_nullable_to_non_nullable
-              as ThumbnailService?,
-      subtitleTexts: null == subtitleTexts
-          ? _value.subtitleTexts
-          : subtitleTexts // ignore: cast_nullable_to_non_nullable
-              as List<SubtitleText>,
-      isAvatarActive: null == isAvatarActive
-          ? _value.isAvatarActive
-          : isAvatarActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      videoPlayerWidth: null == videoPlayerWidth
-          ? _value.videoPlayerWidth
-          : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
-              as double,
-      thumbnailFilePath: null == thumbnailFilePath
-          ? _value.thumbnailFilePath
-          : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      thumbnailFileDataList: null == thumbnailFileDataList
-          ? _value.thumbnailFileDataList
-          : thumbnailFileDataList // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List?>,
-      videoPosition: null == videoPosition
-          ? _value.videoPosition
-          : videoPosition // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      isComplete: null == isComplete
-          ? _value.isComplete
-          : isComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      subtitleText: freezed == subtitleText
+          ? _value.subtitleText
+          : subtitleText // ignore: cast_nullable_to_non_nullable
+              as SubtitleText?,
     ) as $Val);
   }
 }
@@ -131,17 +65,7 @@ abstract class _$$_SubtitleEditSheetStateCopyWith<$Res>
       __$$_SubtitleEditSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool isPlaying,
-      VideoPlayerService? videoPlayerService,
-      ThumbnailService? thumbnailService,
-      List<SubtitleText> subtitleTexts,
-      bool isAvatarActive,
-      double videoPlayerWidth,
-      String thumbnailFilePath,
-      List<Uint8List?> thumbnailFileDataList,
-      Duration videoPosition,
-      bool isComplete});
+  $Res call({SubtitleText? subtitleText});
 }
 
 /// @nodoc
@@ -156,58 +80,13 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isPlaying = null,
-    Object? videoPlayerService = freezed,
-    Object? thumbnailService = freezed,
-    Object? subtitleTexts = null,
-    Object? isAvatarActive = null,
-    Object? videoPlayerWidth = null,
-    Object? thumbnailFilePath = null,
-    Object? thumbnailFileDataList = null,
-    Object? videoPosition = null,
-    Object? isComplete = null,
+    Object? subtitleText = freezed,
   }) {
     return _then(_$_SubtitleEditSheetState(
-      isPlaying: null == isPlaying
-          ? _value.isPlaying
-          : isPlaying // ignore: cast_nullable_to_non_nullable
-              as bool,
-      videoPlayerService: freezed == videoPlayerService
-          ? _value.videoPlayerService
-          : videoPlayerService // ignore: cast_nullable_to_non_nullable
-              as VideoPlayerService?,
-      thumbnailService: freezed == thumbnailService
-          ? _value.thumbnailService
-          : thumbnailService // ignore: cast_nullable_to_non_nullable
-              as ThumbnailService?,
-      subtitleTexts: null == subtitleTexts
-          ? _value._subtitleTexts
-          : subtitleTexts // ignore: cast_nullable_to_non_nullable
-              as List<SubtitleText>,
-      isAvatarActive: null == isAvatarActive
-          ? _value.isAvatarActive
-          : isAvatarActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      videoPlayerWidth: null == videoPlayerWidth
-          ? _value.videoPlayerWidth
-          : videoPlayerWidth // ignore: cast_nullable_to_non_nullable
-              as double,
-      thumbnailFilePath: null == thumbnailFilePath
-          ? _value.thumbnailFilePath
-          : thumbnailFilePath // ignore: cast_nullable_to_non_nullable
-              as String,
-      thumbnailFileDataList: null == thumbnailFileDataList
-          ? _value._thumbnailFileDataList
-          : thumbnailFileDataList // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List?>,
-      videoPosition: null == videoPosition
-          ? _value.videoPosition
-          : videoPosition // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      isComplete: null == isComplete
-          ? _value.isComplete
-          : isComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      subtitleText: freezed == subtitleText
+          ? _value.subtitleText
+          : subtitleText // ignore: cast_nullable_to_non_nullable
+              as SubtitleText?,
     ));
   }
 }
@@ -215,67 +94,15 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
-  const _$_SubtitleEditSheetState(
-      {this.isPlaying = false,
-      this.videoPlayerService = null,
-      this.thumbnailService = null,
-      final List<SubtitleText> subtitleTexts = const [],
-      this.isAvatarActive = false,
-      this.videoPlayerWidth = 0.0,
-      this.thumbnailFilePath = '',
-      final List<Uint8List?> thumbnailFileDataList = const [],
-      this.videoPosition = Duration.zero,
-      this.isComplete = false})
-      : _subtitleTexts = subtitleTexts,
-        _thumbnailFileDataList = thumbnailFileDataList;
+  const _$_SubtitleEditSheetState({this.subtitleText = null});
 
   @override
   @JsonKey()
-  final bool isPlaying;
-  @override
-  @JsonKey()
-  final VideoPlayerService? videoPlayerService;
-  @override
-  @JsonKey()
-  final ThumbnailService? thumbnailService;
-  final List<SubtitleText> _subtitleTexts;
-  @override
-  @JsonKey()
-  List<SubtitleText> get subtitleTexts {
-    if (_subtitleTexts is EqualUnmodifiableListView) return _subtitleTexts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_subtitleTexts);
-  }
-
-  @override
-  @JsonKey()
-  final bool isAvatarActive;
-  @override
-  @JsonKey()
-  final double videoPlayerWidth;
-  @override
-  @JsonKey()
-  final String thumbnailFilePath;
-  final List<Uint8List?> _thumbnailFileDataList;
-  @override
-  @JsonKey()
-  List<Uint8List?> get thumbnailFileDataList {
-    if (_thumbnailFileDataList is EqualUnmodifiableListView)
-      return _thumbnailFileDataList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_thumbnailFileDataList);
-  }
-
-  @override
-  @JsonKey()
-  final Duration videoPosition;
-  @override
-  @JsonKey()
-  final bool isComplete;
+  final SubtitleText? subtitleText;
 
   @override
   String toString() {
-    return 'SubtitleEditSheetState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
+    return 'SubtitleEditSheetState(subtitleText: $subtitleText)';
   }
 
   @override
@@ -283,41 +110,12 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SubtitleEditSheetState &&
-            (identical(other.isPlaying, isPlaying) ||
-                other.isPlaying == isPlaying) &&
-            (identical(other.videoPlayerService, videoPlayerService) ||
-                other.videoPlayerService == videoPlayerService) &&
-            (identical(other.thumbnailService, thumbnailService) ||
-                other.thumbnailService == thumbnailService) &&
-            const DeepCollectionEquality()
-                .equals(other._subtitleTexts, _subtitleTexts) &&
-            (identical(other.isAvatarActive, isAvatarActive) ||
-                other.isAvatarActive == isAvatarActive) &&
-            (identical(other.videoPlayerWidth, videoPlayerWidth) ||
-                other.videoPlayerWidth == videoPlayerWidth) &&
-            (identical(other.thumbnailFilePath, thumbnailFilePath) ||
-                other.thumbnailFilePath == thumbnailFilePath) &&
-            const DeepCollectionEquality()
-                .equals(other._thumbnailFileDataList, _thumbnailFileDataList) &&
-            (identical(other.videoPosition, videoPosition) ||
-                other.videoPosition == videoPosition) &&
-            (identical(other.isComplete, isComplete) ||
-                other.isComplete == isComplete));
+            (identical(other.subtitleText, subtitleText) ||
+                other.subtitleText == subtitleText));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      isPlaying,
-      videoPlayerService,
-      thumbnailService,
-      const DeepCollectionEquality().hash(_subtitleTexts),
-      isAvatarActive,
-      videoPlayerWidth,
-      thumbnailFilePath,
-      const DeepCollectionEquality().hash(_thumbnailFileDataList),
-      videoPosition,
-      isComplete);
+  int get hashCode => Object.hash(runtimeType, subtitleText);
 
   @JsonKey(ignore: true)
   @override
@@ -328,38 +126,11 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
 }
 
 abstract class _SubtitleEditSheetState implements SubtitleEditSheetState {
-  const factory _SubtitleEditSheetState(
-      {final bool isPlaying,
-      final VideoPlayerService? videoPlayerService,
-      final ThumbnailService? thumbnailService,
-      final List<SubtitleText> subtitleTexts,
-      final bool isAvatarActive,
-      final double videoPlayerWidth,
-      final String thumbnailFilePath,
-      final List<Uint8List?> thumbnailFileDataList,
-      final Duration videoPosition,
-      final bool isComplete}) = _$_SubtitleEditSheetState;
+  const factory _SubtitleEditSheetState({final SubtitleText? subtitleText}) =
+      _$_SubtitleEditSheetState;
 
   @override
-  bool get isPlaying;
-  @override
-  VideoPlayerService? get videoPlayerService;
-  @override
-  ThumbnailService? get thumbnailService;
-  @override
-  List<SubtitleText> get subtitleTexts;
-  @override
-  bool get isAvatarActive;
-  @override
-  double get videoPlayerWidth;
-  @override
-  String get thumbnailFilePath;
-  @override
-  List<Uint8List?> get thumbnailFileDataList;
-  @override
-  Duration get videoPosition;
-  @override
-  bool get isComplete;
+  SubtitleText? get subtitleText;
   @override
   @JsonKey(ignore: true)
   _$$_SubtitleEditSheetStateCopyWith<_$_SubtitleEditSheetState> get copyWith =>

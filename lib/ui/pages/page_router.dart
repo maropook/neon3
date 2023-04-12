@@ -99,8 +99,8 @@ class EditPageArgs {
   Avatar avatar;
 }
 
-class SubtitleEditPageArgs {
-  SubtitleEditPageArgs(
+class SubtitleTimingEditPageArgs {
+  SubtitleTimingEditPageArgs(
       {required this.audioFilePath,
       required this.videoFilePath,
       required this.activeFrames,
@@ -112,6 +112,14 @@ class SubtitleEditPageArgs {
   List<Map<String, double>> activeFrames;
   List<SubtitleText> subtitleTexts;
   Avatar avatar;
+}
+
+class SubtitleEditPageArgs {
+  SubtitleEditPageArgs({
+    required this.subtitleText,
+  });
+
+  SubtitleText subtitleText;
 }
 
 class EncodePageArgs {
