@@ -28,14 +28,41 @@ class RecordingPage extends ConsumerWidget {
       title: const Text('レコーディング'),
       actions: [
         Consumer(builder: (context, ref, _) {
+          final activeFrames = ref
+              .read(recordingPageProvider)
+              .activeFrames; //TODO:videoのときactiveFramesどうなるんだ？？？
+          final avatar = ref
+              .watch(recordingPageProvider)
+              .selectedAvatar; //TODO:ref.readだとavatarはnullになる
+
           return IconButton(
               onPressed: () async {
                 final ImportSheetArg? importSheetArg = await showImportSheet(
                     context,
                     ImportSheetArg(recordingType: RecordingType.camera));
+                final recordingType = importSheetArg?.recordingType;
                 ref
                     .read(recordingPageProvider.notifier)
                     .setImportSheetArg(importSheetArg);
+                print(
+                    '$importSheetArg+avatar:$avatar+recordingType+$recordingType');
+                if (importSheetArg == null ||
+                    avatar == null ||
+                    recordingType != RecordingType.video) return;
+
+                final editPageArgs = EditPageArgs(
+                    audioFilePath: importSheetArg.importedFilePath,
+                    videoFilePath: importSheetArg.importedFilePath,
+                    activeFrames: [
+                      //TODO:importedFilePathのときactiveFrames設定できない問題
+                      //TODO:activeFramesは仮の値
+                      {"startTime": 0.2, "endTime": 0.7},
+                      {"startTime": 1.2, "endTime": 1.6},
+                      {"startTime": 2.0, "endTime": 2.2}
+                    ],
+                    avatar: avatar,
+                    recordingType: recordingType!);
+                context.go('/edit', extra: editPageArgs);
               },
               icon: const Icon(Icons.download_rounded));
         })
