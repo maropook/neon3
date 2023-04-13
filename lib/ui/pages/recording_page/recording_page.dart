@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
-import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -65,7 +64,7 @@ class RecordingPage extends ConsumerWidget {
                 context.go('/edit', extra: editPageArgs);
               },
               icon: const Icon(Icons.download_rounded));
-        })
+        }),
       ],
       leading: IconButton(
           onPressed: () => context.go('/avatar/list'),
@@ -109,11 +108,7 @@ class RecordingPage extends ConsumerWidget {
               maxHeight: MediaQuery.of(context).size.longestSide - 200),
           child: recordingType == RecordingType.camera
               ? cameraService!.buildCameraPreview()
-              : recordingType == RecordingType.video
-                  ? Container(
-                      color: Colors.white,
-                      child: Image.asset(Assets.images.encoding.path))
-                  : UniversalImage(importedFilePath),
+              : UniversalImage(importedFilePath),
         ),
       );
     });
@@ -174,12 +169,19 @@ class RecordingPage extends ConsumerWidget {
       return GestureDetector(
         onTap: () async {
           if (isRecording) {
-            await ref.read(recordingPageProvider.notifier).stopRecording();
+            final recordingType = ref.read(recordingPageProvider).recordingType;
+
+            if (recordingType == RecordingType.camera) {
+              await ref.read(recordingPageProvider.notifier).stopRecording();
+            } else if (recordingType == RecordingType.image) {
+              await ref
+                  .read(recordingPageProvider.notifier)
+                  .stopRecordingWithImage();
+            }
             final videoFilePath = ref.read(recordingPageProvider).videoFilePath;
             final audioFilePath = ref.read(recordingPageProvider).audioFilePath;
             final activeFrames = ref.read(recordingPageProvider).activeFrames;
             final avatar = ref.read(recordingPageProvider).selectedAvatar;
-            final recordingType = ref.read(recordingPageProvider).recordingType;
 
             final importedFilePath =
                 ref.read(recordingPageProvider).importedFilePath;
@@ -191,9 +193,7 @@ class RecordingPage extends ConsumerWidget {
                   audioFilePath: recordingType == RecordingType.video
                       ? importedFilePath //videoのときはそもそもaudioFilePathいらない
                       : audioFilePath,
-                  videoFilePath: recordingType == RecordingType.camera
-                      ? videoFilePath
-                      : importedFilePath,
+                  videoFilePath: videoFilePath,
                   activeFrames: [
                     //TODO:仮の値
                     {"startTime": 0.2, "endTime": 0.7},

@@ -85,27 +85,14 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     }
   }
 
-  Future<void> stopRecordingWithVideo() async {
-    //これimportしたらそのままedit_homeに行けたほうがいいんじゃないか？
-    //buildTextsをできるかわからないが。
-    try {
-      final audioFilePath = await _audioRecordService.stopAudioRecording();
-      final videoFilePath = state.importedFilePath;
-
-      state = state.copyWith(
-          audioFilePath: audioFilePath, videoFilePath: videoFilePath);
-    } catch (e) {
-      Logger.logError('recording_page_controller', e.toString());
-    }
-  }
-
   Future<void> stopRecordingWithImage() async {
     try {
       final audioFilePath = await _audioRecordService.stopAudioRecording();
       final EncodeService encodeService = EncodeService();
       final String videoFilePath = await encodeService.imageToVideo(
           imagePath: state.importedFilePath,
-          videoDuration: Duration(milliseconds: currentMillSeconds.toInt()));
+          videoDuration:
+              Duration(milliseconds: (currentSeconds * 1000).toInt()));
 
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFilePath);
