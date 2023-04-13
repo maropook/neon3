@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -14,20 +15,31 @@ class RecordingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('レコーディング'),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                final importedFilePath = await showImportSheet(context) ?? '';
-              },
-              icon: const Icon(Icons.download_rounded)),
-        ],
-        leading: IconButton(
-            onPressed: () => context.go('/avatar/list'),
-            icon: const Icon(Icons.face)),
-      ),
+      appBar: _buildAppBar(context),
       body: _buildBody(),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('レコーディング'),
+      actions: [
+        Consumer(builder: (context, ref, _) {
+          return IconButton(
+              onPressed: () async {
+                final ImportSheetArg? importSheetArg = await showImportSheet(
+                    context,
+                    ImportSheetArg(recordingType: RecordingType.camera));
+                ref
+                    .read(recordingPageProvider.notifier)
+                    .setImportSheetArg(importSheetArg);
+              },
+              icon: const Icon(Icons.download_rounded));
+        })
+      ],
+      leading: IconButton(
+          onPressed: () => context.go('/avatar/list'),
+          icon: const Icon(Icons.face)),
     );
   }
 
@@ -35,10 +47,6 @@ class RecordingPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final cameraService =
           ref.watch(recordingPageProvider.select((s) => s.cameraService));
-      final bool isAvatarActive =
-          ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
-      final double currentSeconds =
-          ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
 
       return cameraService != null
           ? Column(
@@ -53,17 +61,28 @@ class RecordingPage extends ConsumerWidget {
                   ],
                 ),
                 _buildButton(),
-                Row(
-                  children: [
-                    Text(isAvatarActive.toString(),
-                        style: const TextStyle(color: Colors.white)),
-                    Text(currentSeconds.toString(),
-                        style: const TextStyle(color: Colors.white)),
-                  ],
-                )
+                _buildMemo(),
               ],
             )
           : const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  Widget _buildMemo() {
+    return Consumer(builder: (context, ref, _) {
+      final bool isAvatarActive =
+          ref.watch(recordingPageProvider.select((s) => s.isAvatarActive));
+      final double currentSeconds =
+          ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
+
+      return Row(
+        children: [
+          Text(isAvatarActive.toString(),
+              style: const TextStyle(color: Colors.white)),
+          Text(currentSeconds.toString(),
+              style: const TextStyle(color: Colors.white)),
+        ],
+      );
     });
   }
 

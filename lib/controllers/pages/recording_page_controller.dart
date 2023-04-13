@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_record_service.dart';
 import 'package:neon3/services/camera_service.dart';
@@ -23,6 +24,7 @@ class RecordingPageState with _$RecordingPageState {
     @Default(false) bool isAvatarActive,
     @Default(null) Avatar? selectedAvatar,
     @Default([]) List<Map<String, double>> activeFrames,
+    @Default(RecordingType.camera) RecordingType recordingType,
   }) = _CameraState;
 }
 
@@ -150,6 +152,11 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       ]);
       Logger.log("setActiveFrames", state.activeFrames.toString());
     }
+  }
+
+  void setImportSheetArg(ImportSheetArg? arg) {
+    if (arg == null) return;
+    state = state.copyWith(recordingType: arg.recordingType);
   }
 }
 

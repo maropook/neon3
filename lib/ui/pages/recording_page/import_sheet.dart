@@ -6,25 +6,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 
-Future<String?> showImportSheet(
+Future<ImportSheetArg?> showImportSheet(
   BuildContext context,
+  ImportSheetArg importSheetArg,
 ) {
-  return showModalBottomSheet<String?>(
+  return showModalBottomSheet<ImportSheetArg?>(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
       isDismissible: true,
       builder: (BuildContext context) {
-        return const _ImportSheet();
+        return _ImportSheet(importSheetArg);
       });
 }
 
 class _ImportSheet extends StatelessWidget {
-  const _ImportSheet({Key? key}) : super(key: key);
-
+  _ImportSheet(this.importSheetArg, {Key? key}) : super(key: key);
+  ImportSheetArg importSheetArg;
   @override
   Widget build(BuildContext context) {
-    return _buildModal(context);
+    return ProviderScope(overrides: [
+      importSheetProvider.overrideWith((ref) {
+        return ImportSheetController(importSheetProviderArg: importSheetArg);
+      })
+    ], child: _buildModal(context));
   }
 
   Widget _buildModal(BuildContext context) {

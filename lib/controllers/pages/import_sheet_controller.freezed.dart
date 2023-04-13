@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ImportSheetState {
   String get videoFilePath => throw _privateConstructorUsedError;
   String get imageFilePath => throw _privateConstructorUsedError;
+  RecordingType get recordingType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ImportSheetStateCopyWith<ImportSheetState> get copyWith =>
@@ -30,7 +31,10 @@ abstract class $ImportSheetStateCopyWith<$Res> {
           ImportSheetState value, $Res Function(ImportSheetState) then) =
       _$ImportSheetStateCopyWithImpl<$Res, ImportSheetState>;
   @useResult
-  $Res call({String videoFilePath, String imageFilePath});
+  $Res call(
+      {String videoFilePath,
+      String imageFilePath,
+      RecordingType recordingType});
 }
 
 /// @nodoc
@@ -48,6 +52,7 @@ class _$ImportSheetStateCopyWithImpl<$Res, $Val extends ImportSheetState>
   $Res call({
     Object? videoFilePath = null,
     Object? imageFilePath = null,
+    Object? recordingType = null,
   }) {
     return _then(_value.copyWith(
       videoFilePath: null == videoFilePath
@@ -58,6 +63,10 @@ class _$ImportSheetStateCopyWithImpl<$Res, $Val extends ImportSheetState>
           ? _value.imageFilePath
           : imageFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      recordingType: null == recordingType
+          ? _value.recordingType
+          : recordingType // ignore: cast_nullable_to_non_nullable
+              as RecordingType,
     ) as $Val);
   }
 }
@@ -70,7 +79,10 @@ abstract class _$$_ImportSheetStateCopyWith<$Res>
       __$$_ImportSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String videoFilePath, String imageFilePath});
+  $Res call(
+      {String videoFilePath,
+      String imageFilePath,
+      RecordingType recordingType});
 }
 
 /// @nodoc
@@ -86,6 +98,7 @@ class __$$_ImportSheetStateCopyWithImpl<$Res>
   $Res call({
     Object? videoFilePath = null,
     Object? imageFilePath = null,
+    Object? recordingType = null,
   }) {
     return _then(_$_ImportSheetState(
       videoFilePath: null == videoFilePath
@@ -96,6 +109,10 @@ class __$$_ImportSheetStateCopyWithImpl<$Res>
           ? _value.imageFilePath
           : imageFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      recordingType: null == recordingType
+          ? _value.recordingType
+          : recordingType // ignore: cast_nullable_to_non_nullable
+              as RecordingType,
     ));
   }
 }
@@ -103,7 +120,10 @@ class __$$_ImportSheetStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ImportSheetState implements _ImportSheetState {
-  const _$_ImportSheetState({this.videoFilePath = '', this.imageFilePath = ''});
+  const _$_ImportSheetState(
+      {this.videoFilePath = '',
+      this.imageFilePath = '',
+      this.recordingType = RecordingType.camera});
 
   @override
   @JsonKey()
@@ -111,10 +131,13 @@ class _$_ImportSheetState implements _ImportSheetState {
   @override
   @JsonKey()
   final String imageFilePath;
+  @override
+  @JsonKey()
+  final RecordingType recordingType;
 
   @override
   String toString() {
-    return 'ImportSheetState(videoFilePath: $videoFilePath, imageFilePath: $imageFilePath)';
+    return 'ImportSheetState(videoFilePath: $videoFilePath, imageFilePath: $imageFilePath, recordingType: $recordingType)';
   }
 
   @override
@@ -125,11 +148,14 @@ class _$_ImportSheetState implements _ImportSheetState {
             (identical(other.videoFilePath, videoFilePath) ||
                 other.videoFilePath == videoFilePath) &&
             (identical(other.imageFilePath, imageFilePath) ||
-                other.imageFilePath == imageFilePath));
+                other.imageFilePath == imageFilePath) &&
+            (identical(other.recordingType, recordingType) ||
+                other.recordingType == recordingType));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, videoFilePath, imageFilePath);
+  int get hashCode =>
+      Object.hash(runtimeType, videoFilePath, imageFilePath, recordingType);
 
   @JsonKey(ignore: true)
   @override
@@ -141,12 +167,15 @@ class _$_ImportSheetState implements _ImportSheetState {
 abstract class _ImportSheetState implements ImportSheetState {
   const factory _ImportSheetState(
       {final String videoFilePath,
-      final String imageFilePath}) = _$_ImportSheetState;
+      final String imageFilePath,
+      final RecordingType recordingType}) = _$_ImportSheetState;
 
   @override
   String get videoFilePath;
   @override
   String get imageFilePath;
+  @override
+  RecordingType get recordingType;
   @override
   @JsonKey(ignore: true)
   _$$_ImportSheetStateCopyWith<_$_ImportSheetState> get copyWith =>

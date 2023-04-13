@@ -6,22 +6,38 @@ import 'package:neon3/services/fire_avatar_service.dart';
 
 part 'import_sheet_controller.freezed.dart';
 
+enum RecordingType { camera, video, image }
+
+class ImportSheetArg {
+  ImportSheetArg({required this.recordingType, this.importedFilePath = ''});
+  RecordingType recordingType;
+  String importedFilePath;
+}
+
 @freezed
 class ImportSheetState with _$ImportSheetState {
   const factory ImportSheetState({
     @Default('') String videoFilePath,
     @Default('') String imageFilePath,
+    @Default(RecordingType.camera) RecordingType recordingType,
   }) = _ImportSheetState;
 }
 
 final importSheetProvider =
     StateNotifierProvider.autoDispose<ImportSheetController, ImportSheetState>(
-        (ref) => ImportSheetController());
+        (ref) {
+  return throw UnimplementedError();
+});
 
 class ImportSheetController extends StateNotifier<ImportSheetState> {
-  ImportSheetController() : super(const ImportSheetState()) {
+  ImportSheetController({required ImportSheetArg importSheetProviderArg})
+      : _importSheetProviderArg = importSheetProviderArg,
+        super(const ImportSheetState()) {
     init();
   }
+
+  final ImportSheetArg _importSheetProviderArg;
+
   final FireAvatarService fireAvatarService = FireAvatarService();
   final FileService fileService = FileService();
 
