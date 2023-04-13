@@ -1,6 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
-import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/download_image_service.dart';
 import 'package:neon3/services/file_service.dart';
@@ -15,17 +14,13 @@ class EncodeService {
 
   final FileService fileService = FileService();
 
-  Future<String> imageToVideo() async {
+  Future<String> imageToVideo(
+      {required String imagePath, required Duration videoDuration}) async {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
-
-    String imagePath = (await fileService.saveFile(
-            inputFilePath: Assets.images.testBackground.path,
-            outputFilePath: "test.png"))
-        .path;
 
     final String videoFilePath = await neonVideoEncoder.imageToVideo(
       sourceImagePath: imagePath,
-      videoDuration: const Duration(seconds: 30),
+      videoDuration: videoDuration,
       outputFilePath: await fileService.getTempFilePath('image-to-movie.mp4'),
     );
     return videoFilePath;

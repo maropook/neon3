@@ -25,6 +25,9 @@ mixin _$RecordingPageState {
   Avatar? get selectedAvatar => throw _privateConstructorUsedError;
   List<Map<String, double>> get activeFrames =>
       throw _privateConstructorUsedError;
+  RecordingType get recordingType => throw _privateConstructorUsedError;
+  String get importedFilePath => throw _privateConstructorUsedError;
+  double get recordingBackgroundWidth => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RecordingPageStateCopyWith<RecordingPageState> get copyWith =>
@@ -45,7 +48,10 @@ abstract class $RecordingPageStateCopyWith<$Res> {
       double currentSeconds,
       bool isAvatarActive,
       Avatar? selectedAvatar,
-      List<Map<String, double>> activeFrames});
+      List<Map<String, double>> activeFrames,
+      RecordingType recordingType,
+      String importedFilePath,
+      double recordingBackgroundWidth});
 
   $AvatarCopyWith<$Res>? get selectedAvatar;
 }
@@ -71,6 +77,9 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
     Object? isAvatarActive = null,
     Object? selectedAvatar = freezed,
     Object? activeFrames = null,
+    Object? recordingType = null,
+    Object? importedFilePath = null,
+    Object? recordingBackgroundWidth = null,
   }) {
     return _then(_value.copyWith(
       cameraService: freezed == cameraService
@@ -105,6 +114,18 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
           ? _value.activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
               as List<Map<String, double>>,
+      recordingType: null == recordingType
+          ? _value.recordingType
+          : recordingType // ignore: cast_nullable_to_non_nullable
+              as RecordingType,
+      importedFilePath: null == importedFilePath
+          ? _value.importedFilePath
+          : importedFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      recordingBackgroundWidth: null == recordingBackgroundWidth
+          ? _value.recordingBackgroundWidth
+          : recordingBackgroundWidth // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 
@@ -137,7 +158,10 @@ abstract class _$$_CameraStateCopyWith<$Res>
       double currentSeconds,
       bool isAvatarActive,
       Avatar? selectedAvatar,
-      List<Map<String, double>> activeFrames});
+      List<Map<String, double>> activeFrames,
+      RecordingType recordingType,
+      String importedFilePath,
+      double recordingBackgroundWidth});
 
   @override
   $AvatarCopyWith<$Res>? get selectedAvatar;
@@ -162,6 +186,9 @@ class __$$_CameraStateCopyWithImpl<$Res>
     Object? isAvatarActive = null,
     Object? selectedAvatar = freezed,
     Object? activeFrames = null,
+    Object? recordingType = null,
+    Object? importedFilePath = null,
+    Object? recordingBackgroundWidth = null,
   }) {
     return _then(_$_CameraState(
       cameraService: freezed == cameraService
@@ -196,6 +223,18 @@ class __$$_CameraStateCopyWithImpl<$Res>
           ? _value._activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
               as List<Map<String, double>>,
+      recordingType: null == recordingType
+          ? _value.recordingType
+          : recordingType // ignore: cast_nullable_to_non_nullable
+              as RecordingType,
+      importedFilePath: null == importedFilePath
+          ? _value.importedFilePath
+          : importedFilePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      recordingBackgroundWidth: null == recordingBackgroundWidth
+          ? _value.recordingBackgroundWidth
+          : recordingBackgroundWidth // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -211,7 +250,10 @@ class _$_CameraState implements _CameraState {
       this.currentSeconds = 0.0,
       this.isAvatarActive = false,
       this.selectedAvatar = null,
-      final List<Map<String, double>> activeFrames = const []})
+      final List<Map<String, double>> activeFrames = const [],
+      this.recordingType = RecordingType.camera,
+      this.importedFilePath = '',
+      this.recordingBackgroundWidth = 1.0})
       : _activeFrames = activeFrames;
 
   @override
@@ -245,8 +287,18 @@ class _$_CameraState implements _CameraState {
   }
 
   @override
+  @JsonKey()
+  final RecordingType recordingType;
+  @override
+  @JsonKey()
+  final String importedFilePath;
+  @override
+  @JsonKey()
+  final double recordingBackgroundWidth;
+
+  @override
   String toString() {
-    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath, currentSeconds: $currentSeconds, isAvatarActive: $isAvatarActive, selectedAvatar: $selectedAvatar, activeFrames: $activeFrames)';
+    return 'RecordingPageState(cameraService: $cameraService, isRecordingVideo: $isRecordingVideo, videoFilePath: $videoFilePath, audioFilePath: $audioFilePath, currentSeconds: $currentSeconds, isAvatarActive: $isAvatarActive, selectedAvatar: $selectedAvatar, activeFrames: $activeFrames, recordingType: $recordingType, importedFilePath: $importedFilePath, recordingBackgroundWidth: $recordingBackgroundWidth)';
   }
 
   @override
@@ -269,7 +321,14 @@ class _$_CameraState implements _CameraState {
             (identical(other.selectedAvatar, selectedAvatar) ||
                 other.selectedAvatar == selectedAvatar) &&
             const DeepCollectionEquality()
-                .equals(other._activeFrames, _activeFrames));
+                .equals(other._activeFrames, _activeFrames) &&
+            (identical(other.recordingType, recordingType) ||
+                other.recordingType == recordingType) &&
+            (identical(other.importedFilePath, importedFilePath) ||
+                other.importedFilePath == importedFilePath) &&
+            (identical(
+                    other.recordingBackgroundWidth, recordingBackgroundWidth) ||
+                other.recordingBackgroundWidth == recordingBackgroundWidth));
   }
 
   @override
@@ -282,7 +341,10 @@ class _$_CameraState implements _CameraState {
       currentSeconds,
       isAvatarActive,
       selectedAvatar,
-      const DeepCollectionEquality().hash(_activeFrames));
+      const DeepCollectionEquality().hash(_activeFrames),
+      recordingType,
+      importedFilePath,
+      recordingBackgroundWidth);
 
   @JsonKey(ignore: true)
   @override
@@ -300,7 +362,10 @@ abstract class _CameraState implements RecordingPageState {
       final double currentSeconds,
       final bool isAvatarActive,
       final Avatar? selectedAvatar,
-      final List<Map<String, double>> activeFrames}) = _$_CameraState;
+      final List<Map<String, double>> activeFrames,
+      final RecordingType recordingType,
+      final String importedFilePath,
+      final double recordingBackgroundWidth}) = _$_CameraState;
 
   @override
   CameraService? get cameraService;
@@ -318,6 +383,12 @@ abstract class _CameraState implements RecordingPageState {
   Avatar? get selectedAvatar;
   @override
   List<Map<String, double>> get activeFrames;
+  @override
+  RecordingType get recordingType;
+  @override
+  String get importedFilePath;
+  @override
+  double get recordingBackgroundWidth;
   @override
   @JsonKey(ignore: true)
   _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>

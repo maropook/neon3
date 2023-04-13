@@ -48,6 +48,7 @@ class EncodePage extends ConsumerWidget {
                         videoFilePath: encodePageArgs.videoFilePath,
                         activeFrames: encodePageArgs.activeFrames,
                         avatar: encodePageArgs.avatar,
+                        recordingType: encodePageArgs.recordingType,
                       ),
                     ),
                 icon: const Icon(Icons.chevron_left)),

@@ -32,6 +32,7 @@ class EditPage extends StatelessWidget {
           final editPageProviderArg = EditPageProviderArg(
             videoFilePath: editPageArgs.videoFilePath,
             audioFilePath: editPageArgs.audioFilePath,
+            recordingType: editPageArgs.recordingType,
             activeFrames: editPageArgs.activeFrames,
             shortestSide: MediaQuery.of(context).size.shortestSide,
             avatar: editPageArgs.avatar,
@@ -63,13 +64,15 @@ class EditPage extends StatelessWidget {
                     .read(editPageProvider.select((s) => s.ttsAudioFilePath));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
-                    videoFilePath: editPageArgs.videoFilePath,
-                    audioFilePath: editPageArgs.audioFilePath,
-                    musicFilePath: musicFilePath,
-                    ttsAudioFilePath: ttsAudioFilePath,
-                    activeFrames: editPageArgs.activeFrames,
-                    subtitleTexts: subtitleTexts,
-                    avatar: avatar);
+                  videoFilePath: editPageArgs.videoFilePath,
+                  audioFilePath: editPageArgs.audioFilePath,
+                  musicFilePath: musicFilePath,
+                  ttsAudioFilePath: ttsAudioFilePath,
+                  activeFrames: editPageArgs.activeFrames,
+                  subtitleTexts: subtitleTexts,
+                  avatar: avatar,
+                  recordingType: editPageArgs.recordingType,
+                );
 
                 context.go('/encoding', extra: encodePageArgs);
               },

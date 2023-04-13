@@ -23,7 +23,7 @@ class SubtitleTimingEditSheetState with _$SubtitleTimingEditSheetState {
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
     @Default(false) bool isAvatarActive,
-    @Default(0.0) double videoPlayerWidth,
+    @Default(1.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
@@ -128,7 +128,7 @@ class SubtitleTimingEditSheetController
   void getVideoPlayerWidth(GlobalKey globalKey) {
     try {
       state = state.copyWith(
-          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 0);
+          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 1);
     } catch (e) {
       Logger.logError('get_video_player_width', e.toString());
     }
