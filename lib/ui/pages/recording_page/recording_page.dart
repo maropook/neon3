@@ -5,6 +5,7 @@ import 'package:neon3/controllers/pages/recording_page_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
+import 'package:neon3/ui/pages/recording_page/import_sheet.dart';
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -17,7 +18,9 @@ class RecordingPage extends ConsumerWidget {
         title: const Text('レコーディング'),
         actions: [
           IconButton(
-              onPressed: () => context.go('/import'),
+              onPressed: () async {
+                final importedFilePath = await showImportSheet(context) ?? '';
+              },
               icon: const Icon(Icons.download_rounded)),
         ],
         leading: IconButton(

@@ -69,11 +69,17 @@ class $AssetsImagesGen {
   /// File path: assets/images/face_smile.svg
   String get faceSmile => 'assets/images/face_smile.svg';
 
+  /// File path: assets/images/movie.svg
+  String get movie => 'assets/images/movie.svg';
+
   /// File path: assets/images/note.svg
   String get note => 'assets/images/note.svg';
 
   /// File path: assets/images/pencil.svg
   String get pencil => 'assets/images/pencil.svg';
+
+  /// File path: assets/images/photo.svg
+  String get photo => 'assets/images/photo.svg';
 
   /// File path: assets/images/photos.svg
   String get photos => 'assets/images/photos.svg';
@@ -102,8 +108,10 @@ class $AssetsImagesGen {
         encoding,
         face,
         faceSmile,
+        movie,
         note,
         pencil,
+        photo,
         photos,
         testBackground,
         testWoman,
