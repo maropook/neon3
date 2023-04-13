@@ -225,7 +225,7 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
       this.thumbnailService = null,
       final List<SubtitleText> subtitleTexts = const [],
       this.isAvatarActive = false,
-      this.videoPlayerWidth = 0.0,
+      this.videoPlayerWidth = 1.0,
       this.thumbnailFilePath = '',
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,

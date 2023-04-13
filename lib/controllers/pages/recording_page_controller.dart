@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -8,8 +7,10 @@ import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_record_service.dart';
 import 'package:neon3/services/camera_service.dart';
+import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
 import 'package:neon3/services/logger.dart';
+import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 import 'package:path_provider/path_provider.dart';
 part 'recording_page_controller.freezed.dart';
 
@@ -25,6 +26,8 @@ class RecordingPageState with _$RecordingPageState {
     @Default(null) Avatar? selectedAvatar,
     @Default([]) List<Map<String, double>> activeFrames,
     @Default(RecordingType.camera) RecordingType recordingType,
+    @Default('') String importedFilePath,
+    @Default(1.0) double recordingBackgroundWidth,
   }) = _CameraState;
 }
 
@@ -50,6 +53,9 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
             state.copyWith(isRecordingVideo: _cameraService.isRecordingVideo);
       });
       state = state.copyWith(cameraService: _cameraService);
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        getRecordingBackgroundWidth();
+      });
     } catch (e) {
       Logger.logError('recording_page_controller:init', e.toString());
     }
@@ -71,6 +77,35 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     try {
       final audioFilePath = await _audioRecordService.stopAudioRecording();
       final videoFilePath = await _cameraService.stopRecording();
+
+      state = state.copyWith(
+          audioFilePath: audioFilePath, videoFilePath: videoFilePath);
+    } on CameraException catch (e) {
+      Logger.logError('recording_page_controller', e.toString());
+    }
+  }
+
+  Future<void> stopRecordingWithVideo() async {
+    //これimportしたらそのままedit_homeに行けたほうがいいんじゃないか？
+    //buildTextsをできるかわからないが。
+    try {
+      final audioFilePath = await _audioRecordService.stopAudioRecording();
+      final videoFilePath = state.importedFilePath;
+
+      state = state.copyWith(
+          audioFilePath: audioFilePath, videoFilePath: videoFilePath);
+    } catch (e) {
+      Logger.logError('recording_page_controller', e.toString());
+    }
+  }
+
+  Future<void> stopRecordingWithImage() async {
+    try {
+      final audioFilePath = await _audioRecordService.stopAudioRecording();
+      final EncodeService encodeService = EncodeService();
+      final String videoFilePath = await encodeService.imageToVideo(
+          imagePath: state.importedFilePath,
+          videoDuration: Duration(milliseconds: currentMillSeconds.toInt()));
 
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFilePath);
@@ -115,6 +150,9 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final int fps = 60;
   int get spf => 1000 ~/ fps;
 
+  double get currentMillSeconds => 0.001 * (_currentDetailedFrame * spf);
+  double get currentSeconds => state.currentSeconds + currentMillSeconds;
+
   Future<bool> getIsAvatarActive() async => await peak() > threshold;
 
   Future<double> peak() async {
@@ -140,8 +178,6 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     if (state.isAvatarActive == isAvatarActive) return;
 
     state = state.copyWith(isAvatarActive: isAvatarActive);
-    final double currentMillSeconds = 0.001 * (_currentDetailedFrame * spf);
-    final double currentSeconds = state.currentSeconds + currentMillSeconds;
 
     if (isAvatarActive) {
       startSeconds = currentSeconds;
@@ -156,7 +192,20 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
 
   void setImportSheetArg(ImportSheetArg? arg) {
     if (arg == null) return;
-    state = state.copyWith(recordingType: arg.recordingType);
+    state = state.copyWith(
+        recordingType: arg.recordingType,
+        importedFilePath: arg.importedFilePath);
+    getRecordingBackgroundWidth();
+  }
+
+  void getRecordingBackgroundWidth() {
+    try {
+      state = state.copyWith(
+          recordingBackgroundWidth:
+              recordingBackgroundKey.currentContext?.size?.width ?? 1);
+    } catch (e) {
+      Logger.logError('get_video_player_width', e.toString());
+    }
   }
 }
 

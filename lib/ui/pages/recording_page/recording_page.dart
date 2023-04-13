@@ -8,6 +8,8 @@ import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon3/ui/pages/recording_page/import_sheet.dart';
 
+final GlobalKey recordingBackgroundKey = GlobalKey();
+
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
 
@@ -53,19 +55,46 @@ class RecordingPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    cameraService.buildCameraPreview(),
-                    _buildAvatar(),
-                  ],
-                ),
+                _buildPreview(),
                 _buildButton(),
                 _buildMemo(),
               ],
             )
           : const Center(child: CircularProgressIndicator());
     });
+  }
+
+  Widget _buildRecordingBackground() {
+    return Consumer(builder: (context, ref, _) {
+      final cameraService =
+          ref.watch(recordingPageProvider.select((s) => s.cameraService));
+      final recordingType =
+          ref.watch(recordingPageProvider.select((s) => s.recordingType));
+      final importedFilePath =
+          ref.watch(recordingPageProvider.select((s) => s.importedFilePath));
+
+      return RepaintBoundary(
+        key: recordingBackgroundKey,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+              minWidth: 1300,
+              maxHeight: MediaQuery.of(context).size.longestSide - 200),
+          child: recordingType == RecordingType.camera
+              ? cameraService!.buildCameraPreview()
+              : UniversalImage(importedFilePath),
+        ),
+      );
+    });
+  }
+
+  Widget _buildPreview() {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        _buildRecordingBackground(),
+        _buildAvatar(),
+      ],
+    );
   }
 
   Widget _buildMemo() {
@@ -93,8 +122,11 @@ class RecordingPage extends ConsumerWidget {
       final Avatar selectedAvatar =
           ref.watch(recordingPageProvider.select((s) => s.selectedAvatar)) ??
               defaultAvatar;
+      final double avatarWidth = ref.watch(
+              recordingPageProvider.select((s) => s.recordingBackgroundWidth)) /
+          2;
       return SizedBox(
-        width: MediaQuery.of(context).size.width / 2,
+        width: avatarWidth,
         child: UniversalImage(isAvatarActive
             ? selectedAvatar.activeImageUrl
             : selectedAvatar.stopImageUrl),

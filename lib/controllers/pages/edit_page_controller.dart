@@ -27,7 +27,7 @@ class EditPageState with _$EditPageState {
     @Default([]) List<SubtitleText> subtitleTexts,
     @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isAvatarActive,
-    @Default(0.0) double videoPlayerWidth,
+    @Default(1.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
     @Default('') String ttsAudioFilePath,
@@ -199,7 +199,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   void getVideoPlayerWidth(GlobalKey globalKey) {
     try {
       state = state.copyWith(
-          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 0);
+          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 1);
     } catch (e) {
       Logger.logError('get_video_player_width', e.toString());
     }

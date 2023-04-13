@@ -342,7 +342,7 @@ class _$_EditPageState implements _EditPageState {
       final List<SubtitleText> subtitleTexts = const [],
       final List<int> displaySubtitleIndexList = const [],
       this.isAvatarActive = false,
-      this.videoPlayerWidth = 0.0,
+      this.videoPlayerWidth = 1.0,
       this.thumbnailFilePath = '',
       this.musicFilePath = '',
       this.ttsAudioFilePath = '',

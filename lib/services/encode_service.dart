@@ -15,7 +15,7 @@ class EncodeService {
 
   final FileService fileService = FileService();
 
-  Future<String> imageToVideo() async {
+  Future<String> imageToVideoTest() async {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
     String imagePath = (await fileService.saveFile(
@@ -26,6 +26,18 @@ class EncodeService {
     final String videoFilePath = await neonVideoEncoder.imageToVideo(
       sourceImagePath: imagePath,
       videoDuration: const Duration(seconds: 30),
+      outputFilePath: await fileService.getTempFilePath('image-to-movie.mp4'),
+    );
+    return videoFilePath;
+  }
+
+  Future<String> imageToVideo(
+      {required String imagePath, required Duration videoDuration}) async {
+    final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
+
+    final String videoFilePath = await neonVideoEncoder.imageToVideo(
+      sourceImagePath: imagePath,
+      videoDuration: videoDuration,
       outputFilePath: await fileService.getTempFilePath('image-to-movie.mp4'),
     );
     return videoFilePath;
