@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -81,7 +82,11 @@ class RecordingPage extends ConsumerWidget {
               maxHeight: MediaQuery.of(context).size.longestSide - 200),
           child: recordingType == RecordingType.camera
               ? cameraService!.buildCameraPreview()
-              : UniversalImage(importedFilePath),
+              : recordingType == RecordingType.video
+                  ? Container(
+                      color: Colors.white,
+                      child: Image.asset(Assets.images.encoding.path))
+                  : UniversalImage(importedFilePath),
         ),
       );
     });
@@ -147,20 +152,29 @@ class RecordingPage extends ConsumerWidget {
             final audioFilePath = ref.read(recordingPageProvider).audioFilePath;
             final activeFrames = ref.read(recordingPageProvider).activeFrames;
             final avatar = ref.read(recordingPageProvider).selectedAvatar;
+            final recordingType = ref.read(recordingPageProvider).recordingType;
+
+            final importedFilePath =
+                ref.read(recordingPageProvider).importedFilePath;
             if (audioFilePath != null &&
                 videoFilePath != null &&
                 avatar != null) {
               ref.read(recordingPageProvider.notifier).disposeTimer();
               final editPageArgs = EditPageArgs(
-                  audioFilePath: audioFilePath,
-                  videoFilePath: videoFilePath,
+                  audioFilePath: recordingType == RecordingType.video
+                      ? importedFilePath //videoのときはそもそもaudioFilePathいらない
+                      : audioFilePath,
+                  videoFilePath: recordingType == RecordingType.camera
+                      ? videoFilePath
+                      : importedFilePath,
                   activeFrames: [
                     //TODO:仮の値
                     {"startTime": 0.2, "endTime": 0.7},
                     {"startTime": 1.2, "endTime": 1.6},
                     {"startTime": 2.0, "endTime": 2.2}
                   ],
-                  avatar: avatar);
+                  avatar: avatar,
+                  recordingType: recordingType);
               context.go('/edit', extra: editPageArgs);
             }
             return;

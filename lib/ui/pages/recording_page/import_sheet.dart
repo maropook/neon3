@@ -62,14 +62,13 @@ class _ImportSheet extends StatelessWidget {
                       width: 90, height: 90),
                 )),
             onTap: () async {
-              final imagePath = await ref
+              final videoPath = await ref
                   .read(importSheetProvider.notifier)
-                  .getPickedFilePath();
-              if (imagePath.isEmpty) return;
-
+                  .getPickedVideoFilePath();
+              if (videoPath.isEmpty) return;
               Navigator.of(context).pop(ImportSheetArg(
                   recordingType: RecordingType.video,
-                  importedFilePath: imagePath));
+                  importedFilePath: videoPath));
             },
           ),
           GestureDetector(
@@ -85,7 +84,7 @@ class _ImportSheet extends StatelessWidget {
             onTap: () async {
               final imagePath = await ref
                   .read(importSheetProvider.notifier)
-                  .getPickedFilePath();
+                  .getPickedImageFilePath();
               if (imagePath.isEmpty) return;
 
               Navigator.of(context).pop(ImportSheetArg(

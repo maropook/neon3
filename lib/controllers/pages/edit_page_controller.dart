@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
 import 'package:neon3/services/logger.dart';
@@ -42,19 +43,20 @@ class EditPageState with _$EditPageState {
 }
 
 class EditPageProviderArg {
-  EditPageProviderArg({
-    required this.videoFilePath,
-    required this.audioFilePath,
-    required this.activeFrames,
-    required this.shortestSide,
-    required this.avatar,
-  });
+  EditPageProviderArg(
+      {required this.videoFilePath,
+      required this.audioFilePath,
+      required this.activeFrames,
+      required this.shortestSide,
+      required this.avatar,
+      required this.recordingType});
 
   final String videoFilePath;
   final String audioFilePath;
   final List<Map<String, double>> activeFrames;
   final double shortestSide;
   final Avatar avatar;
+  final RecordingType recordingType;
 }
 
 final editPageProvider =
@@ -69,9 +71,10 @@ class EditPageController extends StateNotifier<EditPageState> {
     init();
   }
 
+  RecordingType get recordingType => _editPageProviderArg.recordingType;
   final EditPageProviderArg _editPageProviderArg;
   final SpeechToTextService _speechToTextService = SpeechToTextService();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  AudioPlayer? _audioPlayer;
 
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
@@ -117,8 +120,9 @@ class EditPageController extends StateNotifier<EditPageState> {
             videoPosition: position,
             isAvatarActive: isAvatarActive(currentSeconds));
       });
-
-      // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      if (recordingType != RecordingType.video) {
+        _audioPlayer = AudioPlayer();
+      }
       _thumbnailService = ThumbnailService(
           videoFilePath: _editPageProviderArg.videoFilePath,
           aspectRatio: aspectRatio,
@@ -142,14 +146,14 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> play() async {
     await _videoPlayerService?.play();
-    await _audioPlayer.play(UrlSource(_editPageProviderArg.audioFilePath));
+    await _audioPlayer?.play(UrlSource(_editPageProviderArg.audioFilePath));
 
     await _musicPlayerService?.play(state.musicFilePath);
     await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
 
   Future<void> seek({required Duration duration}) async {
-    await _audioPlayer.seek(duration);
+    await _audioPlayer?.seek(duration);
     await _videoPlayerService?.seek(duration: duration);
 
     await _musicPlayerService?.seek(duration: duration);
@@ -157,7 +161,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   Future<void> pause() async {
-    await _audioPlayer.pause();
+    await _audioPlayer?.pause();
     await _videoPlayerService?.pause();
 
     await _musicPlayerService?.pause();
@@ -166,7 +170,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    _audioPlayer?.dispose();
     _videoPlayerService?.dispose();
 
     _musicPlayerService?.pause();

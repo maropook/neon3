@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/global/user_controller.dart';
-import 'package:neon3/main.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/pages/avatar_detail_page/avatar_detail_page.dart';
 import 'package:neon3/ui/pages/avatar_list_page/avatar_list_page.dart';
@@ -87,16 +87,19 @@ final routerProvider = Provider((ref) {
 });
 
 class EditPageArgs {
-  EditPageArgs(
-      {required this.audioFilePath,
-      required this.videoFilePath,
-      required this.activeFrames,
-      required this.avatar});
+  EditPageArgs({
+    required this.audioFilePath,
+    required this.videoFilePath,
+    required this.activeFrames,
+    required this.avatar,
+    required this.recordingType,
+  });
 
   String audioFilePath;
   String videoFilePath;
   List<Map<String, double>> activeFrames;
   Avatar avatar;
+  RecordingType recordingType;
 }
 
 class SubtitleTimingEditPageArgs {
@@ -123,14 +126,16 @@ class SubtitleEditPageArgs {
 }
 
 class EncodePageArgs {
-  EncodePageArgs(
-      {required this.audioFilePath,
-      required this.videoFilePath,
-      required this.musicFilePath,
-      required this.ttsAudioFilePath,
-      required this.activeFrames,
-      required this.subtitleTexts,
-      required this.avatar});
+  EncodePageArgs({
+    required this.audioFilePath,
+    required this.videoFilePath,
+    required this.musicFilePath,
+    required this.ttsAudioFilePath,
+    required this.activeFrames,
+    required this.subtitleTexts,
+    required this.avatar,
+    required this.recordingType,
+  });
 
   String audioFilePath;
   String videoFilePath;
@@ -139,4 +144,5 @@ class EncodePageArgs {
   List<Map<String, double>> activeFrames;
   List<SubtitleText> subtitleTexts;
   Avatar avatar;
+  RecordingType recordingType;
 }

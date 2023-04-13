@@ -40,26 +40,11 @@ class ImportSheetController extends StateNotifier<ImportSheetState> {
 
   final ImportSheetArg _importSheetProviderArg;
 
-  final FireAvatarService fireAvatarService = FireAvatarService();
-  final FileService fileService = FileService();
-
-  Future<void> init() async {}
-  // Future<String> getPickedFilePath() async {
-  //   final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles();
-  //   if (pickedFile == null) {
-  //     return '';
-  //   }
-  //   final String pickedFilePath = pickedFile.files.single.path!;
-  //   final String outputFilePath = (await fileService.saveFile(
-  //           inputFilePath: pickedFilePath, outputFilePath: 'musicFile.mp3'))
-  //       .path;
-
-  //   return outputFilePath;
-  // }
-
   final ImagePicker picker = ImagePicker();
 
-  Future<String> getPickedFilePath() async {
+  Future<void> init() async {}
+
+  Future<String> getPickedImageFilePath() async {
     final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImageFile == null) return '';
     final String pickedImageFilePath = pickedImageFile.path;
@@ -74,5 +59,13 @@ class ImportSheetController extends StateNotifier<ImportSheetState> {
       return '';
     }
     return croppedImageFile.path;
+  }
+
+  Future<String> getPickedVideoFilePath() async {
+    final pickedImageFile = await picker.pickVideo(source: ImageSource.gallery);
+    if (pickedImageFile == null) return '';
+    final String pickedImageFilePath = pickedImageFile.path;
+
+    return pickedImageFilePath;
   }
 }
