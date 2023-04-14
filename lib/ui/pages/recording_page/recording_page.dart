@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
@@ -15,10 +16,17 @@ class RecordingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: _buildAppBar(context),
-      body: _buildBody(),
+    return ProviderScope(
+      overrides: [
+        recordingPageProvider.overrideWith((ref) {
+          return RecordingPageController(context: context);
+        })
+      ],
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: _buildAppBar(context),
+        body: _buildBody(),
+      ),
     );
   }
 
@@ -114,12 +122,38 @@ class RecordingPage extends ConsumerWidget {
     });
   }
 
+  Widget _buildProgressBar() {
+    return Consumer(builder: (context, ref, _) {
+      final progressRate =
+          ref.watch(recordingPageProvider.select((s) => s.currentSeconds));
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: FAProgressBar(
+          maxValue: 60,
+          currentValue: progressRate,
+          size: 10,
+          borderRadius: BorderRadiusGeometry.lerp(
+              BorderRadius.zero, BorderRadius.zero, 0),
+          border: Border.all(color: Colors.white.withOpacity(0.5), width: 0),
+          progressColor: Colors.black,
+          backgroundColor: Colors.white.withOpacity(0.5),
+        ),
+      );
+    });
+  }
+
   Widget _buildPreview() {
     return Stack(
-      alignment: Alignment.bottomRight,
+      alignment: Alignment.topCenter,
       children: [
-        _buildRecordingBackground(),
-        _buildAvatar(),
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            _buildRecordingBackground(),
+            _buildAvatar(),
+          ],
+        ),
+        _buildProgressBar(),
       ],
     );
   }

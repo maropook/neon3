@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
@@ -10,6 +12,7 @@ import 'package:neon3/services/camera_service.dart';
 import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
 import 'package:neon3/services/logger.dart';
+import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 import 'package:path_provider/path_provider.dart';
 part 'recording_page_controller.freezed.dart';
@@ -33,18 +36,21 @@ class RecordingPageState with _$RecordingPageState {
 
 final recordingPageProvider = StateNotifierProvider.autoDispose<
     RecordingPageController, RecordingPageState>((ref) {
-  return RecordingPageController();
+  return throw UnimplementedError();
 });
 
 class RecordingPageController extends StateNotifier<RecordingPageState> {
-  RecordingPageController() : super(const RecordingPageState()) {
+  RecordingPageController({required BuildContext context})
+      : _context = context,
+        super(const RecordingPageState()) {
     init();
   }
 
+  final BuildContext _context;
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
-
+  final double recordingTimeLimit = 60.0;
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();
@@ -85,18 +91,54 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     }
   }
 
+  Future<void> stopRecordingBecauseOfTimeLimit() async {
+    final recordingType = state.recordingType;
+
+    if (recordingType == RecordingType.camera) {
+      stopRecording();
+    } else if (recordingType == RecordingType.image) {
+      await stopRecordingWithImage();
+    }
+
+    final videoFilePath = state.videoFilePath;
+    final audioFilePath = state.audioFilePath;
+    final activeFrames = state.activeFrames;
+    final avatar = state.selectedAvatar;
+    final importedFilePath = state.importedFilePath;
+
+    if (audioFilePath != null && videoFilePath != null && avatar != null) {
+      await disposeTimer();
+      final editPageArgs = EditPageArgs(
+          audioFilePath: recordingType == RecordingType.video
+              ? importedFilePath //videoのときはそもそもaudioFilePathいらない
+              : audioFilePath,
+          videoFilePath: videoFilePath,
+          activeFrames: [
+            //TODO:仮の値
+            {"startTime": 0.2, "endTime": 0.7},
+            {"startTime": 1.2, "endTime": 1.6},
+            {"startTime": 2.0, "endTime": 2.2}
+          ],
+          avatar: avatar,
+          recordingType: recordingType);
+      _context.go('/edit', extra: editPageArgs);
+    }
+    return;
+  }
+
   Future<void> stopRecordingWithImage() async {
     try {
       final audioFilePath = await _audioRecordService.stopAudioRecording();
       final EncodeService encodeService = EncodeService();
       final String videoFilePath = await encodeService.imageToVideo(
           imagePath: state.importedFilePath,
-          videoDuration:
-              Duration(milliseconds: (currentSeconds * 1000).toInt()));
-
+          videoDuration: Duration(
+              milliseconds: currentSeconds *
+                  1000 ~/
+                  2)); //imageToVideoはvideoDurationの2倍の長さになってしまうので
       state = state.copyWith(
           audioFilePath: audioFilePath, videoFilePath: videoFilePath);
-    } on CameraException catch (e) {
+    } catch (e) {
       Logger.logError('recording_page_controller', e.toString());
     }
   }
@@ -153,9 +195,12 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
       _currentDetailedFrame++;
       await setActiveFrames();
     });
-    _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       state = state.copyWith(currentSeconds: state.currentSeconds + 1.0);
       _currentDetailedFrame = 0;
+      if (currentSeconds >= recordingTimeLimit) {
+        await stopRecordingBecauseOfTimeLimit();
+      }
     });
   }
 
