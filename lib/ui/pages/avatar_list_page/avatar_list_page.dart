@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/avatar_list_page_controller.dart';
-import 'package:neon3/controllers/pages/recording_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -27,9 +24,6 @@ class AvatarListPage extends ConsumerWidget {
         title: const Text('アバター一覧'),
         leading: IconButton(
             onPressed: () {
-              ref
-                  .read(recordingPageProvider.notifier)
-                  .fetchSelectedAvatarFromId();
               context.go('/');
             },
             icon: const Icon(Icons.chevron_left)),

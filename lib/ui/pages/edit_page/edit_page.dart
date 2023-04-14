@@ -94,8 +94,24 @@ class EditPage extends StatelessWidget {
           _buildPreview(),
           _buildThumbnail(),
           _buildTimeline(),
+          _subtitleAddButton(),
           _buildEditContentIcons(),
         ]);
+  }
+
+  Widget _subtitleAddButton() {
+    return Consumer(builder: (context, ref, _) {
+      return GestureDetector(
+        onTap: () {
+          ref.read(editPageProvider.notifier).addSubtitle();
+        },
+        child: Container(
+            color: Colors.grey.withOpacity(0.5),
+            width: 30,
+            height: 30,
+            child: const Icon(Icons.add)),
+      );
+    });
   }
 
   Widget _buildPreview() {

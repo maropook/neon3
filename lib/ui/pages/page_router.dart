@@ -31,24 +31,24 @@ final routerProvider = Provider((ref) {
         },
       ),
       GoRoute(
+          path: '/avatar/list', //頭に/入れないように注意する
+          builder: (BuildContext context, GoRouterState state) {
+            return const AvatarListPage();
+          },
+          routes: [
+            GoRoute(
+              path: 'detail',
+              builder: (BuildContext context, GoRouterState state) {
+                return AvatarDetailPage(avatar: state.extra as Avatar);
+              },
+            ),
+          ]),
+      GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
           return const RecordingPage();
         },
         routes: [
-          GoRoute(
-              path: 'avatar/list', //頭に/入れないように注意する
-              builder: (BuildContext context, GoRouterState state) {
-                return const AvatarListPage();
-              },
-              routes: [
-                GoRoute(
-                  path: 'detail',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return AvatarDetailPage(avatar: state.extra as Avatar);
-                  },
-                ),
-              ]),
           GoRoute(
             path: 'import',
             builder: (BuildContext context, GoRouterState state) {

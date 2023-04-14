@@ -170,15 +170,14 @@ class _SubtitleEditSheet extends StatelessWidget {
               .onChangeFonColor(colorCode, isBorder);
         },
         child: Container(
-          width: 30,
-          height: 30,
+          width: isSameColor ? 35 : 30,
+          height: isSameColor ? 35 : 30,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isSameColor
-                ? HexColor.fromHex(colorCode)
-                : HexColor.fromHex(colorCode).withOpacity(0.5),
-            // border: fontColorBorders[i],
-          ),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white),
+              color: HexColor.fromHex(colorCode)
+              // border: fontColorBorders[i],
+              ),
         ),
       );
     });

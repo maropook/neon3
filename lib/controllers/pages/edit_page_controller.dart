@@ -293,4 +293,15 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     state = state.copyWith(subtitleTexts: [...subtitleTexts]);
   }
+
+  void addSubtitle() {
+    final newSubtitleText = SubtitleText(
+        startTime: currentSeconds,
+        endTime: videoDurationInSeconds,
+        word: 'subtitle');
+    state = state
+        .copyWith(subtitleTexts: [newSubtitleText, ...state.subtitleTexts]);
+
+    setDisplaySubtitleTextIndex();
+  }
 }
