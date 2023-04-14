@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
@@ -156,16 +157,20 @@ class EditPage extends StatelessWidget {
       return Column(
         children: [
           for (int i = 0; i < displaySubtitleIndexList.length; i++)
-            _buildShowTextFieldButton(context, displaySubtitleIndexList[i])
+            _buildSubtitleText(context, displaySubtitleIndexList[i]),
         ],
       );
     });
   }
 
-  Widget _buildShowTextFieldButton(BuildContext context, int index) {
+  Widget _buildSubtitleText(BuildContext context, int index) {
     return Consumer(builder: (context, ref, _) {
-      final texts = ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+      final Color fontColor = HexColor.fromHex(text.fontColorCode);
+      final Color fontBorderColor = HexColor.fromHex(text.borderColorCode);
+      const double fontSize = 30;
       return GestureDetector(
           onTap: () async {
             await ref.read(editPageProvider.notifier).showModalCallback();
@@ -175,9 +180,34 @@ class EditPage extends StatelessWidget {
             ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
             await ref.read(editPageProvider.notifier).closeModalCallback();
           },
-          child: Text(
-            texts[index].word.isNotEmpty ? texts[index].word : 'none',
-            style: const TextStyle(fontSize: 30, color: Colors.white),
+          child: Stack(
+            children: [
+              Text(
+                text.word,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: text.fontName,
+                    fontSize: fontSize,
+                    foreground: Paint()
+                      ..color = text.word.isEmpty
+                          ? fontBorderColor.withOpacity(0.5)
+                          : fontColor),
+              ),
+              Text(
+                text.word.isEmpty ? '※空白のテキスト' : text.word,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: texts[index].fontName,
+                  fontSize: fontSize,
+                  foreground: Paint()
+                    ..strokeWidth = fontSize / 20
+                    ..color = text.word.isEmpty
+                        ? fontBorderColor.withOpacity(0.5)
+                        : fontBorderColor
+                    ..style = PaintingStyle.stroke,
+                ),
+              ),
+            ],
           ));
     });
   }

@@ -50,7 +50,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
-  final double recordingTimeLimit = 60.0;
+  // final double recordingTimeLimit = 60.0;
+  final double recordingTimeLimit = 1.5;
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();
@@ -115,9 +116,9 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
           videoFilePath: videoFilePath,
           activeFrames: [
             //TODO:仮の値
-            {"startTime": 0.2, "endTime": 0.7},
-            {"startTime": 1.2, "endTime": 1.6},
-            {"startTime": 2.0, "endTime": 2.2}
+            {"startTime": 0.2, "endTime": 1.0}, //これより動画の長さが短かったらエラーになる
+            // {"startTime": 1.2, "endTime": 1.6},
+            // {"startTime": 2.0, "endTime": 2.2}
           ],
           avatar: avatar,
           recordingType: recordingType);
