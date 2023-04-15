@@ -41,6 +41,7 @@ class RecordingPage extends ConsumerWidget {
           final avatar = ref
               .watch(recordingPageProvider)
               .selectedAvatar; //TODO:ref.readだとavatarはnullになる
+          //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
 
           return IconButton(
               onPressed: () async {

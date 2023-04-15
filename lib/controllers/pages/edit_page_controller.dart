@@ -39,6 +39,7 @@ class EditPageState with _$EditPageState {
     @Default(false) bool isComplete,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
+    @Default([]) List<Map<String, double>> activeFrames,
   }) = _EditPageState;
 }
 
@@ -102,8 +103,9 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> init() async {
     try {
-      // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,
-      state = state.copyWith(avatar: _editPageProviderArg.avatar);
+      state = state.copyWith(
+          avatar: _editPageProviderArg.avatar,
+          activeFrames: _editPageProviderArg.activeFrames);
       await _speechToTextService.buildTexts(
           _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
@@ -210,10 +212,9 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   bool isAvatarActive(double currentSeconds) {
-    for (int i = 0; i < _editPageProviderArg.activeFrames.length; ++i) {
-      if (_editPageProviderArg.activeFrames[i]['startTime']! <=
-              currentSeconds &&
-          _editPageProviderArg.activeFrames[i]['endTime']! >= currentSeconds) {
+    for (int i = 0; i < state.activeFrames.length; ++i) {
+      if (state.activeFrames[i]['startTime']! <= currentSeconds &&
+          state.activeFrames[i]['endTime']! >= currentSeconds) {
         return true;
       }
     }
@@ -296,12 +297,20 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   void addSubtitle() {
     final newSubtitleText = SubtitleText(
-        startTime: currentSeconds,
-        endTime: videoDurationInSeconds,
-        word: 'subtitle');
-    state = state
-        .copyWith(subtitleTexts: [newSubtitleText, ...state.subtitleTexts]);
+        startTime: currentSeconds, endTime: videoDurationInSeconds, word: '');
+    final newActiveFrame = {
+      'startTime': currentSeconds,
+      'endTime': videoDurationInSeconds
+    };
+    state = state.copyWith(subtitleTexts: [
+      ...state.subtitleTexts,
+      newSubtitleText
+    ], activeFrames: [
+      ...state.activeFrames,
+      newActiveFrame,
+    ]);
 
     setDisplaySubtitleTextIndex();
+    state = state.copyWith(isAvatarActive: isAvatarActive(currentSeconds));
   }
 }

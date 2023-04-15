@@ -63,13 +63,15 @@ class EditPage extends StatelessWidget {
                     ref.read(editPageProvider.select((s) => s.musicFilePath));
                 final ttsAudioFilePath = ref
                     .read(editPageProvider.select((s) => s.ttsAudioFilePath));
+                final activeFrames =
+                    ref.read(editPageProvider.select((s) => s.activeFrames));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                   videoFilePath: editPageArgs.videoFilePath,
                   audioFilePath: editPageArgs.audioFilePath,
                   musicFilePath: musicFilePath,
                   ttsAudioFilePath: ttsAudioFilePath,
-                  activeFrames: editPageArgs.activeFrames,
+                  activeFrames: activeFrames,
                   subtitleTexts: subtitleTexts,
                   avatar: avatar,
                   recordingType: editPageArgs.recordingType,
@@ -334,6 +336,8 @@ class EditPage extends StatelessWidget {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
+      final activeFrames =
+          ref.watch(editPageProvider.select((s) => s.activeFrames));
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -357,7 +361,7 @@ class EditPage extends StatelessWidget {
               final subtitleTimingEditPageArgs = SubtitleTimingEditPageArgs(
                   audioFilePath: editPageArgs.audioFilePath,
                   videoFilePath: editPageArgs.videoFilePath,
-                  activeFrames: editPageArgs.activeFrames,
+                  activeFrames: activeFrames,
                   avatar: avatar,
                   subtitleTexts: texts);
               await showSubtitleTimingEditSheet(
