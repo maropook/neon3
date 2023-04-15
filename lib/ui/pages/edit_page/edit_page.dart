@@ -192,10 +192,15 @@ class EditPage extends StatelessWidget {
       return GestureDetector(
           onTap: () async {
             await ref.read(editPageProvider.notifier).showModalCallback();
-            final subtitleText = await showSubtitleEditSheet(
+            final args = await showSubtitleEditSheet(
                 context, SubtitleEditPageArgs(subtitleText: texts[index]));
-            if (subtitleText == null) return;
-            // ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//こんなのしなくても、select.sの参照を渡してるから勝手にupdateされる
+            if (args?.isDelete == true) {
+              ref
+                  .read(editPageProvider.notifier)
+                  .deleteSubtitle(texts[index].id);
+            }
+            //削除したいとき、
+            //TODO: ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//こんなのしなくても、select.sの参照を渡してるから勝手にupdateされる
             await ref.read(editPageProvider.notifier).closeModalCallback();
           },
           child: Stack(
@@ -347,6 +352,7 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).pause();
               final newAvatar = await showChangeAvatarSheet(context);
               ref.read(editPageProvider.notifier).setSelectedAvatar(newAvatar);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
               'アバターを変更',
@@ -366,6 +372,7 @@ class EditPage extends StatelessWidget {
                   subtitleTexts: texts);
               await showSubtitleTimingEditSheet(
                   context, subtitleTimingEditPageArgs);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
                 'テキストを編集', Assets.images.textEditIcon, context),

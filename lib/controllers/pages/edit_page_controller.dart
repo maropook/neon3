@@ -323,5 +323,13 @@ class EditPageController extends StateNotifier<EditPageState> {
     state = state.copyWith(isAvatarActive: isAvatarActive(currentSeconds));
   }
 
-  void deleteSubtitle() {}
+  void deleteSubtitle(String id) {
+    final subtitleTexts =
+        state.subtitleTexts.where((text) => text.id != id).toList();
+    final activeFrames =
+        state.activeFrames.where((frame) => frame.id != id).toList();
+
+    state = state.copyWith(
+        subtitleTexts: [...subtitleTexts], activeFrames: [...activeFrames]);
+  }
 }

@@ -92,6 +92,7 @@ class SubtitleTimingEditSheetController
   Future<void> init() async {
     try {
       state = state.copyWith(
+          //TODO:参照を渡してるからeditできている。
           subtitleTexts: _subtitleTimingEditSheetProviderArg.subtitleTexts,
           activeFrames: _subtitleTimingEditSheetProviderArg.activeFrames);
       _videoPlayerService = VideoPlayerService(

@@ -5,11 +5,18 @@ import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
-Future<SubtitleText?> showSubtitleEditSheet(
+class EditArgsFromSubtitleEditSheet {
+  EditArgsFromSubtitleEditSheet(
+      {required this.subtitleText, required this.isDelete});
+  SubtitleText? subtitleText;
+  bool isDelete;
+}
+
+Future<EditArgsFromSubtitleEditSheet?> showSubtitleEditSheet(
   BuildContext context,
   SubtitleEditPageArgs subtitleEditPageArgs,
 ) {
-  return showModalBottomSheet<SubtitleText?>(
+  return showModalBottomSheet<EditArgsFromSubtitleEditSheet?>(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
@@ -69,19 +76,40 @@ class _SubtitleEditSheet extends StatelessWidget {
           ref.watch(subtitleEditSheetProvider.select((s) => s.subtitleText));
       final focusNode = ref.watch(subtitleEditSheetProvider.notifier).focusNode;
 
-      return TextButton(
-        child: const Text('完了',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
-        onPressed: () {
-          final FocusScopeNode currentScope = FocusScope.of(context);
-          if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
-            focusNode.unfocus();
-          }
-          Navigator.of(context).pop(subtitleText);
-        },
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            child: const Text('完了',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white)),
+            onPressed: () {
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                focusNode.unfocus();
+              }
+              Navigator.of(context).pop(EditArgsFromSubtitleEditSheet(
+                  subtitleText: subtitleText, isDelete: false));
+            },
+          ),
+          TextButton(
+            child: const Text('削除',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white)),
+            onPressed: () {
+              final FocusScopeNode currentScope = FocusScope.of(context);
+              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                focusNode.unfocus();
+              }
+              Navigator.of(context).pop(EditArgsFromSubtitleEditSheet(
+                  subtitleText: subtitleText, isDelete: true));
+            },
+          ),
+        ],
       );
     });
   }
