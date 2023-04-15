@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_record_service.dart';
 import 'package:neon3/services/camera_service.dart';
@@ -15,6 +16,7 @@ import 'package:neon3/services/logger.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon3/ui/pages/recording_page/recording_page.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 part 'recording_page_controller.freezed.dart';
 
 @freezed
@@ -27,7 +29,7 @@ class RecordingPageState with _$RecordingPageState {
     @Default(0.0) double currentSeconds,
     @Default(false) bool isAvatarActive,
     @Default(null) Avatar? selectedAvatar,
-    @Default([]) List<Map<String, double>> activeFrames,
+    @Default([]) List<ActiveFrame> activeFrames,
     @Default(RecordingType.camera) RecordingType recordingType,
     @Default('') String importedFilePath,
     @Default(1.0) double recordingBackgroundWidth,
@@ -51,7 +53,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
   // final double recordingTimeLimit = 60.0;
-  final double recordingTimeLimit = 1.5;
+  final double recordingTimeLimit = 3.0;
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();
@@ -114,12 +116,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
               ? importedFilePath //videoのときはそもそもaudioFilePathいらない
               : audioFilePath,
           videoFilePath: videoFilePath,
-          activeFrames: [
-            //TODO:仮の値
-            {"startTime": 0.2, "endTime": 1.0}, //これより動画の長さが短かったらエラーになる
-            // {"startTime": 1.2, "endTime": 1.6},
-            // {"startTime": 2.0, "endTime": 2.2}
-          ],
+          activeFrames: sampleActiveFrames, //TODO:仮の値
           avatar: avatar,
           recordingType: recordingType);
       _context.go('/edit', extra: editPageArgs);
@@ -217,7 +214,11 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     } else {
       state = state.copyWith(activeFrames: [
         ...state.activeFrames,
-        {"startTime": startSeconds, "endTime": currentSeconds},
+        ActiveFrame(
+          startTime: startSeconds,
+          endTime: currentSeconds,
+          id: const Uuid().v4(),
+        )
       ]);
       Logger.log("setActiveFrames", state.activeFrames.toString());
     }
@@ -241,8 +242,3 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     }
   }
 }
-
-List<Map<String, double>> activeFrames = [
-  {"startTime": 1.3, "endTime": 2.0},
-  {"startTime": 3.0, "endTime": 4.5}
-];

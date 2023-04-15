@@ -195,7 +195,7 @@ class EditPage extends StatelessWidget {
             final subtitleText = await showSubtitleEditSheet(
                 context, SubtitleEditPageArgs(subtitleText: texts[index]));
             if (subtitleText == null) return;
-            ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
+            // ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//こんなのしなくても、select.sの参照を渡してるから勝手にupdateされる
             await ref.read(editPageProvider.notifier).closeModalCallback();
           },
           child: Stack(

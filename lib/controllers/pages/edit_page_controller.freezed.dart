@@ -36,8 +36,7 @@ mixin _$EditPageState {
   bool get isComplete => throw _privateConstructorUsedError;
   bool get isExistSubtitleTextNow => throw _privateConstructorUsedError;
   int get focusTextsIndex => throw _privateConstructorUsedError;
-  List<Map<String, double>> get activeFrames =>
-      throw _privateConstructorUsedError;
+  List<ActiveFrame> get activeFrames => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -69,7 +68,7 @@ abstract class $EditPageStateCopyWith<$Res> {
       bool isComplete,
       bool isExistSubtitleTextNow,
       int focusTextsIndex,
-      List<Map<String, double>> activeFrames});
+      List<ActiveFrame> activeFrames});
 
   $AvatarCopyWith<$Res>? get avatar;
 }
@@ -183,7 +182,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
       activeFrames: null == activeFrames
           ? _value.activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, double>>,
+              as List<ActiveFrame>,
     ) as $Val);
   }
 
@@ -227,7 +226,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       bool isComplete,
       bool isExistSubtitleTextNow,
       int focusTextsIndex,
-      List<Map<String, double>> activeFrames});
+      List<ActiveFrame> activeFrames});
 
   @override
   $AvatarCopyWith<$Res>? get avatar;
@@ -340,7 +339,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
       activeFrames: null == activeFrames
           ? _value._activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, double>>,
+              as List<ActiveFrame>,
     ));
   }
 }
@@ -367,7 +366,7 @@ class _$_EditPageState implements _EditPageState {
       this.isComplete = false,
       this.isExistSubtitleTextNow = false,
       this.focusTextsIndex = 0,
-      final List<Map<String, double>> activeFrames = const []})
+      final List<ActiveFrame> activeFrames = const []})
       : _subtitleTexts = subtitleTexts,
         _displaySubtitleIndexList = displaySubtitleIndexList,
         _thumbnailFileDataList = thumbnailFileDataList,
@@ -447,10 +446,10 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final int focusTextsIndex;
-  final List<Map<String, double>> _activeFrames;
+  final List<ActiveFrame> _activeFrames;
   @override
   @JsonKey()
-  List<Map<String, double>> get activeFrames {
+  List<ActiveFrame> get activeFrames {
     if (_activeFrames is EqualUnmodifiableListView) return _activeFrames;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_activeFrames);
@@ -558,7 +557,7 @@ abstract class _EditPageState implements EditPageState {
       final bool isComplete,
       final bool isExistSubtitleTextNow,
       final int focusTextsIndex,
-      final List<Map<String, double>> activeFrames}) = _$_EditPageState;
+      final List<ActiveFrame> activeFrames}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
@@ -597,7 +596,7 @@ abstract class _EditPageState implements EditPageState {
   @override
   int get focusTextsIndex;
   @override
-  List<Map<String, double>> get activeFrames;
+  List<ActiveFrame> get activeFrames;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>

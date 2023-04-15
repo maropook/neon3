@@ -23,8 +23,7 @@ mixin _$RecordingPageState {
   double get currentSeconds => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
   Avatar? get selectedAvatar => throw _privateConstructorUsedError;
-  List<Map<String, double>> get activeFrames =>
-      throw _privateConstructorUsedError;
+  List<ActiveFrame> get activeFrames => throw _privateConstructorUsedError;
   RecordingType get recordingType => throw _privateConstructorUsedError;
   String get importedFilePath => throw _privateConstructorUsedError;
   double get recordingBackgroundWidth => throw _privateConstructorUsedError;
@@ -48,7 +47,7 @@ abstract class $RecordingPageStateCopyWith<$Res> {
       double currentSeconds,
       bool isAvatarActive,
       Avatar? selectedAvatar,
-      List<Map<String, double>> activeFrames,
+      List<ActiveFrame> activeFrames,
       RecordingType recordingType,
       String importedFilePath,
       double recordingBackgroundWidth});
@@ -113,7 +112,7 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
       activeFrames: null == activeFrames
           ? _value.activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, double>>,
+              as List<ActiveFrame>,
       recordingType: null == recordingType
           ? _value.recordingType
           : recordingType // ignore: cast_nullable_to_non_nullable
@@ -158,7 +157,7 @@ abstract class _$$_CameraStateCopyWith<$Res>
       double currentSeconds,
       bool isAvatarActive,
       Avatar? selectedAvatar,
-      List<Map<String, double>> activeFrames,
+      List<ActiveFrame> activeFrames,
       RecordingType recordingType,
       String importedFilePath,
       double recordingBackgroundWidth});
@@ -222,7 +221,7 @@ class __$$_CameraStateCopyWithImpl<$Res>
       activeFrames: null == activeFrames
           ? _value._activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, double>>,
+              as List<ActiveFrame>,
       recordingType: null == recordingType
           ? _value.recordingType
           : recordingType // ignore: cast_nullable_to_non_nullable
@@ -250,7 +249,7 @@ class _$_CameraState implements _CameraState {
       this.currentSeconds = 0.0,
       this.isAvatarActive = false,
       this.selectedAvatar = null,
-      final List<Map<String, double>> activeFrames = const [],
+      final List<ActiveFrame> activeFrames = const [],
       this.recordingType = RecordingType.camera,
       this.importedFilePath = '',
       this.recordingBackgroundWidth = 1.0})
@@ -277,10 +276,10 @@ class _$_CameraState implements _CameraState {
   @override
   @JsonKey()
   final Avatar? selectedAvatar;
-  final List<Map<String, double>> _activeFrames;
+  final List<ActiveFrame> _activeFrames;
   @override
   @JsonKey()
-  List<Map<String, double>> get activeFrames {
+  List<ActiveFrame> get activeFrames {
     if (_activeFrames is EqualUnmodifiableListView) return _activeFrames;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_activeFrames);
@@ -362,7 +361,7 @@ abstract class _CameraState implements RecordingPageState {
       final double currentSeconds,
       final bool isAvatarActive,
       final Avatar? selectedAvatar,
-      final List<Map<String, double>> activeFrames,
+      final List<ActiveFrame> activeFrames,
       final RecordingType recordingType,
       final String importedFilePath,
       final double recordingBackgroundWidth}) = _$_CameraState;
@@ -382,7 +381,7 @@ abstract class _CameraState implements RecordingPageState {
   @override
   Avatar? get selectedAvatar;
   @override
-  List<Map<String, double>> get activeFrames;
+  List<ActiveFrame> get activeFrames;
   @override
   RecordingType get recordingType;
   @override

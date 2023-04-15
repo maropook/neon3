@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
 import 'package:neon3/services/logger.dart';
@@ -15,6 +16,7 @@ import 'package:neon3/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
+import 'package:uuid/uuid.dart';
 
 part 'edit_page_controller.freezed.dart';
 
@@ -39,7 +41,7 @@ class EditPageState with _$EditPageState {
     @Default(false) bool isComplete,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
-    @Default([]) List<Map<String, double>> activeFrames,
+    @Default([]) List<ActiveFrame> activeFrames,
   }) = _EditPageState;
 }
 
@@ -54,7 +56,7 @@ class EditPageProviderArg {
 
   final String videoFilePath;
   final String audioFilePath;
-  final List<Map<String, double>> activeFrames;
+  final List<ActiveFrame> activeFrames;
   final double shortestSide;
   final Avatar avatar;
   final RecordingType recordingType;
@@ -213,8 +215,8 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   bool isAvatarActive(double currentSeconds) {
     for (int i = 0; i < state.activeFrames.length; ++i) {
-      if (state.activeFrames[i]['startTime']! <= currentSeconds &&
-          state.activeFrames[i]['endTime']! >= currentSeconds) {
+      if (state.activeFrames[i].startTime <= currentSeconds &&
+          state.activeFrames[i].endTime >= currentSeconds) {
         return true;
       }
     }
@@ -296,12 +298,19 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   void addSubtitle() {
+    final newActiveFrame = ActiveFrame(
+      id: const Uuid().v4(),
+      startTime: currentSeconds,
+      endTime: videoDurationInSeconds,
+    );
+
     final newSubtitleText = SubtitleText(
-        startTime: currentSeconds, endTime: videoDurationInSeconds, word: '');
-    final newActiveFrame = {
-      'startTime': currentSeconds,
-      'endTime': videoDurationInSeconds
-    };
+      id: newActiveFrame.id,
+      startTime: newActiveFrame.startTime,
+      endTime: newActiveFrame.endTime,
+      word: '',
+    );
+
     state = state.copyWith(subtitleTexts: [
       ...state.subtitleTexts,
       newSubtitleText
@@ -313,4 +322,6 @@ class EditPageController extends StateNotifier<EditPageState> {
     setDisplaySubtitleTextIndex();
     state = state.copyWith(isAvatarActive: isAvatarActive(currentSeconds));
   }
+
+  void deleteSubtitle() {}
 }

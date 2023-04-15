@@ -1,5 +1,6 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/download_image_service.dart';
 import 'package:neon3/services/file_service.dart';
@@ -74,7 +75,7 @@ class EncodeService {
     required String audioFilePath,
     required String musicFilePath,
     required String ttsAudioFilePath,
-    required List<Map<String, double>> activeFrames,
+    required List<ActiveFrame> activeFrames,
     required List<SubtitleText> subtitleTexts,
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
@@ -85,9 +86,9 @@ class EncodeService {
 
     //SubtitleText
     //TODO:人工音声を追加できるようになったら変更する
-    for (int i = 0; i < subtitleTexts.length; ++i) {
-      subtitleTexts[i].word = 'word${i}';
-    }
+    // for (int i = 0; i < subtitleTexts.length; ++i) {
+    //   subtitleTexts[i].word = 'word${i}';
+    // }
 
     // AvatarAnimation
     AvatarAnimation avatarAnimation = AvatarAnimation(
@@ -96,7 +97,7 @@ class EncodeService {
         stopImagePath: await downloadImageService.downloadImage(
             downloadUrl: avatar.stopImageUrl),
         imageSizeRatio: 1.0,
-        activeFrameList: activeFrames,
+        activeFrameList: ActiveFrame.listToMap(activeFrames),
         avatarSizeRatio: 0.5,
         positionX: 0.5);
 
