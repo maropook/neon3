@@ -50,12 +50,11 @@ dependencies:
   video_thumbnail: ^0.5.3
   audio_video_progress_bar: ^1.0.1
   flutter_tts: ^3.6.3
-  gallery_saver: ^2.3.2
 
   neon_video_encoder:
     git:
       url: https://github.com/ini-siro/neon_video_encoder.git
-      ref: refs/heads/fix/font_height
+      ref: refs/heads/feature/add_subtitle_texts_id
   neon_speech_to_text:
     git:
       url: https://github.com/maropook/neon_speech_to_text.git
@@ -102,12 +101,6 @@ flutter:
     - family: SoukouMincho
       fonts:
         - asset: assets/fonts/SoukouMincho.ttf
-    - family: Corporate-Logo-Medium-ver3
-      fonts:
-        - asset: assets/fonts/Corporate-Logo-Medium-ver3.otf
-    - family: Koruri-Regular
-      fonts:
-        - asset: assets/fonts/Koruri-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

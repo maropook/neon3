@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/subtitle_edit_sheet_controller.dart';
-import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
-class EditArgsFromSubtitleEditSheet {
-  EditArgsFromSubtitleEditSheet(
-      {required this.subtitleText, required this.isDelete});
-  SubtitleText? subtitleText;
-  bool isDelete;
-}
-
-Future<EditArgsFromSubtitleEditSheet?> showSubtitleEditSheet(
+Future<SubtitleText?> showSubtitleEditSheet(
   BuildContext context,
   SubtitleEditPageArgs subtitleEditPageArgs,
 ) {
-  return showModalBottomSheet<EditArgsFromSubtitleEditSheet?>(
+  return showModalBottomSheet<SubtitleText?>(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
@@ -61,23 +53,23 @@ class _SubtitleEditSheet extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      _buildCompleteButton(),
-      _buildSubtitleFonts(),
-      _buildSubtitleWordColors(false),
-      _buildSubtitleWordColors(true),
-      _buildSubtitleTextField()
-    ]);
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [_buildSubtitlesTextField()]);
   }
 
-  Widget _buildCompleteButton() {
+  // TODO: text_fieldをどうするか
+  Widget _buildSubtitlesTextField() {
     return Consumer(builder: (context, ref, _) {
       final subtitleText =
           ref.watch(subtitleEditSheetProvider.select((s) => s.subtitleText));
+      final subtitleTextEditController = ref
+          .watch(subtitleEditSheetProvider.notifier)
+          .subtitleTextEditController;
       final focusNode = ref.watch(subtitleEditSheetProvider.notifier).focusNode;
 
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      return Column(
         children: [
           TextButton(
             child: const Text('完了',
@@ -90,39 +82,9 @@ class _SubtitleEditSheet extends StatelessWidget {
               if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
                 focusNode.unfocus();
               }
-              Navigator.of(context).pop(EditArgsFromSubtitleEditSheet(
-                  subtitleText: subtitleText, isDelete: false));
+              Navigator.of(context).pop(subtitleText);
             },
           ),
-          TextButton(
-            child: const Text('削除',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white)),
-            onPressed: () {
-              final FocusScopeNode currentScope = FocusScope.of(context);
-              if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
-                focusNode.unfocus();
-              }
-              Navigator.of(context).pop(EditArgsFromSubtitleEditSheet(
-                  subtitleText: subtitleText, isDelete: true));
-            },
-          ),
-        ],
-      );
-    });
-  }
-
-  Widget _buildSubtitleTextField() {
-    return Consumer(builder: (context, ref, _) {
-      final subtitleTextEditController = ref
-          .watch(subtitleEditSheetProvider.notifier)
-          .subtitleTextEditController;
-      final focusNode = ref.watch(subtitleEditSheetProvider.notifier).focusNode;
-
-      return Column(
-        children: [
           TextField(
             keyboardType: TextInputType.multiline,
             maxLines: null,
@@ -131,8 +93,7 @@ class _SubtitleEditSheet extends StatelessWidget {
             obscureText: false,
             autofocus: true,
             focusNode: focusNode,
-            onChanged:
-                ref.read(subtitleEditSheetProvider.notifier).onChangeText,
+            onChanged: ref.read(subtitleEditSheetProvider.notifier).onChanged,
             controller: subtitleTextEditController,
             decoration: InputDecoration(
               filled: true,
@@ -141,97 +102,6 @@ class _SubtitleEditSheet extends StatelessWidget {
             ),
           ),
         ],
-      );
-    });
-  }
-
-  Widget _buildSubtitleFonts() {
-    return Consumer(builder: (context, ref, _) {
-      final subtitleFontService = SubtitleFontService();
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (int i = 0; i < subtitleFontService.fontList.length; i++)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildSubtitleFont(i),
-            ),
-        ],
-      );
-    });
-  }
-
-  Widget _buildSubtitleWordColors(bool isBorder) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          !isBorder ? '　文字　' : 'ふちどり',
-          style: const TextStyle(color: Colors.white),
-        ),
-        for (int i = 0; i < SubtitlesFontColor.values.length; i++)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _buildSubtitleWordColor(i, isBorder),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildSubtitleWordColor(int index, bool isBorder) {
-    return Consumer(builder: (context, ref, _) {
-      final subtitleFontService = SubtitleFontService();
-      final colorCode = subtitleFontService
-          .colorsToColorCode(SubtitlesFontColor.values[index].name);
-
-      final fontColorCode = ref.watch(subtitleEditSheetProvider
-          .select((s) => s.subtitleText?.fontColorCode));
-      final borderColorCode = ref.watch(subtitleEditSheetProvider
-          .select((s) => s.subtitleText?.borderColorCode));
-      final isSameColor =
-          isBorder ? colorCode == borderColorCode : colorCode == fontColorCode;
-      return GestureDetector(
-        onTap: () {
-          ref
-              .read(subtitleEditSheetProvider.notifier)
-              .onChangeFonColor(colorCode, isBorder);
-        },
-        child: Container(
-          width: isSameColor ? 35 : 30,
-          height: isSameColor ? 35 : 30,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white),
-              color: HexColor.fromHex(colorCode)
-              // border: fontColorBorders[i],
-              ),
-        ),
-      );
-    });
-  }
-
-  Widget _buildSubtitleFont(int index) {
-    return Consumer(builder: (context, ref, _) {
-      final subtitleFontService = SubtitleFontService();
-      final font = ref.watch(
-          subtitleEditSheetProvider.select((s) => s.subtitleText?.fontName));
-      final fontName = subtitleFontService.fontList[index].name;
-      return GestureDetector(
-        onTap: () {
-          ref
-              .read(subtitleEditSheetProvider.notifier)
-              .onChangeFontName(fontName);
-        },
-        child: Text(
-          'あ夏',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontFamily: fontName == 'systemFont' ? null : fontName,
-              fontSize: 15,
-              color: font == fontName
-                  ? Colors.white
-                  : Colors.white.withOpacity(0.5)),
-        ),
       );
     });
   }

@@ -36,7 +36,6 @@ mixin _$EditPageState {
   bool get isComplete => throw _privateConstructorUsedError;
   bool get isExistSubtitleTextNow => throw _privateConstructorUsedError;
   int get focusTextsIndex => throw _privateConstructorUsedError;
-  List<ActiveFrame> get activeFrames => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditPageStateCopyWith<EditPageState> get copyWith =>
@@ -67,8 +66,7 @@ abstract class $EditPageStateCopyWith<$Res> {
       Duration beforeShowingVideoPosition,
       bool isComplete,
       bool isExistSubtitleTextNow,
-      int focusTextsIndex,
-      List<ActiveFrame> activeFrames});
+      int focusTextsIndex});
 
   $AvatarCopyWith<$Res>? get avatar;
 }
@@ -104,7 +102,6 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? isComplete = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
-    Object? activeFrames = null,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
@@ -179,10 +176,6 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.focusTextsIndex
           : focusTextsIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      activeFrames: null == activeFrames
-          ? _value.activeFrames
-          : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<ActiveFrame>,
     ) as $Val);
   }
 
@@ -225,8 +218,7 @@ abstract class _$$_EditPageStateCopyWith<$Res>
       Duration beforeShowingVideoPosition,
       bool isComplete,
       bool isExistSubtitleTextNow,
-      int focusTextsIndex,
-      List<ActiveFrame> activeFrames});
+      int focusTextsIndex});
 
   @override
   $AvatarCopyWith<$Res>? get avatar;
@@ -261,7 +253,6 @@ class __$$_EditPageStateCopyWithImpl<$Res>
     Object? isComplete = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
-    Object? activeFrames = null,
   }) {
     return _then(_$_EditPageState(
       isPlaying: null == isPlaying
@@ -336,10 +327,6 @@ class __$$_EditPageStateCopyWithImpl<$Res>
           ? _value.focusTextsIndex
           : focusTextsIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      activeFrames: null == activeFrames
-          ? _value._activeFrames
-          : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<ActiveFrame>,
     ));
   }
 }
@@ -365,12 +352,10 @@ class _$_EditPageState implements _EditPageState {
       this.beforeShowingVideoPosition = Duration.zero,
       this.isComplete = false,
       this.isExistSubtitleTextNow = false,
-      this.focusTextsIndex = 0,
-      final List<ActiveFrame> activeFrames = const []})
+      this.focusTextsIndex = 0})
       : _subtitleTexts = subtitleTexts,
         _displaySubtitleIndexList = displaySubtitleIndexList,
-        _thumbnailFileDataList = thumbnailFileDataList,
-        _activeFrames = activeFrames;
+        _thumbnailFileDataList = thumbnailFileDataList;
 
   @override
   @JsonKey()
@@ -446,18 +431,10 @@ class _$_EditPageState implements _EditPageState {
   @override
   @JsonKey()
   final int focusTextsIndex;
-  final List<ActiveFrame> _activeFrames;
-  @override
-  @JsonKey()
-  List<ActiveFrame> get activeFrames {
-    if (_activeFrames is EqualUnmodifiableListView) return _activeFrames;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_activeFrames);
-  }
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, displaySubtitleIndexList: $displaySubtitleIndexList, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex, activeFrames: $activeFrames)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, displaySubtitleIndexList: $displaySubtitleIndexList, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex)';
   }
 
   @override
@@ -501,34 +478,30 @@ class _$_EditPageState implements _EditPageState {
             (identical(other.isExistSubtitleTextNow, isExistSubtitleTextNow) ||
                 other.isExistSubtitleTextNow == isExistSubtitleTextNow) &&
             (identical(other.focusTextsIndex, focusTextsIndex) ||
-                other.focusTextsIndex == focusTextsIndex) &&
-            const DeepCollectionEquality()
-                .equals(other._activeFrames, _activeFrames));
+                other.focusTextsIndex == focusTextsIndex));
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        isPlaying,
-        avatar,
-        videoPlayerService,
-        thumbnailService,
-        const DeepCollectionEquality().hash(_subtitleTexts),
-        const DeepCollectionEquality().hash(_displaySubtitleIndexList),
-        isAvatarActive,
-        videoPlayerWidth,
-        thumbnailFilePath,
-        musicFilePath,
-        ttsAudioFilePath,
-        audioType,
-        const DeepCollectionEquality().hash(_thumbnailFileDataList),
-        videoPosition,
-        beforeShowingVideoPosition,
-        isComplete,
-        isExistSubtitleTextNow,
-        focusTextsIndex,
-        const DeepCollectionEquality().hash(_activeFrames)
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isPlaying,
+      avatar,
+      videoPlayerService,
+      thumbnailService,
+      const DeepCollectionEquality().hash(_subtitleTexts),
+      const DeepCollectionEquality().hash(_displaySubtitleIndexList),
+      isAvatarActive,
+      videoPlayerWidth,
+      thumbnailFilePath,
+      musicFilePath,
+      ttsAudioFilePath,
+      audioType,
+      const DeepCollectionEquality().hash(_thumbnailFileDataList),
+      videoPosition,
+      beforeShowingVideoPosition,
+      isComplete,
+      isExistSubtitleTextNow,
+      focusTextsIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -556,8 +529,7 @@ abstract class _EditPageState implements EditPageState {
       final Duration beforeShowingVideoPosition,
       final bool isComplete,
       final bool isExistSubtitleTextNow,
-      final int focusTextsIndex,
-      final List<ActiveFrame> activeFrames}) = _$_EditPageState;
+      final int focusTextsIndex}) = _$_EditPageState;
 
   @override
   bool get isPlaying;
@@ -595,8 +567,6 @@ abstract class _EditPageState implements EditPageState {
   bool get isExistSubtitleTextNow;
   @override
   int get focusTextsIndex;
-  @override
-  List<ActiveFrame> get activeFrames;
   @override
   @JsonKey(ignore: true)
   _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>

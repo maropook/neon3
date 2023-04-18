@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
@@ -23,7 +22,6 @@ class SubtitleTimingEditSheetState with _$SubtitleTimingEditSheetState {
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
-    @Default([]) List<ActiveFrame> activeFrames,
     @Default(false) bool isAvatarActive,
     @Default(1.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
@@ -44,7 +42,7 @@ class SubtitleTimingEditSheetProviderArg {
 
   final String videoFilePath;
   final String audioFilePath;
-  final List<ActiveFrame> activeFrames;
+  final List<Map<String, double>> activeFrames;
   final List<SubtitleText> subtitleTexts;
   final double shortestSide;
 }
@@ -92,9 +90,7 @@ class SubtitleTimingEditSheetController
   Future<void> init() async {
     try {
       state = state.copyWith(
-          //TODO:参照を渡してるからeditできている。
-          subtitleTexts: _subtitleTimingEditSheetProviderArg.subtitleTexts,
-          activeFrames: _subtitleTimingEditSheetProviderArg.activeFrames);
+          subtitleTexts: _subtitleTimingEditSheetProviderArg.subtitleTexts);
       _videoPlayerService = VideoPlayerService(
           videoFilePath: _subtitleTimingEditSheetProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
@@ -172,9 +168,13 @@ class SubtitleTimingEditSheetController
   }
 
   bool isAvatarActive(double currentSeconds) {
-    for (int i = 0; i < state.activeFrames.length; ++i) {
-      if (state.activeFrames[i].startTime <= currentSeconds &&
-          state.activeFrames[i].endTime >= currentSeconds) {
+    for (int i = 0;
+        i < _subtitleTimingEditSheetProviderArg.activeFrames.length;
+        ++i) {
+      if (_subtitleTimingEditSheetProviderArg.activeFrames[i]['startTime']! <=
+              currentSeconds &&
+          _subtitleTimingEditSheetProviderArg.activeFrames[i]['endTime']! >=
+              currentSeconds) {
         return true;
       }
     }
@@ -202,53 +202,32 @@ class SubtitleTimingEditSheetController
     return endPos;
   }
 
-  void startTimeDragged(int index, Offset startPos, String id) {
+  void startTimeDragged(int index, Offset startPos) {
     final startTimeInMilliseconds =
         videoDurationInMilliseconds * startPos.dx / timelineWidth;
     final startTime = startTimeInMilliseconds / 1000;
+    _subtitleTimingEditSheetProviderArg.activeFrames[index]['startTime'] =
+        startTime;
 
-    final newFrame = state.activeFrames[index];
-    newFrame.startTime = startTime;
-
-    final activeFrames = state.activeFrames
-        .map((frame) => frame.id == newFrame.id ? newFrame : frame)
-        .toList();
-
-    final newText = state.subtitleTexts[index];
-    newText.startTime = startTime;
-
-    final texts = state.subtitleTexts
-        .map((text) => text.id == newText.id ? newText : text)
-        .toList();
-
-    state = state
-        .copyWith(subtitleTexts: [...texts], activeFrames: [...activeFrames]);
+    final texts = state.subtitleTexts; //TODO:もう少しうまくできそう
+    texts[index].startTime = startTime;
+    state = state.copyWith(subtitleTexts: [...texts]);
   }
 
-  void endTimeDragged(int index, Offset endPos, String id) {
+  void endTimeDragged(int index, Offset endPos) {
     final endTimeInMilliseconds =
         videoDurationInMilliseconds * endPos.dx / timelineWidth;
     final endTime = endTimeInMilliseconds / 1000; //_videoEndPosはmillisecondsのため
 
-    final newFrame = state.activeFrames[index];
-    newFrame.endTime = endTime;
+    _subtitleTimingEditSheetProviderArg.activeFrames[index]['endTime'] =
+        endTime;
 
-    final activeFrames = state.activeFrames
-        .map((frame) => frame.id == newFrame.id ? newFrame : frame)
-        .toList();
-
-    final newText = state.subtitleTexts[index];
-    newText.endTime = endTime;
-
-    final texts = state.subtitleTexts
-        .map((text) => text.id == newText.id ? newText : text)
-        .toList();
-
-    state = state
-        .copyWith(subtitleTexts: [...texts], activeFrames: [...activeFrames]);
+    final texts = state.subtitleTexts; //TODO:
+    texts[index].endTime = endTime;
+    state = state.copyWith(subtitleTexts: [...texts]);
   }
 
-  void dragStart(DragStartDetails details, int index, String id) {
+  void dragStart(DragStartDetails details, int index) {
     const int sideSize = 24;
 
     if (details.localPosition.dx <= dragStartPosition(index).dx + sideSize) {
@@ -261,7 +240,7 @@ class SubtitleTimingEditSheetController
     }
   }
 
-  void dragUpdate(DragUpdateDetails details, int index, String id) {
+  void dragUpdate(DragUpdateDetails details, int index) {
     Offset startPos = dragStartPosition(index);
     Offset endPos = dragEndPosition(index);
     if (_dragType == EditorDragType.left) {
@@ -269,22 +248,22 @@ class SubtitleTimingEditSheetController
               (startPos.dx + details.delta.dx <= endPos.dx)) &&
           !(endPos.dx - startPos.dx - details.delta.dx > timelineWidth)) {
         startPos += details.delta;
-        startTimeDragged(index, startPos, id);
+        startTimeDragged(index, startPos);
       }
     } else if (_dragType == EditorDragType.center) {
       if ((startPos.dx + details.delta.dx >= 0) &&
           (endPos.dx + details.delta.dx <= timelineWidth)) {
         startPos += details.delta;
         endPos += details.delta;
-        startTimeDragged(index, startPos, id);
-        endTimeDragged(index, endPos, id);
+        startTimeDragged(index, startPos);
+        endTimeDragged(index, endPos);
       }
     } else {
       if ((endPos.dx + details.delta.dx <= timelineWidth) &&
           (endPos.dx + details.delta.dx >= startPos.dx) &&
           !(endPos.dx - startPos.dx + details.delta.dx > timelineWidth)) {
         endPos += details.delta;
-        endTimeDragged(index, endPos, id);
+        endTimeDragged(index, endPos);
       }
     }
   }

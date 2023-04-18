@@ -1,6 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
-import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/download_image_service.dart';
 import 'package:neon3/services/file_service.dart';
@@ -75,7 +74,7 @@ class EncodeService {
     required String audioFilePath,
     required String musicFilePath,
     required String ttsAudioFilePath,
-    required List<ActiveFrame> activeFrames,
+    required List<Map<String, double>> activeFrames,
     required List<SubtitleText> subtitleTexts,
     required Avatar avatar,
     required void Function(dynamic value) addListenersFunction,
@@ -84,6 +83,12 @@ class EncodeService {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
     final DownloadImageService downloadImageService = DownloadImageService();
 
+    //SubtitleText
+    //TODO:人工音声を追加できるようになったら変更する
+    for (int i = 0; i < subtitleTexts.length; ++i) {
+      subtitleTexts[i].word = 'word${i}';
+    }
+
     // AvatarAnimation
     AvatarAnimation avatarAnimation = AvatarAnimation(
         activeImagePath: await downloadImageService.downloadImage(
@@ -91,12 +96,12 @@ class EncodeService {
         stopImagePath: await downloadImageService.downloadImage(
             downloadUrl: avatar.stopImageUrl),
         imageSizeRatio: 1.0,
-        activeFrameList: ActiveFrame.listToMap(activeFrames),
+        activeFrameList: activeFrames,
         avatarSizeRatio: 0.5,
         positionX: 0.5);
 
     //AudioSetting
-    //TODO:isMutedDefaultAudio→ true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
+    //isMutedDefaultAudio→ true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
     // isMutedDefaultAudio:trueの場合は、voiceFileにある音声たちより、動画が短かったらExport failed: Operation Stoppedになる
 
     AudioType audioType =
@@ -120,6 +125,7 @@ class EncodeService {
     EasyLoading.dismiss();
     final encodedVideoFilePath = await neonVideoEncoder.encode(
       encodeArgs: encodeArgs,
+      // inputFilePath: await imageToVideo(),
       inputFilePath: videoFilePath,
       outputFilePath: await fileService.getTempFilePath('video-with-audio.mp4'),
     );

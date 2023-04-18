@@ -48,13 +48,7 @@
 		<string>AkazukiPOP.otf</string>
 		<string>SoukouMincho.ttf</string>
 		<string>YasashisaGothicBold.otf</string>
-		<string>Corporate-Logo-Medium-ver3.otf</string>
-		<string>Koruri-Regular.ttf</string>
 	</array>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

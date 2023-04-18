@@ -21,7 +21,6 @@ mixin _$SubtitleTimingEditSheetState {
       throw _privateConstructorUsedError;
   ThumbnailService? get thumbnailService => throw _privateConstructorUsedError;
   List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
-  List<ActiveFrame> get activeFrames => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
   double get videoPlayerWidth => throw _privateConstructorUsedError;
   String get thumbnailFilePath => throw _privateConstructorUsedError;
@@ -48,7 +47,6 @@ abstract class $SubtitleTimingEditSheetStateCopyWith<$Res> {
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
-      List<ActiveFrame> activeFrames,
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
@@ -75,7 +73,6 @@ class _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
-    Object? activeFrames = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
@@ -100,10 +97,6 @@ class _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
           ? _value.subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
               as List<SubtitleText>,
-      activeFrames: null == activeFrames
-          ? _value.activeFrames
-          : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<ActiveFrame>,
       isAvatarActive: null == isAvatarActive
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
@@ -146,7 +139,6 @@ abstract class _$$_SubtitleTimingEditSheetStateCopyWith<$Res>
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
-      List<ActiveFrame> activeFrames,
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
@@ -172,7 +164,6 @@ class __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
-    Object? activeFrames = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
@@ -197,10 +188,6 @@ class __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>
           ? _value._subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
               as List<SubtitleText>,
-      activeFrames: null == activeFrames
-          ? _value._activeFrames
-          : activeFrames // ignore: cast_nullable_to_non_nullable
-              as List<ActiveFrame>,
       isAvatarActive: null == isAvatarActive
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
@@ -237,7 +224,6 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
       this.videoPlayerService = null,
       this.thumbnailService = null,
       final List<SubtitleText> subtitleTexts = const [],
-      final List<ActiveFrame> activeFrames = const [],
       this.isAvatarActive = false,
       this.videoPlayerWidth = 1.0,
       this.thumbnailFilePath = '',
@@ -245,7 +231,6 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
       this.videoPosition = Duration.zero,
       this.isComplete = false})
       : _subtitleTexts = subtitleTexts,
-        _activeFrames = activeFrames,
         _thumbnailFileDataList = thumbnailFileDataList;
 
   @override
@@ -264,15 +249,6 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
     if (_subtitleTexts is EqualUnmodifiableListView) return _subtitleTexts;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_subtitleTexts);
-  }
-
-  final List<ActiveFrame> _activeFrames;
-  @override
-  @JsonKey()
-  List<ActiveFrame> get activeFrames {
-    if (_activeFrames is EqualUnmodifiableListView) return _activeFrames;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_activeFrames);
   }
 
   @override
@@ -303,7 +279,7 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
 
   @override
   String toString() {
-    return 'SubtitleTimingEditSheetState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, activeFrames: $activeFrames, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
+    return 'SubtitleTimingEditSheetState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
   }
 
   @override
@@ -319,8 +295,6 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
                 other.thumbnailService == thumbnailService) &&
             const DeepCollectionEquality()
                 .equals(other._subtitleTexts, _subtitleTexts) &&
-            const DeepCollectionEquality()
-                .equals(other._activeFrames, _activeFrames) &&
             (identical(other.isAvatarActive, isAvatarActive) ||
                 other.isAvatarActive == isAvatarActive) &&
             (identical(other.videoPlayerWidth, videoPlayerWidth) ||
@@ -342,7 +316,6 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
       videoPlayerService,
       thumbnailService,
       const DeepCollectionEquality().hash(_subtitleTexts),
-      const DeepCollectionEquality().hash(_activeFrames),
       isAvatarActive,
       videoPlayerWidth,
       thumbnailFilePath,
@@ -365,7 +338,6 @@ abstract class _SubtitleTimingEditSheetState
       final VideoPlayerService? videoPlayerService,
       final ThumbnailService? thumbnailService,
       final List<SubtitleText> subtitleTexts,
-      final List<ActiveFrame> activeFrames,
       final bool isAvatarActive,
       final double videoPlayerWidth,
       final String thumbnailFilePath,
@@ -381,8 +353,6 @@ abstract class _SubtitleTimingEditSheetState
   ThumbnailService? get thumbnailService;
   @override
   List<SubtitleText> get subtitleTexts;
-  @override
-  List<ActiveFrame> get activeFrames;
   @override
   bool get isAvatarActive;
   @override

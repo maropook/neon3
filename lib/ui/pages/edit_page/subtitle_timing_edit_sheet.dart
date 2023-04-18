@@ -4,21 +4,12 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/subtitle_timing_edit_sheet_controller.dart';
-import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 final GlobalKey subtitleTimingEditVideoPlayerKey = GlobalKey();
-
-class SubtitleTimingSheetArgs {
-  SubtitleTimingSheetArgs(
-      {required this.subtitleTexts, required this.activeFrames});
-
-  List<SubtitleText> subtitleTexts;
-  List<ActiveFrame> activeFrames;
-}
 
 Future<void> showSubtitleTimingEditSheet(
   BuildContext context,
@@ -137,6 +128,8 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
     return Consumer(builder: (context, ref, _) {
       final List<SubtitleText> texts = ref.watch(
           subtitleTimingEditSheetProvider.select((s) => s.subtitleTexts));
+      final Duration videoPosition = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.videoPosition));
       final Duration videoDuration = ref.watch(subtitleTimingEditSheetProvider
           .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
       final timelineWidth = ref.watch(subtitleTimingEditSheetProvider.notifier
@@ -158,12 +151,12 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
                   onHorizontalDragStart: (DragStartDetails details) {
                     ref
                         .read(subtitleTimingEditSheetProvider.notifier)
-                        .dragStart(details, index, texts[index].id);
+                        .dragStart(details, index);
                   },
                   onHorizontalDragUpdate: (DragUpdateDetails details) {
                     ref
                         .read(subtitleTimingEditSheetProvider.notifier)
-                        .dragUpdate(details, index, texts[index].id);
+                        .dragUpdate(details, index);
                   },
                   child: CustomPaint(
                     foregroundPainter: EditSubtitleTextsPainter(
