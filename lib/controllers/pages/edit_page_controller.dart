@@ -76,10 +76,10 @@ class EditPageController extends StateNotifier<EditPageState> {
   RecordingType get recordingType => _editPageProviderArg.recordingType;
   final EditPageProviderArg _editPageProviderArg;
   final SpeechToTextService _speechToTextService = SpeechToTextService();
-  AudioPlayer? _audioPlayer;
 
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
+  AudioPlayerService? _audioPlayerService;
   AudioPlayerService? _musicPlayerService;
   AudioPlayerService? _ttsAudioPlayerService;
 
@@ -124,7 +124,8 @@ class EditPageController extends StateNotifier<EditPageState> {
             isAvatarActive: isAvatarActive(currentSeconds));
       });
       if (recordingType != RecordingType.video) {
-        _audioPlayer = AudioPlayer();
+        _audioPlayerService =
+            AudioPlayerService(_editPageProviderArg.audioFilePath);
       }
       _thumbnailService = ThumbnailService(
           videoFilePath: _editPageProviderArg.videoFilePath,
@@ -152,14 +153,14 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> play() async {
     await _videoPlayerService?.play();
-    await _audioPlayer?.play(UrlSource(_editPageProviderArg.audioFilePath));
+    await _audioPlayerService?.play(_editPageProviderArg.audioFilePath);
 
     await _musicPlayerService?.play(state.musicFilePath);
     await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
 
   Future<void> seek({required Duration duration}) async {
-    await _audioPlayer?.seek(duration);
+    await _audioPlayerService?.seek(duration: duration);
     await _videoPlayerService?.seek(duration: duration);
 
     await _musicPlayerService?.seek(duration: duration);
@@ -167,7 +168,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   Future<void> pause() async {
-    await _audioPlayer?.pause();
+    await _audioPlayerService?.pause();
     await _videoPlayerService?.pause();
 
     await _musicPlayerService?.pause();
@@ -176,7 +177,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   @override
   void dispose() {
-    _audioPlayer?.dispose();
+    _audioPlayerService?.dispose();
     _videoPlayerService?.dispose();
 
     _musicPlayerService?.pause();
@@ -260,11 +261,15 @@ class EditPageController extends StateNotifier<EditPageState> {
 
       await _ttsAudioPlayerService?.dispose();
       _ttsAudioPlayerService = null;
+      _audioPlayerService =
+          AudioPlayerService(_editPageProviderArg.audioFilePath);
       state =
           state.copyWith(ttsAudioFilePath: '', audioType: AudioType.original);
       return;
     }
 
+    await _audioPlayerService?.dispose();
+    _audioPlayerService = null;
     _ttsAudioPlayerService = AudioPlayerService(ttsAudioFilePath);
     state = state.copyWith(
         ttsAudioFilePath: ttsAudioFilePath, audioType: AudioType.artificial);

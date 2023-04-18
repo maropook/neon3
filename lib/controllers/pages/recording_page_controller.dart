@@ -52,8 +52,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
-  // final double recordingTimeLimit = 60.0;
-  final double recordingTimeLimit = 4; //TODO:仮の値
+  final double recordingTimeLimit = 60.0;
+  // final double recordingTimeLimit = 4; //TODO:仮の値
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();
@@ -116,7 +116,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
               ? importedFilePath //videoのときはそもそもaudioFilePathいらない
               : audioFilePath,
           videoFilePath: videoFilePath,
-          activeFrames: sampleActiveFrames, //TODO:仮の値
+          // activeFrames: sampleActiveFrames, //TODO:仮の値
+          activeFrames: activeFrames,
           avatar: avatar,
           recordingType: recordingType);
       _context.go('/edit', extra: editPageArgs);
