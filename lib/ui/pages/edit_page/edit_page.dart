@@ -261,7 +261,8 @@ class EditPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 text.word,
                 style: TextStyle(
-                    fontFamily: text.fontName.isEmpty ? null : text.fontName,
+                    fontFamily:
+                        text.fontName == 'systemFont' ? null : text.fontName,
                     fontSize: fontSize.toDouble(),
                     foreground: Paint()
                       ..color = text.word.isEmpty
@@ -272,7 +273,8 @@ class EditPage extends StatelessWidget {
                 text.word.isEmpty ? '※空白のテキスト' : text.word,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: text.fontName.isEmpty ? null : text.fontName,
+                  fontFamily:
+                      text.fontName == 'systemFont' ? null : text.fontName,
                   fontSize: fontSize.toDouble(),
                   foreground: Paint()
                     ..strokeWidth = fontSize * 0.05

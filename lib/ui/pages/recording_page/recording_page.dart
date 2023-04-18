@@ -68,7 +68,7 @@ class RecordingPage extends ConsumerWidget {
                     audioFilePath: importSheetArg.importedFilePath,
                     videoFilePath: importSheetArg.importedFilePath,
                     //TODO:importedFilePathのときactiveFrames設定できない問題
-                    activeFrames: sampleActiveFrames,
+                    activeFrames: sampleActiveFrames, //TODO:仮の値
                     avatar: avatar,
                     recordingType: recordingType!);
                 context.go('/edit', extra: editPageArgs);

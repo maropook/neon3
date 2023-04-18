@@ -32,9 +32,19 @@ class SubtitleFontService {
       name: 'SoukouMincho',
     ),
     Font(
+      fileName: 'Corporate-Logo-Medium-ver3.otf',
+      screenName: 'コーポレート・ロゴ',
+      name: 'Corporate-Logo-Medium-ver3',
+    ),
+    Font(
+      fileName: 'Koruri-Regular.ttf',
+      screenName: '小瑠璃フォント',
+      name: 'Koruri-Regular',
+    ),
+    Font(
       fileName: '',
       screenName: 'systemFont',
-      name: '',
+      name: 'systemFont',
     ),
   ];
   double getFontHeight(String fontName) {

@@ -226,7 +226,7 @@ class _SubtitleEditSheet extends StatelessWidget {
           'あ夏',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontFamily: fontName.isEmpty ? null : fontName,
+              fontFamily: fontName == 'systemFont' ? null : fontName,
               fontSize: 15,
               color: font == fontName
                   ? Colors.white

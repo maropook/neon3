@@ -102,6 +102,12 @@ flutter:
     - family: SoukouMincho
       fonts:
         - asset: assets/fonts/SoukouMincho.ttf
+    - family: Corporate-Logo-Medium-ver3
+      fonts:
+        - asset: assets/fonts/Corporate-Logo-Medium-ver3.otf
+    - family: Koruri-Regular
+      fonts:
+        - asset: assets/fonts/Koruri-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
