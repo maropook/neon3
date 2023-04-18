@@ -1,7 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/encode_service.dart';
+import 'package:neon3/services/logger.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'encode_page_controller.freezed.dart';
@@ -30,7 +33,7 @@ class EncodePageProviderArg {
   final String ttsAudioFilePath;
   final Avatar avatar;
   final List<SubtitleText> subtitleTexts;
-  final List<Map<String, double>> activeFrames;
+  final List<ActiveFrame> activeFrames;
 }
 
 final encodePageProvider =
@@ -62,6 +65,9 @@ class EncodePageController extends StateNotifier<EncodePageState> {
         activeFrames: _encodePageProviderArg.activeFrames,
         subtitleTexts: _encodePageProviderArg.subtitleTexts,
         avatar: _encodePageProviderArg.avatar);
+
+    final bool? success = await GallerySaver.saveVideo(encodedVideoFilePath);
+    Logger.log('encode_page_controller', '[init save_video] $success');
 
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }

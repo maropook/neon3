@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -37,10 +38,11 @@ class RecordingPage extends ConsumerWidget {
         Consumer(builder: (context, ref, _) {
           final activeFrames = ref
               .read(recordingPageProvider)
-              .activeFrames; //TODO:videoのときactiveFramesどうなるんだ？？？
+              .activeFrames; //TODO:videoのときactiveFramesが作られない
           final avatar = ref
               .watch(recordingPageProvider)
               .selectedAvatar; //TODO:ref.readだとavatarはnullになる
+          //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
 
           return IconButton(
               onPressed: () async {
@@ -51,22 +53,23 @@ class RecordingPage extends ConsumerWidget {
                 ref
                     .read(recordingPageProvider.notifier)
                     .setImportSheetArg(importSheetArg);
-                print(
-                    '$importSheetArg+avatar:$avatar+recordingType+$recordingType');
+
                 if (importSheetArg == null ||
                     avatar == null ||
-                    recordingType != RecordingType.video) return;
+                    recordingType == RecordingType.camera) return;
+                if (recordingType == RecordingType.image) {
+                  ref
+                      .read(recordingPageProvider.notifier)
+                      .getRecordingBackgroundWidth();
+                  return;
+                }
 
                 final editPageArgs = EditPageArgs(
                     audioFilePath: importSheetArg.importedFilePath,
                     videoFilePath: importSheetArg.importedFilePath,
-                    activeFrames: [
-                      //TODO:importedFilePathのときactiveFrames設定できない問題
-                      //TODO:activeFramesは仮の値
-                      {"startTime": 0.2, "endTime": 0.7},
-                      {"startTime": 1.2, "endTime": 1.6},
-                      {"startTime": 2.0, "endTime": 2.2}
-                    ],
+                    //TODO:importedFilePathのときactiveFrames設定できない問題
+                    // activeFrames: sampleActiveFrames, //TODO:仮の値
+                    activeFrames: activeFrames,
                     avatar: avatar,
                     recordingType: recordingType!);
                 context.go('/edit', extra: editPageArgs);
@@ -112,7 +115,7 @@ class RecordingPage extends ConsumerWidget {
         key: recordingBackgroundKey,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-              minWidth: 1300,
+              // minWidth: 1300,
               maxHeight: MediaQuery.of(context).size.longestSide - 200),
           child: recordingType == RecordingType.camera
               ? cameraService!.buildCameraPreview()
@@ -228,12 +231,8 @@ class RecordingPage extends ConsumerWidget {
                       ? importedFilePath //videoのときはそもそもaudioFilePathいらない
                       : audioFilePath,
                   videoFilePath: videoFilePath,
-                  activeFrames: [
-                    //TODO:仮の値
-                    {"startTime": 0.2, "endTime": 0.7},
-                    {"startTime": 1.2, "endTime": 1.6},
-                    {"startTime": 2.0, "endTime": 2.2}
-                  ],
+                  // activeFrames: sampleActiveFrames, //TODO:仮の値
+                  activeFrames: activeFrames,
                   avatar: avatar,
                   recordingType: recordingType);
               context.go('/edit', extra: editPageArgs);

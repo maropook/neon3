@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
 import 'package:neon3/services/logger.dart';
@@ -15,6 +15,7 @@ import 'package:neon3/services/video_player_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
+import 'package:uuid/uuid.dart';
 
 part 'edit_page_controller.freezed.dart';
 
@@ -39,6 +40,7 @@ class EditPageState with _$EditPageState {
     @Default(false) bool isComplete,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
+    @Default([]) List<ActiveFrame> activeFrames,
   }) = _EditPageState;
 }
 
@@ -53,7 +55,7 @@ class EditPageProviderArg {
 
   final String videoFilePath;
   final String audioFilePath;
-  final List<Map<String, double>> activeFrames;
+  final List<ActiveFrame> activeFrames;
   final double shortestSide;
   final Avatar avatar;
   final RecordingType recordingType;
@@ -74,10 +76,10 @@ class EditPageController extends StateNotifier<EditPageState> {
   RecordingType get recordingType => _editPageProviderArg.recordingType;
   final EditPageProviderArg _editPageProviderArg;
   final SpeechToTextService _speechToTextService = SpeechToTextService();
-  AudioPlayer? _audioPlayer;
 
   ThumbnailService? _thumbnailService;
   VideoPlayerService? _videoPlayerService;
+  AudioPlayerService? _audioPlayerService;
   AudioPlayerService? _musicPlayerService;
   AudioPlayerService? _ttsAudioPlayerService;
 
@@ -102,8 +104,9 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> init() async {
     try {
-      // await _speechToTextService.buildTexts(sampleActiveFrames, _audioFilePath,
-      state = state.copyWith(avatar: _editPageProviderArg.avatar);
+      state = state.copyWith(
+          avatar: _editPageProviderArg.avatar,
+          activeFrames: _editPageProviderArg.activeFrames);
       await _speechToTextService.buildTexts(
           _editPageProviderArg.activeFrames, _editPageProviderArg.audioFilePath,
           (List<SubtitleText> texts) {
@@ -121,7 +124,8 @@ class EditPageController extends StateNotifier<EditPageState> {
             isAvatarActive: isAvatarActive(currentSeconds));
       });
       if (recordingType != RecordingType.video) {
-        _audioPlayer = AudioPlayer();
+        _audioPlayerService =
+            AudioPlayerService(_editPageProviderArg.audioFilePath);
       }
       _thumbnailService = ThumbnailService(
           videoFilePath: _editPageProviderArg.videoFilePath,
@@ -138,7 +142,10 @@ class EditPageController extends StateNotifier<EditPageState> {
       });
 
       await play();
-      getVideoPlayerWidth(editVideoPlayerKey); //playのあとじゃないとうまく行かない
+
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        getVideoPlayerWidth(editVideoPlayerKey);
+      });
     } catch (e) {
       Logger.logError('edit_controller:init', e.toString());
     }
@@ -146,14 +153,14 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   Future<void> play() async {
     await _videoPlayerService?.play();
-    await _audioPlayer?.play(UrlSource(_editPageProviderArg.audioFilePath));
+    await _audioPlayerService?.play(_editPageProviderArg.audioFilePath);
 
     await _musicPlayerService?.play(state.musicFilePath);
     await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
 
   Future<void> seek({required Duration duration}) async {
-    await _audioPlayer?.seek(duration);
+    await _audioPlayerService?.seek(duration: duration);
     await _videoPlayerService?.seek(duration: duration);
 
     await _musicPlayerService?.seek(duration: duration);
@@ -161,7 +168,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   Future<void> pause() async {
-    await _audioPlayer?.pause();
+    await _audioPlayerService?.pause();
     await _videoPlayerService?.pause();
 
     await _musicPlayerService?.pause();
@@ -170,7 +177,7 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   @override
   void dispose() {
-    _audioPlayer?.dispose();
+    _audioPlayerService?.dispose();
     _videoPlayerService?.dispose();
 
     _musicPlayerService?.pause();
@@ -210,10 +217,9 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   bool isAvatarActive(double currentSeconds) {
-    for (int i = 0; i < _editPageProviderArg.activeFrames.length; ++i) {
-      if (_editPageProviderArg.activeFrames[i]['startTime']! <=
-              currentSeconds &&
-          _editPageProviderArg.activeFrames[i]['endTime']! >= currentSeconds) {
+    for (int i = 0; i < state.activeFrames.length; ++i) {
+      if (state.activeFrames[i].startTime <= currentSeconds &&
+          state.activeFrames[i].endTime >= currentSeconds) {
         return true;
       }
     }
@@ -248,27 +254,30 @@ class EditPageController extends StateNotifier<EditPageState> {
     if (ttsAudioFilePath == 'delete') {
       //TODO: originalにされたときはdeleteとかじゃないやり方でやりたい。ttsAudioFilePathにdeleteをいれるのはおかしい
 
-      //TODO: ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたらせっかくつくったttsAudioFileがなくなってしまう。
-      //artificialのまま字幕の文字全部消えて、そのままencode_controllerにaudioTypeを渡すとエラーになるとおもうが、
-      //セーフ(いまのところ反映されない。一回字幕作成を押さないとつくりなおされないから。)&audioTypeではなく人工音声のfilePathを渡していて、
+      //TODO: ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたら作ったttsAudioFileがなくなってしまう。
+      //artificialのまま字幕の文字全部消えて、そのままencode_controllerにaudioTypeを渡すとエラーになると思うが、
+      //(いまのところ反映されないのでエラーにならない。一回字幕作成を押さないとつくりなおされないから)&audioTypeではなく人工音声のfilePathを渡していて、
       //isEmptyのときはoriginalとみなしてencodeされるようにしているから
 
       await _ttsAudioPlayerService?.dispose();
       _ttsAudioPlayerService = null;
+      _audioPlayerService =
+          AudioPlayerService(_editPageProviderArg.audioFilePath);
       state =
           state.copyWith(ttsAudioFilePath: '', audioType: AudioType.original);
       return;
     }
 
+    await _audioPlayerService?.dispose();
+    _audioPlayerService = null;
     _ttsAudioPlayerService = AudioPlayerService(ttsAudioFilePath);
     state = state.copyWith(
         ttsAudioFilePath: ttsAudioFilePath, audioType: AudioType.artificial);
   }
 
   //subtitle_display
-
   void setDisplaySubtitleTextIndex() {
-    //video_player_listenerよりtimerでやったほうがいい？
+    //TODO:video_player_listenerよりtimerでやったほうがいい？
     final texts = state.subtitleTexts;
     bool isExistSubtitleTextNow = false;
     List<int> displaySubtitleIndexList = [];
@@ -292,5 +301,41 @@ class EditPageController extends StateNotifier<EditPageState> {
         .toList();
 
     state = state.copyWith(subtitleTexts: [...subtitleTexts]);
+  }
+
+  void addSubtitle() {
+    final newActiveFrame = ActiveFrame(
+      id: const Uuid().v4(),
+      startTime: currentSeconds,
+      endTime: videoDurationInSeconds,
+    );
+
+    final newSubtitleText = SubtitleText(
+      id: newActiveFrame.id,
+      startTime: newActiveFrame.startTime,
+      endTime: newActiveFrame.endTime,
+      word: '',
+    );
+
+    state = state.copyWith(subtitleTexts: [
+      ...state.subtitleTexts,
+      newSubtitleText
+    ], activeFrames: [
+      ...state.activeFrames,
+      newActiveFrame,
+    ]);
+
+    setDisplaySubtitleTextIndex();
+    state = state.copyWith(isAvatarActive: isAvatarActive(currentSeconds));
+  }
+
+  void deleteSubtitle(String id) {
+    final subtitleTexts =
+        state.subtitleTexts.where((text) => text.id != id).toList();
+    final activeFrames =
+        state.activeFrames.where((frame) => frame.id != id).toList();
+
+    state = state.copyWith(
+        subtitleTexts: [...subtitleTexts], activeFrames: [...activeFrames]);
   }
 }

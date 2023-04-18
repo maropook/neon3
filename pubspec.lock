@@ -624,6 +624,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.0"
+  gallery_saver:
+    dependency: "direct main"
+    description:
+      name: gallery_saver
+      sha256: df8b7e207ca12d64c71e0710a7ee3bc48aa7206d51cc720716fedb1543a66712
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
   glob:
     dependency: transitive
     description:
@@ -877,11 +885,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "refs/heads/feature/add_subtitle_texts_id"
-      resolved-ref: cbbf33255e9fce23bebbf13b7e10e107d40c0590
+      ref: "refs/heads/fix/font_height"
+      resolved-ref: b86ed6995cd0407c7b76235d1b06670bf2da38df
       url: "https://github.com/ini-siro/neon_video_encoder.git"
     source: git
-    version: "0.0.9"
+    version: "0.0.10"
   octo_image:
     dependency: transitive
     description:

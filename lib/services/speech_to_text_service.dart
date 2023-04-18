@@ -3,12 +3,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/file_service.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon_speech_to_text/neon_speech_to_text.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
-import 'package:uuid/uuid.dart';
 
 class SpeechToTextService {
   SpeechToTextService();
@@ -18,9 +18,7 @@ class SpeechToTextService {
   FileService fileService = FileService();
   List<SubtitleText> texts = <SubtitleText>[];
 
-  Future<void> buildTexts(
-      List<Map<String, double>> activeFrames,
-      String audioFilePath,
+  Future<void> buildTexts(List<ActiveFrame> activeFrames, String audioFilePath,
       void Function(List<SubtitleText> texts) completeCallBack) async {
     final List<String> trimmedAudioFilePathList =
         await trimAudio(activeFrames, audioFilePath);
@@ -47,21 +45,15 @@ class SpeechToTextService {
   }
 
   Future<List<String>> trimAudio(
-      List<Map<String, double>> activeFrames, String audioFilePath) async {
+      List<ActiveFrame> activeFrames, String audioFilePath) async {
     final List<String> trimmedAudioFilePathList = [];
-
-    final String voiceFilePath1 = (await fileService.saveFile(
-            inputFilePath: Assets.audio.voiceFile1,
-            outputFilePath: "audio1.mp3"))
-        .path;
 
     for (int index = 0; index < activeFrames.length; ++index) {
       final String trimmedAudioFilePath = await encodeService.trimAudio(
         audioFilePath,
-        // voiceFilePath1,
         await fileService.getTempFilePath('audio_$index.m4a'),
-        activeFrames[index]['startTime']!,
-        activeFrames[index]['endTime']!,
+        activeFrames[index].startTime,
+        activeFrames[index].endTime,
       );
       trimmedAudioFilePathList.add(trimmedAudioFilePath);
     }
@@ -69,7 +61,7 @@ class SpeechToTextService {
   }
 
   Future<void> speechToTexts({
-    required List<Map<String, double>> activeFrames,
+    required List<ActiveFrame> activeFrames,
     required List<String> inputFilePathList,
     required void Function(List<SubtitleText> texts) completeCallBack,
   }) async {
@@ -85,11 +77,11 @@ class SpeechToTextService {
       for (int index = 0; index < activeFrames.length; ++index) {
         //completeしてからじゃなくて、addListenersCallBackでtexts.addしたほうがいいのか？
         texts.add(SubtitleText(
-            id: const Uuid().v4(),
-            startTime: activeFrames[index]['startTime']!,
-            endTime: activeFrames[index]['endTime']!,
-            word: 'ハロー')); //TODO:!!いまは人工音声のため
-        // word: speechTextsList[index])); //TODO:!!いまは人工音声のため
+            id: activeFrames[index].id,
+            startTime: activeFrames[index].startTime,
+            endTime: activeFrames[index].endTime,
+            // word: 'テスト')); //TODO:仮の値
+            word: speechTextsList[index]));
         // Logger.log(
         //     "speechToTexts_complete_call_back", speechTextsList[index]);
         completeCallBack(texts);
@@ -97,22 +89,7 @@ class SpeechToTextService {
     }
 
     try {
-      //TODO:テスト値
-      final String voiceFilePath1 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile1,
-              outputFilePath: "audio1.mp3"))
-          .path;
-      final String voiceFilePath2 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile2,
-              outputFilePath: "audio2.mp3"))
-          .path;
-      final String voiceFilePath3 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile3,
-              outputFilePath: "audio3.mp3"))
-          .path;
-
       await _neonSpeechToTextPlugin.speechToTexts(
-        // inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],//TODO:テスト値
         inputFilePathList: inputFilePathList,
         completeCallBack: setSubtitleTexts,
         addListenersFunction: (LinkedHashMap map) async {},

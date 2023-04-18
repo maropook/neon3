@@ -48,9 +48,25 @@ class SubtitleEditSheetController
   TextEditingController subtitleTextEditController =
       TextEditingController(text: '');
 
-  void onChanged(String text) {
+  void onChangeText(String text) {
     final subtitleText = state.subtitleText;
     subtitleText?.word = text;
+    state = state.copyWith(subtitleText: subtitleText);
+  }
+
+  void onChangeFontName(String fontName) {
+    final subtitleText = state.subtitleText;
+    subtitleText?.fontName = fontName;
+    state = state.copyWith(subtitleText: subtitleText);
+  }
+
+  void onChangeFonColor(String fontColorCode, bool isBorder) {
+    final subtitleText = state.subtitleText;
+    if (!isBorder) {
+      subtitleText?.fontColorCode = fontColorCode;
+    } else {
+      subtitleText?.borderColorCode = fontColorCode;
+    }
     state = state.copyWith(subtitleText: subtitleText);
   }
 }

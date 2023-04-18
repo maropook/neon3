@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
@@ -62,13 +64,15 @@ class EditPage extends StatelessWidget {
                     ref.read(editPageProvider.select((s) => s.musicFilePath));
                 final ttsAudioFilePath = ref
                     .read(editPageProvider.select((s) => s.ttsAudioFilePath));
+                final activeFrames =
+                    ref.read(editPageProvider.select((s) => s.activeFrames));
                 if (avatar == null) return;
                 final encodePageArgs = EncodePageArgs(
                   videoFilePath: editPageArgs.videoFilePath,
                   audioFilePath: editPageArgs.audioFilePath,
                   musicFilePath: musicFilePath,
                   ttsAudioFilePath: ttsAudioFilePath,
-                  activeFrames: editPageArgs.activeFrames,
+                  activeFrames: activeFrames,
                   subtitleTexts: subtitleTexts,
                   avatar: avatar,
                   recordingType: editPageArgs.recordingType,
@@ -93,8 +97,24 @@ class EditPage extends StatelessWidget {
           _buildPreview(),
           _buildThumbnail(),
           _buildTimeline(),
+          _subtitleAddButton(),
           _buildEditContentIcons(),
         ]);
+  }
+
+  Widget _subtitleAddButton() {
+    return Consumer(builder: (context, ref, _) {
+      return GestureDetector(
+        onTap: () {
+          ref.read(editPageProvider.notifier).addSubtitle();
+        },
+        child: Container(
+            color: Colors.grey.withOpacity(0.5),
+            width: 30,
+            height: 30,
+            child: const Icon(Icons.add)),
+      );
+    });
   }
 
   Widget _buildPreview() {
@@ -106,7 +126,6 @@ class EditPage extends StatelessWidget {
 
       return videoController != null
           ? Stack(
-              alignment: Alignment.center,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -153,31 +172,119 @@ class EditPage extends StatelessWidget {
     return Consumer(builder: (context, ref, _) {
       final List<int> displaySubtitleIndexList =
           ref.watch(editPageProvider.select((s) => s.displaySubtitleIndexList));
-      return Column(
+
+      return Stack(
         children: [
           for (int i = 0; i < displaySubtitleIndexList.length; i++)
-            _buildShowTextFieldButton(context, displaySubtitleIndexList[i])
+            _buildSubtitleTextPosition(displaySubtitleIndexList[i])
         ],
       );
     });
   }
 
-  Widget _buildShowTextFieldButton(BuildContext context, int index) {
+  double getSubtitleWidth(SubtitleText text, double videoPlayerWidth) {
+    final String word = text.word;
+    final double fontSize = videoPlayerWidth * text.fontSize;
+    if (!word.contains('\n')) {
+      return fontSize * text.word.length;
+    }
+    final words = word.split('\n');
+    final wordLengthList = <int>[];
+    for (String word in words) {
+      wordLengthList.add(word.length);
+    }
+    final wordLength = wordLengthList.reduce(max);
+    return wordLength * fontSize;
+  }
+
+  Widget _buildSubtitleTextPosition(int index) {
+    final SubtitleFontService subtitleFontService = SubtitleFontService();
     return Consumer(builder: (context, ref, _) {
-      final texts = ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final double aspectRatio = ref.watch(editPageProvider
+              .select((s) => s.videoPlayerService?.aspectRatio)) ??
+          1.0;
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+
+      final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
+      final double subtitleWidth = getSubtitleWidth(text, videoPlayerWidth);
+
+      final fontPadding = videoPlayerWidth *
+          subtitleFontService.getFontHeight(text.fontName) *
+          text.fontSize;
+
+      // final bottomPadding = videoPlayerWidth * text.position.y + fontPadding;//TODO:こっちが正しいが、フォントによってpreviewがずれる
+      final bottomPadding = videoPlayerWidth * text.position.y;
+      final leftPadding = (videoPlayerWidth * text.position.x) +
+          (videoPlayerWidth - subtitleWidth) / 2;
+
+      return SizedBox(
+          height: videoPlayerWidth / aspectRatio,
+          width: videoPlayerWidth,
+          child: Padding(
+            padding: EdgeInsets.only(left: leftPadding, bottom: bottomPadding),
+            child: _buildSubtitleText(context, index),
+          ));
+    });
+  }
+
+  Widget _buildSubtitleText(BuildContext context, int index) {
+    return Consumer(builder: (context, ref, _) {
+      final double videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+
+      final Color fontColor = HexColor.fromHex(text.fontColorCode);
+      final Color fontBorderColor = HexColor.fromHex(text.borderColorCode);
+      final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
 
       return GestureDetector(
           onTap: () async {
             await ref.read(editPageProvider.notifier).showModalCallback();
-            final subtitleText = await showSubtitleEditSheet(
-                context, SubtitleEditPageArgs(subtitleText: texts[index]));
-            if (subtitleText == null) return;
-            ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);
+            final args = await showSubtitleEditSheet(
+                context, SubtitleEditPageArgs(subtitleText: text));
+            if (args?.isDelete == true) {
+              ref.read(editPageProvider.notifier).deleteSubtitle(text.id);
+            }
+            //TODO: ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//select.sの参照を渡してるから勝手にupdateされる
             await ref.read(editPageProvider.notifier).closeModalCallback();
           },
-          child: Text(
-            texts[index].word.isNotEmpty ? texts[index].word : 'none',
-            style: const TextStyle(fontSize: 30, color: Colors.white),
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                text.word,
+                style: TextStyle(
+                    fontFamily:
+                        text.fontName == 'systemFont' ? null : text.fontName,
+                    fontSize: fontSize.toDouble(),
+                    foreground: Paint()
+                      ..color = text.word.isEmpty
+                          ? fontBorderColor.withOpacity(0.5)
+                          : fontColor),
+              ),
+              Text(
+                text.word.isEmpty ? '※空白のテキスト' : text.word,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily:
+                      text.fontName == 'systemFont' ? null : text.fontName,
+                  fontSize: fontSize.toDouble(),
+                  foreground: Paint()
+                    ..strokeWidth = fontSize * 0.05
+                    ..color = text.word.isEmpty
+                        ? fontBorderColor.withOpacity(0.5)
+                        : fontBorderColor
+                    ..style = PaintingStyle.stroke,
+                ),
+              ),
+            ],
           ));
     });
   }
@@ -288,6 +395,8 @@ class EditPage extends StatelessWidget {
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       final avatar = ref.watch(editPageProvider.select((s) => s.avatar));
+      final activeFrames =
+          ref.watch(editPageProvider.select((s) => s.activeFrames));
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -297,6 +406,7 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).pause();
               final newAvatar = await showChangeAvatarSheet(context);
               ref.read(editPageProvider.notifier).setSelectedAvatar(newAvatar);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
               'アバターを変更',
@@ -311,11 +421,12 @@ class EditPage extends StatelessWidget {
               final subtitleTimingEditPageArgs = SubtitleTimingEditPageArgs(
                   audioFilePath: editPageArgs.audioFilePath,
                   videoFilePath: editPageArgs.videoFilePath,
-                  activeFrames: editPageArgs.activeFrames,
+                  activeFrames: activeFrames,
                   avatar: avatar,
                   subtitleTexts: texts);
               await showSubtitleTimingEditSheet(
                   context, subtitleTimingEditPageArgs);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
                 'テキストを編集', Assets.images.textEditIcon, context),

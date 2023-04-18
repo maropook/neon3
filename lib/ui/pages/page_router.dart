@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/global/user_controller.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
+import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/pages/avatar_detail_page/avatar_detail_page.dart';
 import 'package:neon3/ui/pages/avatar_list_page/avatar_list_page.dart';
@@ -31,24 +32,24 @@ final routerProvider = Provider((ref) {
         },
       ),
       GoRoute(
+          path: '/avatar/list', //頭に/入れないように注意する
+          builder: (BuildContext context, GoRouterState state) {
+            return const AvatarListPage();
+          },
+          routes: [
+            GoRoute(
+              path: 'detail',
+              builder: (BuildContext context, GoRouterState state) {
+                return AvatarDetailPage(avatar: state.extra as Avatar);
+              },
+            ),
+          ]),
+      GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
           return const RecordingPage();
         },
         routes: [
-          GoRoute(
-              path: 'avatar/list', //頭に/入れないように注意する
-              builder: (BuildContext context, GoRouterState state) {
-                return const AvatarListPage();
-              },
-              routes: [
-                GoRoute(
-                  path: 'detail',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return AvatarDetailPage(avatar: state.extra as Avatar);
-                  },
-                ),
-              ]),
           GoRoute(
             path: 'import',
             builder: (BuildContext context, GoRouterState state) {
@@ -97,7 +98,7 @@ class EditPageArgs {
 
   String audioFilePath;
   String videoFilePath;
-  List<Map<String, double>> activeFrames;
+  List<ActiveFrame> activeFrames;
   Avatar avatar;
   RecordingType recordingType;
 }
@@ -112,7 +113,7 @@ class SubtitleTimingEditPageArgs {
 
   String audioFilePath;
   String videoFilePath;
-  List<Map<String, double>> activeFrames;
+  List<ActiveFrame> activeFrames;
   List<SubtitleText> subtitleTexts;
   Avatar avatar;
 }
@@ -141,7 +142,7 @@ class EncodePageArgs {
   String videoFilePath;
   String musicFilePath;
   String ttsAudioFilePath;
-  List<Map<String, double>> activeFrames;
+  List<ActiveFrame> activeFrames;
   List<SubtitleText> subtitleTexts;
   Avatar avatar;
   RecordingType recordingType;
