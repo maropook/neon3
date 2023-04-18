@@ -29,19 +29,14 @@ final sampleActiveFrames = [
     endTime: 1.0,
     id: const Uuid().v4(),
   ),
-  ActiveFrame(
-    startTime: 1.2,
-    endTime: 1.6,
-    id: const Uuid().v4(),
-  ),
-  ActiveFrame(
-    startTime: 2.0,
-    endTime: 2.2,
-    id: const Uuid().v4(),
-  ),
+  // ActiveFrame(
+  //   startTime: 1.2,
+  //   endTime: 1.6,
+  //   id: const Uuid().v4(),
+  // ),
+  // ActiveFrame(
+  //   startTime: 2.0,
+  //   endTime: 2.2,
+  //   id: const Uuid().v4(),
+  // ),
 ];
-
-
- // {"startTime": 0.2, "endTime": 1.0}, //これより動画の長さが短かったらエラーになる
-            // {"startTime": 1.2, "endTime": 1.6},
-            // {"startTime": 2.0, "endTime": 2.2}

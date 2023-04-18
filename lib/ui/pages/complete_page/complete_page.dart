@@ -47,7 +47,7 @@ class CompletePage extends StatelessWidget {
             children: [
               videoPlayerService != null
                   ? SizedBox(
-                      height: 300,
+                      width: 187.5,
                       child: GestureDetector(
                         onTap: () {
                           isPlaying

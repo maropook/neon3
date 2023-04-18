@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -142,7 +141,10 @@ class EditPageController extends StateNotifier<EditPageState> {
       });
 
       await play();
-      getVideoPlayerWidth(editVideoPlayerKey); //playのあとじゃないとうまく行かない
+
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        getVideoPlayerWidth(editVideoPlayerKey);
+      });
     } catch (e) {
       Logger.logError('edit_controller:init', e.toString());
     }
@@ -251,9 +253,9 @@ class EditPageController extends StateNotifier<EditPageState> {
     if (ttsAudioFilePath == 'delete') {
       //TODO: originalにされたときはdeleteとかじゃないやり方でやりたい。ttsAudioFilePathにdeleteをいれるのはおかしい
 
-      //TODO: ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたらせっかくつくったttsAudioFileがなくなってしまう。
-      //artificialのまま字幕の文字全部消えて、そのままencode_controllerにaudioTypeを渡すとエラーになるとおもうが、
-      //セーフ(いまのところ反映されない。一回字幕作成を押さないとつくりなおされないから。)&audioTypeではなく人工音声のfilePathを渡していて、
+      //TODO: ttsAudioFilePathにdeleteを入れるのは良くない＆deleteしたら作ったttsAudioFileがなくなってしまう。
+      //artificialのまま字幕の文字全部消えて、そのままencode_controllerにaudioTypeを渡すとエラーになると思うが、
+      //(いまのところ反映されないのでエラーにならない。一回字幕作成を押さないとつくりなおされないから)&audioTypeではなく人工音声のfilePathを渡していて、
       //isEmptyのときはoriginalとみなしてencodeされるようにしているから
 
       await _ttsAudioPlayerService?.dispose();
@@ -269,9 +271,8 @@ class EditPageController extends StateNotifier<EditPageState> {
   }
 
   //subtitle_display
-
   void setDisplaySubtitleTextIndex() {
-    //video_player_listenerよりtimerでやったほうがいい？
+    //TODO:video_player_listenerよりtimerでやったほうがいい？
     final texts = state.subtitleTexts;
     bool isExistSubtitleTextNow = false;
     List<int> displaySubtitleIndexList = [];

@@ -84,12 +84,6 @@ class EncodeService {
     final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
     final DownloadImageService downloadImageService = DownloadImageService();
 
-    //SubtitleText
-    //TODO:人工音声を追加できるようになったら変更する
-    // for (int i = 0; i < subtitleTexts.length; ++i) {
-    //   subtitleTexts[i].word = 'word${i}';
-    // }
-
     // AvatarAnimation
     AvatarAnimation avatarAnimation = AvatarAnimation(
         activeImagePath: await downloadImageService.downloadImage(
@@ -102,7 +96,7 @@ class EncodeService {
         positionX: 0.5);
 
     //AudioSetting
-    //isMutedDefaultAudio→ true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
+    //TODO:isMutedDefaultAudio→ true:artificial voiceFileListから使われる false:original→1秒から5秒まで字幕が表示されます
     // isMutedDefaultAudio:trueの場合は、voiceFileにある音声たちより、動画が短かったらExport failed: Operation Stoppedになる
 
     AudioType audioType =
@@ -126,7 +120,6 @@ class EncodeService {
     EasyLoading.dismiss();
     final encodedVideoFilePath = await neonVideoEncoder.encode(
       encodeArgs: encodeArgs,
-      // inputFilePath: await imageToVideo(),
       inputFilePath: videoFilePath,
       outputFilePath: await fileService.getTempFilePath('video-with-audio.mp4'),
     );

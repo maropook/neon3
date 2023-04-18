@@ -31,7 +31,40 @@ class SubtitleFontService {
       screenName: '装甲明朝',
       name: 'SoukouMincho',
     ),
+    Font(
+      fileName: '',
+      screenName: 'systemFont',
+      name: '',
+    ),
   ];
+  double getFontHeight(String fontName) {
+    var fontSize = 0.0;
+    switch (fontName) {
+      case "YasashisaGothicBoldV2-bold":
+        return 0.45;
+      case "07AkazukinPop":
+        return 0.38;
+      case "SoukouMincho":
+        return 0.00;
+      default:
+        print("no font");
+    }
+    return fontSize;
+  }
+  // double getFontHeight(String fontName) {
+  //   var fontSize = 1.0;
+  //   switch (fontName) {
+  //     case "YasashisaGothicBoldV2-bold":
+  //       return 1.45;
+  //     case "07AkazukinPop":
+  //       return 1.38;
+  //     case "SoukouMincho":
+  //       return 1.00;
+  //     default:
+  //       print("no font");
+  //   }
+  //   return fontSize;
+  // }
 
   String colorsToColorCode(String color) {
     switch (color) {

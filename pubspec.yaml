@@ -50,11 +50,12 @@ dependencies:
   video_thumbnail: ^0.5.3
   audio_video_progress_bar: ^1.0.1
   flutter_tts: ^3.6.3
+  gallery_saver: ^2.3.2
 
   neon_video_encoder:
     git:
       url: https://github.com/ini-siro/neon_video_encoder.git
-      ref: refs/heads/feature/add_subtitle_texts_id
+      ref: refs/heads/fix/font_height
   neon_speech_to_text:
     git:
       url: https://github.com/maropook/neon_speech_to_text.git

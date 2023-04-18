@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,6 @@ class EditPage extends StatelessWidget {
 
       return videoController != null
           ? Stack(
-              alignment: Alignment.center,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -172,45 +172,97 @@ class EditPage extends StatelessWidget {
     return Consumer(builder: (context, ref, _) {
       final List<int> displaySubtitleIndexList =
           ref.watch(editPageProvider.select((s) => s.displaySubtitleIndexList));
-      return Column(
+
+      return Stack(
         children: [
           for (int i = 0; i < displaySubtitleIndexList.length; i++)
-            _buildSubtitleText(context, displaySubtitleIndexList[i]),
+            _buildSubtitleTextPosition(displaySubtitleIndexList[i])
         ],
       );
     });
   }
 
-  Widget _buildSubtitleText(BuildContext context, int index) {
+  double getSubtitleWidth(SubtitleText text, double videoPlayerWidth) {
+    final String word = text.word;
+    final double fontSize = videoPlayerWidth * text.fontSize;
+    if (!word.contains('\n')) {
+      return fontSize * text.word.length;
+    }
+    final words = word.split('\n');
+    final wordLengthList = <int>[];
+    for (String word in words) {
+      wordLengthList.add(word.length);
+    }
+    final wordLength = wordLengthList.reduce(max);
+    return wordLength * fontSize;
+  }
+
+  Widget _buildSubtitleTextPosition(int index) {
+    final SubtitleFontService subtitleFontService = SubtitleFontService();
     return Consumer(builder: (context, ref, _) {
+      final videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final double aspectRatio = ref.watch(editPageProvider
+              .select((s) => s.videoPlayerService?.aspectRatio)) ??
+          1.0;
       final List<SubtitleText> texts =
           ref.watch(editPageProvider.select((s) => s.subtitleTexts));
       final SubtitleText text = texts[index];
+
+      final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
+      final double subtitleWidth = getSubtitleWidth(text, videoPlayerWidth);
+
+      final fontPadding = videoPlayerWidth *
+          subtitleFontService.getFontHeight(text.fontName) *
+          text.fontSize;
+
+      // final bottomPadding = videoPlayerWidth * text.position.y + fontPadding;//TODO:こっちが正しいが、フォントによってpreviewがずれる
+      final bottomPadding = videoPlayerWidth * text.position.y;
+      final leftPadding = (videoPlayerWidth * text.position.x) +
+          (videoPlayerWidth - subtitleWidth) / 2;
+
+      return SizedBox(
+          height: videoPlayerWidth / aspectRatio,
+          width: videoPlayerWidth,
+          child: Padding(
+            padding: EdgeInsets.only(left: leftPadding, bottom: bottomPadding),
+            child: _buildSubtitleText(context, index),
+          ));
+    });
+  }
+
+  Widget _buildSubtitleText(BuildContext context, int index) {
+    return Consumer(builder: (context, ref, _) {
+      final double videoPlayerWidth =
+          ref.watch(editPageProvider.select((s) => s.videoPlayerWidth));
+      final List<SubtitleText> texts =
+          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+
       final Color fontColor = HexColor.fromHex(text.fontColorCode);
       final Color fontBorderColor = HexColor.fromHex(text.borderColorCode);
-      const double fontSize = 30;
+      final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
+
       return GestureDetector(
           onTap: () async {
             await ref.read(editPageProvider.notifier).showModalCallback();
             final args = await showSubtitleEditSheet(
-                context, SubtitleEditPageArgs(subtitleText: texts[index]));
+                context, SubtitleEditPageArgs(subtitleText: text));
             if (args?.isDelete == true) {
-              ref
-                  .read(editPageProvider.notifier)
-                  .deleteSubtitle(texts[index].id);
+              ref.read(editPageProvider.notifier).deleteSubtitle(text.id);
             }
-            //削除したいとき、
-            //TODO: ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//こんなのしなくても、select.sの参照を渡してるから勝手にupdateされる
+            //TODO: ref.read(editPageProvider.notifier).updateSubtitle(subtitleText);//select.sの参照を渡してるから勝手にupdateされる
             await ref.read(editPageProvider.notifier).closeModalCallback();
           },
           child: Stack(
+            alignment: Alignment.bottomLeft,
             children: [
               Text(
-                text.word,
                 textAlign: TextAlign.center,
+                text.word,
                 style: TextStyle(
-                    fontFamily: text.fontName,
-                    fontSize: fontSize,
+                    fontFamily: text.fontName.isEmpty ? null : text.fontName,
+                    fontSize: fontSize.toDouble(),
                     foreground: Paint()
                       ..color = text.word.isEmpty
                           ? fontBorderColor.withOpacity(0.5)
@@ -220,10 +272,10 @@ class EditPage extends StatelessWidget {
                 text.word.isEmpty ? '※空白のテキスト' : text.word,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: texts[index].fontName,
-                  fontSize: fontSize,
+                  fontFamily: text.fontName.isEmpty ? null : text.fontName,
+                  fontSize: fontSize.toDouble(),
                   foreground: Paint()
-                    ..strokeWidth = fontSize / 20
+                    ..strokeWidth = fontSize * 0.05
                     ..color = text.word.isEmpty
                         ? fontBorderColor.withOpacity(0.5)
                         : fontBorderColor

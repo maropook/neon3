@@ -38,7 +38,7 @@ class RecordingPage extends ConsumerWidget {
         Consumer(builder: (context, ref, _) {
           final activeFrames = ref
               .read(recordingPageProvider)
-              .activeFrames; //TODO:videoのときactiveFramesどうなるんだ？？？
+              .activeFrames; //TODO:videoのときactiveFramesが作られない
           final avatar = ref
               .watch(recordingPageProvider)
               .selectedAvatar; //TODO:ref.readだとavatarはnullになる
@@ -53,11 +53,16 @@ class RecordingPage extends ConsumerWidget {
                 ref
                     .read(recordingPageProvider.notifier)
                     .setImportSheetArg(importSheetArg);
-                print(
-                    '$importSheetArg+avatar:$avatar+recordingType+$recordingType');
+
                 if (importSheetArg == null ||
                     avatar == null ||
-                    recordingType != RecordingType.video) return;
+                    recordingType == RecordingType.camera) return;
+                if (recordingType == RecordingType.image) {
+                  ref
+                      .read(recordingPageProvider.notifier)
+                      .getRecordingBackgroundWidth();
+                  return;
+                }
 
                 final editPageArgs = EditPageArgs(
                     audioFilePath: importSheetArg.importedFilePath,
@@ -109,7 +114,7 @@ class RecordingPage extends ConsumerWidget {
         key: recordingBackgroundKey,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-              minWidth: 1300,
+              // minWidth: 1300,
               maxHeight: MediaQuery.of(context).size.longestSide - 200),
           child: recordingType == RecordingType.camera
               ? cameraService!.buildCameraPreview()

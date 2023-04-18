@@ -80,8 +80,8 @@ class SpeechToTextService {
             id: activeFrames[index].id,
             startTime: activeFrames[index].startTime,
             endTime: activeFrames[index].endTime,
-            word: 'ハロー')); //TODO:!!いまは人工音声のため
-        // word: speechTextsList[index])); //TODO:!!いまは人工音声のため
+            word: 'テスト')); //TODO:仮の値
+        // word: speechTextsList[index]));
         // Logger.log(
         //     "speechToTexts_complete_call_back", speechTextsList[index]);
         completeCallBack(texts);
@@ -89,22 +89,7 @@ class SpeechToTextService {
     }
 
     try {
-      //TODO:テスト値
-      final String voiceFilePath1 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile1,
-              outputFilePath: "audio1.mp3"))
-          .path;
-      final String voiceFilePath2 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile2,
-              outputFilePath: "audio2.mp3"))
-          .path;
-      final String voiceFilePath3 = (await fileService.saveFile(
-              inputFilePath: Assets.audio.voiceFile3,
-              outputFilePath: "audio3.mp3"))
-          .path;
-
       await _neonSpeechToTextPlugin.speechToTexts(
-        // inputFilePathList: [voiceFilePath1, voiceFilePath2, voiceFilePath3],//TODO:テスト値
         inputFilePathList: inputFilePathList,
         completeCallBack: setSubtitleTexts,
         addListenersFunction: (LinkedHashMap map) async {},

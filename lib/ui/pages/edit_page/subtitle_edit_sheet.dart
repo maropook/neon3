@@ -114,7 +114,6 @@ class _SubtitleEditSheet extends StatelessWidget {
     });
   }
 
-  // TODO: text_fieldをどうするか
   Widget _buildSubtitleTextField() {
     return Consumer(builder: (context, ref, _) {
       final subtitleTextEditController = ref
@@ -227,7 +226,7 @@ class _SubtitleEditSheet extends StatelessWidget {
           'あ夏',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontFamily: fontName,
+              fontFamily: fontName.isEmpty ? null : fontName,
               fontSize: 15,
               color: font == fontName
                   ? Colors.white
