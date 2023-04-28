@@ -13,6 +13,12 @@ class FontFamily {
   /// Font family: AkazukinPop
   static const String akazukinPop = 'AkazukinPop';
 
+  /// Font family: Corporate-Logo-Medium-ver3
+  static const String corporateLogoMediumVer3 = 'Corporate-Logo-Medium-ver3';
+
+  /// Font family: Koruri-Regular
+  static const String koruriRegular = 'Koruri-Regular';
+
   /// Font family: SoukouMincho
   static const String soukouMincho = 'SoukouMincho';
 
