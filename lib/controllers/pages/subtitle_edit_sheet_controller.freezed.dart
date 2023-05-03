@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SubtitleEditSheetState {
   SubtitleText? get subtitleText => throw _privateConstructorUsedError;
+  Color get customFontColor => throw _privateConstructorUsedError;
+  Color get customBorderColor => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SubtitleEditSheetStateCopyWith<SubtitleEditSheetState> get copyWith =>
@@ -29,7 +31,10 @@ abstract class $SubtitleEditSheetStateCopyWith<$Res> {
           $Res Function(SubtitleEditSheetState) then) =
       _$SubtitleEditSheetStateCopyWithImpl<$Res, SubtitleEditSheetState>;
   @useResult
-  $Res call({SubtitleText? subtitleText});
+  $Res call(
+      {SubtitleText? subtitleText,
+      Color customFontColor,
+      Color customBorderColor});
 }
 
 /// @nodoc
@@ -47,12 +52,22 @@ class _$SubtitleEditSheetStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? subtitleText = freezed,
+    Object? customFontColor = null,
+    Object? customBorderColor = null,
   }) {
     return _then(_value.copyWith(
       subtitleText: freezed == subtitleText
           ? _value.subtitleText
           : subtitleText // ignore: cast_nullable_to_non_nullable
               as SubtitleText?,
+      customFontColor: null == customFontColor
+          ? _value.customFontColor
+          : customFontColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      customBorderColor: null == customBorderColor
+          ? _value.customBorderColor
+          : customBorderColor // ignore: cast_nullable_to_non_nullable
+              as Color,
     ) as $Val);
   }
 }
@@ -65,7 +80,10 @@ abstract class _$$_SubtitleEditSheetStateCopyWith<$Res>
       __$$_SubtitleEditSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({SubtitleText? subtitleText});
+  $Res call(
+      {SubtitleText? subtitleText,
+      Color customFontColor,
+      Color customBorderColor});
 }
 
 /// @nodoc
@@ -81,12 +99,22 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? subtitleText = freezed,
+    Object? customFontColor = null,
+    Object? customBorderColor = null,
   }) {
     return _then(_$_SubtitleEditSheetState(
       subtitleText: freezed == subtitleText
           ? _value.subtitleText
           : subtitleText // ignore: cast_nullable_to_non_nullable
               as SubtitleText?,
+      customFontColor: null == customFontColor
+          ? _value.customFontColor
+          : customFontColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      customBorderColor: null == customBorderColor
+          ? _value.customBorderColor
+          : customBorderColor // ignore: cast_nullable_to_non_nullable
+              as Color,
     ));
   }
 }
@@ -94,15 +122,24 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
-  const _$_SubtitleEditSheetState({this.subtitleText = null});
+  const _$_SubtitleEditSheetState(
+      {this.subtitleText = null,
+      this.customFontColor = Colors.white,
+      this.customBorderColor = Colors.white});
 
   @override
   @JsonKey()
   final SubtitleText? subtitleText;
+  @override
+  @JsonKey()
+  final Color customFontColor;
+  @override
+  @JsonKey()
+  final Color customBorderColor;
 
   @override
   String toString() {
-    return 'SubtitleEditSheetState(subtitleText: $subtitleText)';
+    return 'SubtitleEditSheetState(subtitleText: $subtitleText, customFontColor: $customFontColor, customBorderColor: $customBorderColor)';
   }
 
   @override
@@ -111,11 +148,16 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
         (other.runtimeType == runtimeType &&
             other is _$_SubtitleEditSheetState &&
             (identical(other.subtitleText, subtitleText) ||
-                other.subtitleText == subtitleText));
+                other.subtitleText == subtitleText) &&
+            (identical(other.customFontColor, customFontColor) ||
+                other.customFontColor == customFontColor) &&
+            (identical(other.customBorderColor, customBorderColor) ||
+                other.customBorderColor == customBorderColor));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, subtitleText);
+  int get hashCode => Object.hash(
+      runtimeType, subtitleText, customFontColor, customBorderColor);
 
   @JsonKey(ignore: true)
   @override
@@ -126,11 +168,17 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
 }
 
 abstract class _SubtitleEditSheetState implements SubtitleEditSheetState {
-  const factory _SubtitleEditSheetState({final SubtitleText? subtitleText}) =
-      _$_SubtitleEditSheetState;
+  const factory _SubtitleEditSheetState(
+      {final SubtitleText? subtitleText,
+      final Color customFontColor,
+      final Color customBorderColor}) = _$_SubtitleEditSheetState;
 
   @override
   SubtitleText? get subtitleText;
+  @override
+  Color get customFontColor;
+  @override
+  Color get customBorderColor;
   @override
   @JsonKey(ignore: true)
   _$$_SubtitleEditSheetStateCopyWith<_$_SubtitleEditSheetState> get copyWith =>

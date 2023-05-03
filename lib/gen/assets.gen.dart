@@ -59,6 +59,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/change_avatar_icon.svg
   String get changeAvatarIcon => 'assets/images/change_avatar_icon.svg';
 
+  /// File path: assets/images/color_wheel.svg
+  String get colorWheel => 'assets/images/color_wheel.svg';
+
   /// File path: assets/images/encoding.png
   AssetGenImage get encoding =>
       const AssetGenImage('assets/images/encoding.png');
@@ -105,6 +108,7 @@ class $AssetsImagesGen {
         avatarStop,
         backgroundSea,
         changeAvatarIcon,
+        colorWheel,
         encoding,
         face,
         faceSmile,

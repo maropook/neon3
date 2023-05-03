@@ -115,13 +115,14 @@ class EditPageController extends StateNotifier<EditPageState> {
       _videoPlayerService =
           VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
-        videoCompleteCallback();
         setDisplaySubtitleTextIndex();
+
         state = state.copyWith(
             // isComplete: isVideoComplete(_videoPlayerService!),
             isPlaying: isPlaying,
             videoPosition: position,
             isAvatarActive: isAvatarActive(currentSeconds));
+        videoCompleteCallback();
       });
       if (recordingType != RecordingType.video) {
         _audioPlayerService =
@@ -141,11 +142,11 @@ class EditPageController extends StateNotifier<EditPageState> {
         state = state.copyWith(thumbnailFileDataList: [...event]);
       });
 
-      await play();
-
-      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+      //playの後だと呼び出されない時があるので
+      Future.delayed(const Duration(milliseconds: 700)).then((_) {
         getVideoPlayerWidth(editVideoPlayerKey);
       });
+      await play();
     } catch (e) {
       Logger.logError('edit_controller:init', e.toString());
     }
@@ -209,8 +210,10 @@ class EditPageController extends StateNotifier<EditPageState> {
   //avatar
   void getVideoPlayerWidth(GlobalKey globalKey) {
     try {
-      state = state.copyWith(
-          videoPlayerWidth: globalKey.currentContext?.size?.width ?? 1);
+      final width = globalKey.currentContext?.size?.width;
+      Logger.log('get_video_player_width', width.toString()); //ログがないと表示されない時がある
+
+      state = state.copyWith(videoPlayerWidth: width ?? 1);
     } catch (e) {
       Logger.logError('get_video_player_width', e.toString());
     }

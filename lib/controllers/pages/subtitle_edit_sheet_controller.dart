@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 part 'subtitle_edit_sheet_controller.freezed.dart';
@@ -11,6 +12,8 @@ enum EditorDragType { left, center, right }
 class SubtitleEditSheetState with _$SubtitleEditSheetState {
   const factory SubtitleEditSheetState({
     @Default(null) SubtitleText? subtitleText,
+    @Default(Colors.white) Color customFontColor,
+    @Default(Colors.white) Color customBorderColor,
   }) = _SubtitleEditSheetState;
 }
 
@@ -68,5 +71,36 @@ class SubtitleEditSheetController
       subtitleText?.borderColorCode = fontColorCode;
     }
     state = state.copyWith(subtitleText: subtitleText);
+  }
+
+  void onChangeCustomFonColor(Color fontColor, bool isBorder) {
+    if (!isBorder) {
+      state = state.copyWith(customFontColor: fontColor);
+    } else {
+      state = state.copyWith(customBorderColor: fontColor);
+    }
+    onChangeFonColor(fontColor.toHexTriplet(), isBorder);
+  }
+
+  String colorsToColorCode(String color) {
+    switch (color) {
+      case 'white':
+        return Colors.white.toHexTriplet();
+      case 'blue':
+        return Colors.blue.toHexTriplet();
+      case 'black':
+        return Colors.black.toHexTriplet();
+      case 'red':
+        return Colors.red.toHexTriplet();
+      case 'green':
+        return Colors.green.toHexTriplet();
+      case 'yellow':
+        return Colors.yellow.toHexTriplet();
+      case 'customFontColor':
+        return state.customFontColor.toHexTriplet();
+      case 'customBorderColor':
+        return state.customBorderColor.toHexTriplet();
+    }
+    return '#000000ff';
   }
 }

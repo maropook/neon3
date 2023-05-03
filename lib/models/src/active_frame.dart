@@ -25,18 +25,18 @@ class ActiveFrame {
 
 final sampleActiveFrames = [
   ActiveFrame(
-    startTime: 0.2,
-    endTime: 1.0,
+    startTime: 0.7,
+    endTime: 1.4,
     id: const Uuid().v4(),
   ),
-  ActiveFrame(
-    startTime: 1.2,
-    endTime: 1.6,
-    id: const Uuid().v4(),
-  ),
-  ActiveFrame(
-    startTime: 2.0,
-    endTime: 2.2,
-    id: const Uuid().v4(),
-  ),
+  // ActiveFrame(
+  //   startTime: 1.2,
+  //   endTime: 1.6,
+  //   id: const Uuid().v4(),
+  // ),
+  // ActiveFrame(
+  //   startTime: 2.0,
+  //   endTime: 2.2,
+  //   id: const Uuid().v4(),
+  // ),
 ];

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/subtitle_edit_sheet_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
+import 'package:neon3/ui/pages/edit_page/subtitle_custom_color_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -171,7 +174,7 @@ class _SubtitleEditSheet extends StatelessWidget {
         ),
         for (int i = 0; i < SubtitlesFontColor.values.length; i++)
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: _buildSubtitleWordColor(i, isBorder),
           ),
       ],
@@ -180,21 +183,39 @@ class _SubtitleEditSheet extends StatelessWidget {
 
   Widget _buildSubtitleWordColor(int index, bool isBorder) {
     return Consumer(builder: (context, ref, _) {
-      final subtitleFontService = SubtitleFontService();
-      final colorCode = subtitleFontService
+      final bool isCustom =
+          SubtitlesFontColor.values[index].name.contains('custom');
+      String colorCode = ref
+          .read(subtitleEditSheetProvider.notifier)
           .colorsToColorCode(SubtitlesFontColor.values[index].name);
-
+      if (isCustom) {
+        final customColor = ref.watch(subtitleEditSheetProvider
+            .select((s) => isBorder ? s.customBorderColor : s.customFontColor));
+        colorCode = customColor.toHexTriplet();
+      }
       final fontColorCode = ref.watch(subtitleEditSheetProvider
           .select((s) => s.subtitleText?.fontColorCode));
       final borderColorCode = ref.watch(subtitleEditSheetProvider
           .select((s) => s.subtitleText?.borderColorCode));
       final isSameColor =
           isBorder ? colorCode == borderColorCode : colorCode == fontColorCode;
+
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
+          if (!isCustom) {
+            ref
+                .read(subtitleEditSheetProvider.notifier)
+                .onChangeFonColor(colorCode, isBorder);
+            return;
+          }
+
+          final previousColor = ref.read(subtitleEditSheetProvider.select(
+              (s) => isBorder ? s.customBorderColor : s.customFontColor));
+          final newColor = await showColorPicker(context, previousColor);
+          if (newColor == null) return;
           ref
               .read(subtitleEditSheetProvider.notifier)
-              .onChangeFonColor(colorCode, isBorder);
+              .onChangeCustomFonColor(newColor, isBorder);
         },
         child: Container(
           width: isSameColor ? 35 : 30,
@@ -205,6 +226,13 @@ class _SubtitleEditSheet extends StatelessWidget {
               color: HexColor.fromHex(colorCode)
               // border: fontColorBorders[i],
               ),
+          child: isCustom
+              ? SvgPicture.asset(
+                  Assets.images.colorWheel,
+                  width: isSameColor ? 35 : 30,
+                  height: isSameColor ? 35 : 30,
+                )
+              : null,
         ),
       );
     });

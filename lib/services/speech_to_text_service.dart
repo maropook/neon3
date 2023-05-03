@@ -80,8 +80,8 @@ class SpeechToTextService {
             id: activeFrames[index].id,
             startTime: activeFrames[index].startTime,
             endTime: activeFrames[index].endTime,
-            // word: 'テスト')); //TODO:仮の値
-            word: speechTextsList[index]));
+            word: 'テスト')); //TODO:仮の値
+        // word: speechTextsList[index]));
         // Logger.log(
         //     "speechToTexts_complete_call_back", speechTextsList[index]);
         completeCallBack(texts);
