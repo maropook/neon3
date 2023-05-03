@@ -13,9 +13,6 @@ class Font {
 }
 
 class SubtitleFontService {
-  final Color _customBorderColor = Colors.white;
-  final Color _customFontColor = Colors.white;
-
   final List<Font> fontList = <Font>[
     Font(
       fileName: 'YasashisaGothicBold.otf',
@@ -75,28 +72,6 @@ class SubtitleFontService {
   //   }
   //   return fontSize;
   // }
-
-  String colorsToColorCode(String color) {
-    switch (color) {
-      case 'white':
-        return Colors.white.toHexTriplet();
-      case 'blue':
-        return Colors.blue.toHexTriplet();
-      case 'black':
-        return Colors.black.toHexTriplet();
-      case 'red':
-        return Colors.red.toHexTriplet();
-      case 'green':
-        return Colors.green.toHexTriplet();
-      case 'yellow':
-        return Colors.yellow.toHexTriplet();
-      case 'customFontColor':
-        return _customFontColor.toHexTriplet();
-      case 'customBorderColor':
-        return _customBorderColor.toHexTriplet();
-    }
-    return '#000000ff';
-  }
 }
 
 extension HexColor on Color {
@@ -120,7 +95,7 @@ enum SubtitlesFontColor {
   blue,
   green,
   yellow,
-  // customFontColor
+  customFontColor
 }
 
 enum SubtitlesBorderColor {
@@ -130,5 +105,5 @@ enum SubtitlesBorderColor {
   blue,
   green,
   yellow,
-  // customBorderColor
+  customBorderColor
 }
