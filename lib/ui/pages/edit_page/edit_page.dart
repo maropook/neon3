@@ -12,7 +12,6 @@ import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
-import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
@@ -286,47 +285,6 @@ class EditPage extends StatelessWidget {
               ),
             ],
           ));
-    });
-  }
-
-  Widget _buildSubtitleTextsTimeline() {
-    return Consumer(builder: (context, ref, _) {
-      final List<SubtitleText> texts =
-          ref.watch(editPageProvider.select((s) => s.subtitleTexts));
-      final Duration videoDuration = ref.watch(editPageProvider
-          .select((s) => s.videoPlayerService?.duration ?? Duration.zero));
-      final timelineWidth =
-          ref.watch(editPageProvider.notifier.select((s) => s.timelineWidth));
-      final thumbnailHeight =
-          ref.watch(editPageProvider.notifier.select((s) => s.thumbnailHeight));
-
-      ref.watch(editPageProvider.select((s) => s.thumbnailService));
-
-      return Container(
-        color: Colors.grey[150],
-        width: timelineWidth,
-        child: Column(
-          children: [
-            for (SubtitleText text in texts)
-              CustomPaint(
-                foregroundPainter: EditSubtitleTextsPainter(
-                  text,
-                  videoDuration,
-                  timelineWidth,
-                  thumbnailHeight,
-                ),
-                child: Container(
-                  color: const Color.fromARGB(255, 50, 50, 50),
-                  height: thumbnailHeight,
-                  width: timelineWidth + 6,
-                ),
-              ),
-            for (int i = 0; i < texts.length; i++)
-              Text("${texts[i].startTime}:${texts[i].word}",
-                  style: const TextStyle(color: Colors.black)),
-          ],
-        ),
-      );
     });
   }
 

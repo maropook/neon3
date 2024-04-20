@@ -72,6 +72,10 @@ class RecordingPage extends ConsumerWidget {
                     // activeFrames: activeFrames,
                     avatar: avatar,
                     recordingType: recordingType!);
+                if (recordingType == RecordingType.video) {
+                  context.go('/trim', extra: editPageArgs);
+                  return;
+                }
                 context.go('/edit', extra: editPageArgs);
               },
               icon: const Icon(Icons.download_rounded));
@@ -235,6 +239,7 @@ class RecordingPage extends ConsumerWidget {
                   // activeFrames: activeFrames,
                   avatar: avatar,
                   recordingType: recordingType);
+
               context.go('/edit', extra: editPageArgs);
             }
             return;

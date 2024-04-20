@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -63,9 +64,15 @@ class ImportSheetController extends StateNotifier<ImportSheetState> {
 
   Future<String> getPickedVideoFilePath() async {
     final pickedImageFile = await picker.pickVideo(source: ImageSource.gallery);
+
     if (pickedImageFile == null) return '';
     final String pickedImageFilePath = pickedImageFile.path;
 
+    final videoInfo = FlutterVideoInfo();
+    var info = await videoInfo.getVideoInfo(pickedImageFilePath);
+    if (info!.duration! >= 2 * 1000) {
+      print('動画の時間が60秒以上だったため、トリミングされました');
+    }
     return pickedImageFilePath;
   }
 }

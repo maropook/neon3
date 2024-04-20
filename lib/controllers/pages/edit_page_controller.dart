@@ -89,8 +89,8 @@ class EditPageController extends StateNotifier<EditPageState> {
   Duration get position => _videoPlayerService?.position ?? Duration.zero;
   double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
-  int get videoDurationInMilliseconds =>
-      _videoPlayerService?.videoDurationInMilliseconds ?? 0;
+  double get videoDurationInMilliseconds =>
+      _videoPlayerService?.videoDurationInMilliseconds ?? 0.0;
   double get videoDurationInSeconds => videoDurationInMilliseconds * 0.001;
 
 //thumbnail_service
