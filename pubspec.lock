@@ -901,11 +901,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "refs/heads/feature/trim_video"
-      resolved-ref: b7fb2ac67d36f7891778798250a96b780b250f9a
-      url: "https://github.com/ini-siro/neon_video_encoder.git"
+      ref: "refs/heads/feature/2024_4_21_build"
+      resolved-ref: "8e4b9e3d9ec2de3a256d58e8564ca97cc39467f9"
+      url: "https://github.com/maropook/neon_video_encoder.git"
     source: git
-    version: "0.0.11"
+    version: "0.0.12"
   octo_image:
     dependency: transitive
     description:
