@@ -77,7 +77,7 @@ class SubtitleTimingEditSheetController
   Duration get position => _videoPlayerService?.position ?? Duration.zero;
   double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
-  int get videoDurationInMilliseconds =>
+  double get videoDurationInMilliseconds =>
       _videoPlayerService?.videoDurationInMilliseconds ?? 0;
 
 //thumbnail_service

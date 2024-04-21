@@ -13,6 +13,7 @@ import 'package:neon3/ui/pages/encoding_page/encode_page.dart';
 import 'package:neon3/ui/pages/import_page/import_page.dart';
 import 'package:neon3/ui/pages/login_page/login_page.dart';
 import 'package:neon3/ui/pages/recording_page/recording_page.dart';
+import 'package:neon3/ui/pages/trim_page/trim_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -62,6 +63,12 @@ final routerProvider = Provider((ref) {
         path: '/edit',
         builder: (BuildContext context, GoRouterState state) {
           return EditPage(editPageArgs: state.extra as EditPageArgs);
+        },
+      ),
+      GoRoute(
+        path: '/trim',
+        builder: (BuildContext context, GoRouterState state) {
+          return TrimPage(state.extra as EditPageArgs);
         },
       ),
       GoRoute(

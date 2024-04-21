@@ -7,7 +7,7 @@ class ThumbnailService {
       {required double aspectRatio,
       required double shortestSide,
       required String videoFilePath,
-      required int videoDurationMs})
+      required double videoDurationMs})
       : _aspectRatio = aspectRatio,
         _shortestSide = shortestSide,
         _videoFilePath = videoFilePath,
@@ -16,7 +16,7 @@ class ThumbnailService {
   final double _aspectRatio;
   final double _shortestSide;
   final String _videoFilePath;
-  final int _videoDurationMs;
+  final double _videoDurationMs;
 
   double get thumbnailHeight => _shortestSide / 7;
   double get thumbnailWidth => thumbnailHeight * _aspectRatio;

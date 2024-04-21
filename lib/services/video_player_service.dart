@@ -16,7 +16,7 @@ class VideoPlayerService {
   Duration get duration =>
       _videoPlayerController?.value.duration ?? Duration.zero;
   double get aspectRatio => _videoPlayerController?.value.aspectRatio ?? 1;
-  int get videoDurationInMilliseconds => duration.inMilliseconds;
+  double get videoDurationInMilliseconds => duration.inMicroseconds * 0.001;
   double get currentSeconds =>
       0.001 * (_videoPlayerController?.value.position.inMilliseconds ?? 0);
 
