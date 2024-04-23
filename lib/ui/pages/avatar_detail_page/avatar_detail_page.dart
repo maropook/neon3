@@ -22,7 +22,6 @@ class AvatarDetailPage extends ConsumerWidget {
               (ref) => AvatarDetailPageController(avatar: _avatar))
         ],
         child: Scaffold(
-          backgroundColor: Colors.black,
           appBar: AppBar(
             title: const Text('アバター詳細'),
             leading: IconButton(
