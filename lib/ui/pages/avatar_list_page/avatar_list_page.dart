@@ -19,7 +19,6 @@ class AvatarListPage extends ConsumerWidget {
             defaultAvatar;
 
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('アバター一覧'),
         leading: IconButton(

@@ -26,7 +26,9 @@ class App extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'neon',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.black,
+      ),
       routerConfig: router,
       builder: (context, child) {
         return FlutterEasyLoading(child: child);

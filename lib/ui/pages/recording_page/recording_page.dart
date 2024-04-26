@@ -24,7 +24,6 @@ class RecordingPage extends ConsumerWidget {
         })
       ],
       child: Scaffold(
-        backgroundColor: Colors.black,
         appBar: _buildAppBar(context),
         body: _buildBody(),
       ),

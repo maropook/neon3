@@ -41,10 +41,7 @@ class EditPage extends StatelessWidget {
           return EditPageController(editPageProviderArg: editPageProviderArg);
         })
       ],
-      child: Scaffold(
-          appBar: _buildAppBar(context),
-          backgroundColor: Colors.white,
-          body: _buildBody()),
+      child: Scaffold(appBar: _buildAppBar(context), body: _buildBody()),
     );
   }
 
