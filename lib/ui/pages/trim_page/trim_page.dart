@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon_video_encoder/neon_video_encoder.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,6 +68,8 @@ class TrimPage extends StatelessWidget {
           ref.watch(trimPageProvider.select((s) => s.videoPlayerService));
       final trimPageController = ref.read(trimPageProvider.notifier);
       final isPlaying = ref.watch(trimPageProvider.select((s) => s.isPlaying));
+      final Size size = MediaQuery.of(context).size;
+      double shortestSide = size.shortestSide;
 
       return Center(
         child: Column(
@@ -75,7 +78,7 @@ class TrimPage extends StatelessWidget {
             children: [
               videoPlayerService != null
                   ? SizedBox(
-                      width: 187.5,
+                      width: shortestSide * 0.8,
                       child: GestureDetector(
                         onTap: () {
                           isPlaying
@@ -86,7 +89,8 @@ class TrimPage extends StatelessWidget {
                       ),
                     )
                   : const CircularProgressIndicator(),
-              _buildTimeline()
+              _buildTimeline(),
+              const SizedBox(),
             ]),
       );
     });
@@ -106,7 +110,7 @@ class TrimPage extends StatelessWidget {
               width: 3,
               height: thumbnailService.thumbnailHeight,
               child: Container(
-                color: Colors.red,
+                color: Styles.primaryColor,
               ),
             )
           : const CircularProgressIndicator();
@@ -148,7 +152,7 @@ class TrimPage extends StatelessWidget {
                 children: [
                   _buildThumbnail(),
                   _buildSeekBar(),
-                  _buildTestSeekBar(),
+                  // _buildTestSeekBar(),
                   _buildSubtitleTextsTimeline(),
                 ],
               ),

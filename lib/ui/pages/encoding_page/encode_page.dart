@@ -17,6 +17,7 @@ class EncodePage extends ConsumerWidget {
       overrides: [
         encodePageProvider.overrideWith((ref) {
           final encodePageProviderArgs = EncodePageProviderArg(
+            recordingType: encodePageArgs.recordingType,
             videoFilePath: encodePageArgs.videoFilePath,
             audioFilePath: encodePageArgs.audioFilePath,
             avatar: encodePageArgs.avatar,
