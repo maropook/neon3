@@ -12,7 +12,7 @@ part of 'complete_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CompletePageState {
@@ -64,22 +64,22 @@ class _$CompletePageStateCopyWithImpl<$Res, $Val extends CompletePageState>
 }
 
 /// @nodoc
-abstract class _$$_CompletePageStateCopyWith<$Res>
+abstract class _$$CompletePageStateImplCopyWith<$Res>
     implements $CompletePageStateCopyWith<$Res> {
-  factory _$$_CompletePageStateCopyWith(_$_CompletePageState value,
-          $Res Function(_$_CompletePageState) then) =
-      __$$_CompletePageStateCopyWithImpl<$Res>;
+  factory _$$CompletePageStateImplCopyWith(_$CompletePageStateImpl value,
+          $Res Function(_$CompletePageStateImpl) then) =
+      __$$CompletePageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool isPlaying, VideoPlayerService? videoPlayerService});
 }
 
 /// @nodoc
-class __$$_CompletePageStateCopyWithImpl<$Res>
-    extends _$CompletePageStateCopyWithImpl<$Res, _$_CompletePageState>
-    implements _$$_CompletePageStateCopyWith<$Res> {
-  __$$_CompletePageStateCopyWithImpl(
-      _$_CompletePageState _value, $Res Function(_$_CompletePageState) _then)
+class __$$CompletePageStateImplCopyWithImpl<$Res>
+    extends _$CompletePageStateCopyWithImpl<$Res, _$CompletePageStateImpl>
+    implements _$$CompletePageStateImplCopyWith<$Res> {
+  __$$CompletePageStateImplCopyWithImpl(_$CompletePageStateImpl _value,
+      $Res Function(_$CompletePageStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -88,7 +88,7 @@ class __$$_CompletePageStateCopyWithImpl<$Res>
     Object? isPlaying = null,
     Object? videoPlayerService = freezed,
   }) {
-    return _then(_$_CompletePageState(
+    return _then(_$CompletePageStateImpl(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -103,8 +103,8 @@ class __$$_CompletePageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CompletePageState implements _CompletePageState {
-  const _$_CompletePageState(
+class _$CompletePageStateImpl implements _CompletePageState {
+  const _$CompletePageStateImpl(
       {this.isPlaying = false, this.videoPlayerService = null});
 
   @override
@@ -120,10 +120,10 @@ class _$_CompletePageState implements _CompletePageState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CompletePageState &&
+            other is _$CompletePageStateImpl &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
@@ -136,15 +136,15 @@ class _$_CompletePageState implements _CompletePageState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CompletePageStateCopyWith<_$_CompletePageState> get copyWith =>
-      __$$_CompletePageStateCopyWithImpl<_$_CompletePageState>(
+  _$$CompletePageStateImplCopyWith<_$CompletePageStateImpl> get copyWith =>
+      __$$CompletePageStateImplCopyWithImpl<_$CompletePageStateImpl>(
           this, _$identity);
 }
 
 abstract class _CompletePageState implements CompletePageState {
   const factory _CompletePageState(
       {final bool isPlaying,
-      final VideoPlayerService? videoPlayerService}) = _$_CompletePageState;
+      final VideoPlayerService? videoPlayerService}) = _$CompletePageStateImpl;
 
   @override
   bool get isPlaying;
@@ -152,6 +152,6 @@ abstract class _CompletePageState implements CompletePageState {
   VideoPlayerService? get videoPlayerService;
   @override
   @JsonKey(ignore: true)
-  _$$_CompletePageStateCopyWith<_$_CompletePageState> get copyWith =>
+  _$$CompletePageStateImplCopyWith<_$CompletePageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

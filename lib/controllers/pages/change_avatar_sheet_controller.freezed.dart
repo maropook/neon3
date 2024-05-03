@@ -12,7 +12,7 @@ part of 'change_avatar_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ChangeAvatarSheetState {
@@ -78,11 +78,12 @@ class _$ChangeAvatarSheetStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ChangeAvatarSheetStateCopyWith<$Res>
+abstract class _$$ChangeAvatarSheetStateImplCopyWith<$Res>
     implements $ChangeAvatarSheetStateCopyWith<$Res> {
-  factory _$$_ChangeAvatarSheetStateCopyWith(_$_ChangeAvatarSheetState value,
-          $Res Function(_$_ChangeAvatarSheetState) then) =
-      __$$_ChangeAvatarSheetStateCopyWithImpl<$Res>;
+  factory _$$ChangeAvatarSheetStateImplCopyWith(
+          _$ChangeAvatarSheetStateImpl value,
+          $Res Function(_$ChangeAvatarSheetStateImpl) then) =
+      __$$ChangeAvatarSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Avatar> avatarList, Avatar? selectedAvatar});
@@ -92,12 +93,13 @@ abstract class _$$_ChangeAvatarSheetStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ChangeAvatarSheetStateCopyWithImpl<$Res>
+class __$$ChangeAvatarSheetStateImplCopyWithImpl<$Res>
     extends _$ChangeAvatarSheetStateCopyWithImpl<$Res,
-        _$_ChangeAvatarSheetState>
-    implements _$$_ChangeAvatarSheetStateCopyWith<$Res> {
-  __$$_ChangeAvatarSheetStateCopyWithImpl(_$_ChangeAvatarSheetState _value,
-      $Res Function(_$_ChangeAvatarSheetState) _then)
+        _$ChangeAvatarSheetStateImpl>
+    implements _$$ChangeAvatarSheetStateImplCopyWith<$Res> {
+  __$$ChangeAvatarSheetStateImplCopyWithImpl(
+      _$ChangeAvatarSheetStateImpl _value,
+      $Res Function(_$ChangeAvatarSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -106,7 +108,7 @@ class __$$_ChangeAvatarSheetStateCopyWithImpl<$Res>
     Object? avatarList = null,
     Object? selectedAvatar = freezed,
   }) {
-    return _then(_$_ChangeAvatarSheetState(
+    return _then(_$ChangeAvatarSheetStateImpl(
       avatarList: null == avatarList
           ? _value._avatarList
           : avatarList // ignore: cast_nullable_to_non_nullable
@@ -121,8 +123,8 @@ class __$$_ChangeAvatarSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ChangeAvatarSheetState implements _ChangeAvatarSheetState {
-  const _$_ChangeAvatarSheetState(
+class _$ChangeAvatarSheetStateImpl implements _ChangeAvatarSheetState {
+  const _$ChangeAvatarSheetStateImpl(
       {final List<Avatar> avatarList = const [], this.selectedAvatar = null})
       : _avatarList = avatarList;
 
@@ -145,10 +147,10 @@ class _$_ChangeAvatarSheetState implements _ChangeAvatarSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ChangeAvatarSheetState &&
+            other is _$ChangeAvatarSheetStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._avatarList, _avatarList) &&
             (identical(other.selectedAvatar, selectedAvatar) ||
@@ -162,15 +164,15 @@ class _$_ChangeAvatarSheetState implements _ChangeAvatarSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ChangeAvatarSheetStateCopyWith<_$_ChangeAvatarSheetState> get copyWith =>
-      __$$_ChangeAvatarSheetStateCopyWithImpl<_$_ChangeAvatarSheetState>(
-          this, _$identity);
+  _$$ChangeAvatarSheetStateImplCopyWith<_$ChangeAvatarSheetStateImpl>
+      get copyWith => __$$ChangeAvatarSheetStateImplCopyWithImpl<
+          _$ChangeAvatarSheetStateImpl>(this, _$identity);
 }
 
 abstract class _ChangeAvatarSheetState implements ChangeAvatarSheetState {
   const factory _ChangeAvatarSheetState(
       {final List<Avatar> avatarList,
-      final Avatar? selectedAvatar}) = _$_ChangeAvatarSheetState;
+      final Avatar? selectedAvatar}) = _$ChangeAvatarSheetStateImpl;
 
   @override
   List<Avatar> get avatarList;
@@ -178,6 +180,6 @@ abstract class _ChangeAvatarSheetState implements ChangeAvatarSheetState {
   Avatar? get selectedAvatar;
   @override
   @JsonKey(ignore: true)
-  _$$_ChangeAvatarSheetStateCopyWith<_$_ChangeAvatarSheetState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ChangeAvatarSheetStateImplCopyWith<_$ChangeAvatarSheetStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,7 +12,7 @@ part of 'avatar_edit_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AvatarEditSheetState {
@@ -64,22 +64,22 @@ class _$AvatarEditSheetStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_AvatarEditSheetStateCopyWith<$Res>
+abstract class _$$AvatarEditSheetStateImplCopyWith<$Res>
     implements $AvatarEditSheetStateCopyWith<$Res> {
-  factory _$$_AvatarEditSheetStateCopyWith(_$_AvatarEditSheetState value,
-          $Res Function(_$_AvatarEditSheetState) then) =
-      __$$_AvatarEditSheetStateCopyWithImpl<$Res>;
+  factory _$$AvatarEditSheetStateImplCopyWith(_$AvatarEditSheetStateImpl value,
+          $Res Function(_$AvatarEditSheetStateImpl) then) =
+      __$$AvatarEditSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String newActiveImagePath, String newStopImagePath});
 }
 
 /// @nodoc
-class __$$_AvatarEditSheetStateCopyWithImpl<$Res>
-    extends _$AvatarEditSheetStateCopyWithImpl<$Res, _$_AvatarEditSheetState>
-    implements _$$_AvatarEditSheetStateCopyWith<$Res> {
-  __$$_AvatarEditSheetStateCopyWithImpl(_$_AvatarEditSheetState _value,
-      $Res Function(_$_AvatarEditSheetState) _then)
+class __$$AvatarEditSheetStateImplCopyWithImpl<$Res>
+    extends _$AvatarEditSheetStateCopyWithImpl<$Res, _$AvatarEditSheetStateImpl>
+    implements _$$AvatarEditSheetStateImplCopyWith<$Res> {
+  __$$AvatarEditSheetStateImplCopyWithImpl(_$AvatarEditSheetStateImpl _value,
+      $Res Function(_$AvatarEditSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -88,7 +88,7 @@ class __$$_AvatarEditSheetStateCopyWithImpl<$Res>
     Object? newActiveImagePath = null,
     Object? newStopImagePath = null,
   }) {
-    return _then(_$_AvatarEditSheetState(
+    return _then(_$AvatarEditSheetStateImpl(
       newActiveImagePath: null == newActiveImagePath
           ? _value.newActiveImagePath
           : newActiveImagePath // ignore: cast_nullable_to_non_nullable
@@ -103,8 +103,8 @@ class __$$_AvatarEditSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AvatarEditSheetState implements _AvatarEditSheetState {
-  const _$_AvatarEditSheetState(
+class _$AvatarEditSheetStateImpl implements _AvatarEditSheetState {
+  const _$AvatarEditSheetStateImpl(
       {this.newActiveImagePath = "", this.newStopImagePath = ""});
 
   @override
@@ -120,10 +120,10 @@ class _$_AvatarEditSheetState implements _AvatarEditSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AvatarEditSheetState &&
+            other is _$AvatarEditSheetStateImpl &&
             (identical(other.newActiveImagePath, newActiveImagePath) ||
                 other.newActiveImagePath == newActiveImagePath) &&
             (identical(other.newStopImagePath, newStopImagePath) ||
@@ -137,15 +137,16 @@ class _$_AvatarEditSheetState implements _AvatarEditSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AvatarEditSheetStateCopyWith<_$_AvatarEditSheetState> get copyWith =>
-      __$$_AvatarEditSheetStateCopyWithImpl<_$_AvatarEditSheetState>(
-          this, _$identity);
+  _$$AvatarEditSheetStateImplCopyWith<_$AvatarEditSheetStateImpl>
+      get copyWith =>
+          __$$AvatarEditSheetStateImplCopyWithImpl<_$AvatarEditSheetStateImpl>(
+              this, _$identity);
 }
 
 abstract class _AvatarEditSheetState implements AvatarEditSheetState {
   const factory _AvatarEditSheetState(
       {final String newActiveImagePath,
-      final String newStopImagePath}) = _$_AvatarEditSheetState;
+      final String newStopImagePath}) = _$AvatarEditSheetStateImpl;
 
   @override
   String get newActiveImagePath;
@@ -153,6 +154,6 @@ abstract class _AvatarEditSheetState implements AvatarEditSheetState {
   String get newStopImagePath;
   @override
   @JsonKey(ignore: true)
-  _$$_AvatarEditSheetStateCopyWith<_$_AvatarEditSheetState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$AvatarEditSheetStateImplCopyWith<_$AvatarEditSheetStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

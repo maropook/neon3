@@ -12,7 +12,7 @@ part of 'avatar_detail_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AvatarDetailPageState {
@@ -94,11 +94,12 @@ class _$AvatarDetailPageStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_AvatarDetailPageStateCopyWith<$Res>
+abstract class _$$AvatarDetailPageStateImplCopyWith<$Res>
     implements $AvatarDetailPageStateCopyWith<$Res> {
-  factory _$$_AvatarDetailPageStateCopyWith(_$_AvatarDetailPageState value,
-          $Res Function(_$_AvatarDetailPageState) then) =
-      __$$_AvatarDetailPageStateCopyWithImpl<$Res>;
+  factory _$$AvatarDetailPageStateImplCopyWith(
+          _$AvatarDetailPageStateImpl value,
+          $Res Function(_$AvatarDetailPageStateImpl) then) =
+      __$$AvatarDetailPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -112,11 +113,12 @@ abstract class _$$_AvatarDetailPageStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_AvatarDetailPageStateCopyWithImpl<$Res>
-    extends _$AvatarDetailPageStateCopyWithImpl<$Res, _$_AvatarDetailPageState>
-    implements _$$_AvatarDetailPageStateCopyWith<$Res> {
-  __$$_AvatarDetailPageStateCopyWithImpl(_$_AvatarDetailPageState _value,
-      $Res Function(_$_AvatarDetailPageState) _then)
+class __$$AvatarDetailPageStateImplCopyWithImpl<$Res>
+    extends _$AvatarDetailPageStateCopyWithImpl<$Res,
+        _$AvatarDetailPageStateImpl>
+    implements _$$AvatarDetailPageStateImplCopyWith<$Res> {
+  __$$AvatarDetailPageStateImplCopyWithImpl(_$AvatarDetailPageStateImpl _value,
+      $Res Function(_$AvatarDetailPageStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +129,7 @@ class __$$_AvatarDetailPageStateCopyWithImpl<$Res>
     Object? avatar = freezed,
     Object? selectedAvatarId = null,
   }) {
-    return _then(_$_AvatarDetailPageState(
+    return _then(_$AvatarDetailPageStateImpl(
       newActiveImagePath: null == newActiveImagePath
           ? _value.newActiveImagePath
           : newActiveImagePath // ignore: cast_nullable_to_non_nullable
@@ -150,8 +152,8 @@ class __$$_AvatarDetailPageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AvatarDetailPageState implements _AvatarDetailPageState {
-  const _$_AvatarDetailPageState(
+class _$AvatarDetailPageStateImpl implements _AvatarDetailPageState {
+  const _$AvatarDetailPageStateImpl(
       {this.newActiveImagePath = "",
       this.newStopImagePath = "",
       this.avatar = null,
@@ -176,10 +178,10 @@ class _$_AvatarDetailPageState implements _AvatarDetailPageState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AvatarDetailPageState &&
+            other is _$AvatarDetailPageStateImpl &&
             (identical(other.newActiveImagePath, newActiveImagePath) ||
                 other.newActiveImagePath == newActiveImagePath) &&
             (identical(other.newStopImagePath, newStopImagePath) ||
@@ -196,9 +198,9 @@ class _$_AvatarDetailPageState implements _AvatarDetailPageState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AvatarDetailPageStateCopyWith<_$_AvatarDetailPageState> get copyWith =>
-      __$$_AvatarDetailPageStateCopyWithImpl<_$_AvatarDetailPageState>(
-          this, _$identity);
+  _$$AvatarDetailPageStateImplCopyWith<_$AvatarDetailPageStateImpl>
+      get copyWith => __$$AvatarDetailPageStateImplCopyWithImpl<
+          _$AvatarDetailPageStateImpl>(this, _$identity);
 }
 
 abstract class _AvatarDetailPageState implements AvatarDetailPageState {
@@ -206,7 +208,7 @@ abstract class _AvatarDetailPageState implements AvatarDetailPageState {
       {final String newActiveImagePath,
       final String newStopImagePath,
       final Avatar? avatar,
-      final String selectedAvatarId}) = _$_AvatarDetailPageState;
+      final String selectedAvatarId}) = _$AvatarDetailPageStateImpl;
 
   @override
   String get newActiveImagePath;
@@ -218,6 +220,6 @@ abstract class _AvatarDetailPageState implements AvatarDetailPageState {
   String get selectedAvatarId;
   @override
   @JsonKey(ignore: true)
-  _$$_AvatarDetailPageStateCopyWith<_$_AvatarDetailPageState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$AvatarDetailPageStateImplCopyWith<_$AvatarDetailPageStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

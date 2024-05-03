@@ -12,7 +12,7 @@ part of 'recording_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$RecordingPageState {
@@ -142,11 +142,11 @@ class _$RecordingPageStateCopyWithImpl<$Res, $Val extends RecordingPageState>
 }
 
 /// @nodoc
-abstract class _$$_CameraStateCopyWith<$Res>
+abstract class _$$CameraStateImplCopyWith<$Res>
     implements $RecordingPageStateCopyWith<$Res> {
-  factory _$$_CameraStateCopyWith(
-          _$_CameraState value, $Res Function(_$_CameraState) then) =
-      __$$_CameraStateCopyWithImpl<$Res>;
+  factory _$$CameraStateImplCopyWith(
+          _$CameraStateImpl value, $Res Function(_$CameraStateImpl) then) =
+      __$$CameraStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -167,11 +167,11 @@ abstract class _$$_CameraStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CameraStateCopyWithImpl<$Res>
-    extends _$RecordingPageStateCopyWithImpl<$Res, _$_CameraState>
-    implements _$$_CameraStateCopyWith<$Res> {
-  __$$_CameraStateCopyWithImpl(
-      _$_CameraState _value, $Res Function(_$_CameraState) _then)
+class __$$CameraStateImplCopyWithImpl<$Res>
+    extends _$RecordingPageStateCopyWithImpl<$Res, _$CameraStateImpl>
+    implements _$$CameraStateImplCopyWith<$Res> {
+  __$$CameraStateImplCopyWithImpl(
+      _$CameraStateImpl _value, $Res Function(_$CameraStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -189,7 +189,7 @@ class __$$_CameraStateCopyWithImpl<$Res>
     Object? importedFilePath = null,
     Object? recordingBackgroundWidth = null,
   }) {
-    return _then(_$_CameraState(
+    return _then(_$CameraStateImpl(
       cameraService: freezed == cameraService
           ? _value.cameraService
           : cameraService // ignore: cast_nullable_to_non_nullable
@@ -240,8 +240,8 @@ class __$$_CameraStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CameraState implements _CameraState {
-  const _$_CameraState(
+class _$CameraStateImpl implements _CameraState {
+  const _$CameraStateImpl(
       {this.cameraService = null,
       this.isRecordingVideo = false,
       this.videoFilePath = null,
@@ -301,10 +301,10 @@ class _$_CameraState implements _CameraState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CameraState &&
+            other is _$CameraStateImpl &&
             (identical(other.cameraService, cameraService) ||
                 other.cameraService == cameraService) &&
             (identical(other.isRecordingVideo, isRecordingVideo) ||
@@ -348,8 +348,8 @@ class _$_CameraState implements _CameraState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>
-      __$$_CameraStateCopyWithImpl<_$_CameraState>(this, _$identity);
+  _$$CameraStateImplCopyWith<_$CameraStateImpl> get copyWith =>
+      __$$CameraStateImplCopyWithImpl<_$CameraStateImpl>(this, _$identity);
 }
 
 abstract class _CameraState implements RecordingPageState {
@@ -364,7 +364,7 @@ abstract class _CameraState implements RecordingPageState {
       final List<ActiveFrame> activeFrames,
       final RecordingType recordingType,
       final String importedFilePath,
-      final double recordingBackgroundWidth}) = _$_CameraState;
+      final double recordingBackgroundWidth}) = _$CameraStateImpl;
 
   @override
   CameraService? get cameraService;
@@ -390,6 +390,6 @@ abstract class _CameraState implements RecordingPageState {
   double get recordingBackgroundWidth;
   @override
   @JsonKey(ignore: true)
-  _$$_CameraStateCopyWith<_$_CameraState> get copyWith =>
+  _$$CameraStateImplCopyWith<_$CameraStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

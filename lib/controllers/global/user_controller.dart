@@ -15,8 +15,8 @@ class UserState with _$UserState {
   }) = _UserState;
 }
 
-final userProvider =
-    StateNotifierProvider<UserController, UserState>((ref) => UserController());
+// final userProvider =
+//     StateNotifierProvider<UserController, UserState>((ref) => UserController());
 
 class UserController extends StateNotifier<UserState> {
   UserController() : super(UserState()) {

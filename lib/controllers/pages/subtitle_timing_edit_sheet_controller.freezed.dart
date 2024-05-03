@@ -12,7 +12,7 @@ part of 'subtitle_timing_edit_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SubtitleTimingEditSheetState {
@@ -133,12 +133,12 @@ class _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SubtitleTimingEditSheetStateCopyWith<$Res>
+abstract class _$$SubtitleTimingEditSheetStateImplCopyWith<$Res>
     implements $SubtitleTimingEditSheetStateCopyWith<$Res> {
-  factory _$$_SubtitleTimingEditSheetStateCopyWith(
-          _$_SubtitleTimingEditSheetState value,
-          $Res Function(_$_SubtitleTimingEditSheetState) then) =
-      __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>;
+  factory _$$SubtitleTimingEditSheetStateImplCopyWith(
+          _$SubtitleTimingEditSheetStateImpl value,
+          $Res Function(_$SubtitleTimingEditSheetStateImpl) then) =
+      __$$SubtitleTimingEditSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -156,13 +156,13 @@ abstract class _$$_SubtitleTimingEditSheetStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>
+class __$$SubtitleTimingEditSheetStateImplCopyWithImpl<$Res>
     extends _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
-        _$_SubtitleTimingEditSheetState>
-    implements _$$_SubtitleTimingEditSheetStateCopyWith<$Res> {
-  __$$_SubtitleTimingEditSheetStateCopyWithImpl(
-      _$_SubtitleTimingEditSheetState _value,
-      $Res Function(_$_SubtitleTimingEditSheetState) _then)
+        _$SubtitleTimingEditSheetStateImpl>
+    implements _$$SubtitleTimingEditSheetStateImplCopyWith<$Res> {
+  __$$SubtitleTimingEditSheetStateImplCopyWithImpl(
+      _$SubtitleTimingEditSheetStateImpl _value,
+      $Res Function(_$SubtitleTimingEditSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -180,7 +180,7 @@ class __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>
     Object? videoPosition = null,
     Object? isComplete = null,
   }) {
-    return _then(_$_SubtitleTimingEditSheetState(
+    return _then(_$SubtitleTimingEditSheetStateImpl(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -231,8 +231,9 @@ class __$$_SubtitleTimingEditSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
-  const _$_SubtitleTimingEditSheetState(
+class _$SubtitleTimingEditSheetStateImpl
+    implements _SubtitleTimingEditSheetState {
+  const _$SubtitleTimingEditSheetStateImpl(
       {this.isPlaying = false,
       this.videoPlayerService = null,
       this.thumbnailService = null,
@@ -307,10 +308,10 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SubtitleTimingEditSheetState &&
+            other is _$SubtitleTimingEditSheetStateImpl &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
@@ -353,9 +354,10 @@ class _$_SubtitleTimingEditSheetState implements _SubtitleTimingEditSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SubtitleTimingEditSheetStateCopyWith<_$_SubtitleTimingEditSheetState>
-      get copyWith => __$$_SubtitleTimingEditSheetStateCopyWithImpl<
-          _$_SubtitleTimingEditSheetState>(this, _$identity);
+  _$$SubtitleTimingEditSheetStateImplCopyWith<
+          _$SubtitleTimingEditSheetStateImpl>
+      get copyWith => __$$SubtitleTimingEditSheetStateImplCopyWithImpl<
+          _$SubtitleTimingEditSheetStateImpl>(this, _$identity);
 }
 
 abstract class _SubtitleTimingEditSheetState
@@ -371,7 +373,7 @@ abstract class _SubtitleTimingEditSheetState
       final String thumbnailFilePath,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
-      final bool isComplete}) = _$_SubtitleTimingEditSheetState;
+      final bool isComplete}) = _$SubtitleTimingEditSheetStateImpl;
 
   @override
   bool get isPlaying;
@@ -397,6 +399,7 @@ abstract class _SubtitleTimingEditSheetState
   bool get isComplete;
   @override
   @JsonKey(ignore: true)
-  _$$_SubtitleTimingEditSheetStateCopyWith<_$_SubtitleTimingEditSheetState>
+  _$$SubtitleTimingEditSheetStateImplCopyWith<
+          _$SubtitleTimingEditSheetStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

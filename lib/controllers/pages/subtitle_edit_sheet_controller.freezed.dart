@@ -12,7 +12,7 @@ part of 'subtitle_edit_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SubtitleEditSheetState {
@@ -73,11 +73,12 @@ class _$SubtitleEditSheetStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SubtitleEditSheetStateCopyWith<$Res>
+abstract class _$$SubtitleEditSheetStateImplCopyWith<$Res>
     implements $SubtitleEditSheetStateCopyWith<$Res> {
-  factory _$$_SubtitleEditSheetStateCopyWith(_$_SubtitleEditSheetState value,
-          $Res Function(_$_SubtitleEditSheetState) then) =
-      __$$_SubtitleEditSheetStateCopyWithImpl<$Res>;
+  factory _$$SubtitleEditSheetStateImplCopyWith(
+          _$SubtitleEditSheetStateImpl value,
+          $Res Function(_$SubtitleEditSheetStateImpl) then) =
+      __$$SubtitleEditSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -87,12 +88,13 @@ abstract class _$$_SubtitleEditSheetStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
+class __$$SubtitleEditSheetStateImplCopyWithImpl<$Res>
     extends _$SubtitleEditSheetStateCopyWithImpl<$Res,
-        _$_SubtitleEditSheetState>
-    implements _$$_SubtitleEditSheetStateCopyWith<$Res> {
-  __$$_SubtitleEditSheetStateCopyWithImpl(_$_SubtitleEditSheetState _value,
-      $Res Function(_$_SubtitleEditSheetState) _then)
+        _$SubtitleEditSheetStateImpl>
+    implements _$$SubtitleEditSheetStateImplCopyWith<$Res> {
+  __$$SubtitleEditSheetStateImplCopyWithImpl(
+      _$SubtitleEditSheetStateImpl _value,
+      $Res Function(_$SubtitleEditSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -102,7 +104,7 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
     Object? customFontColor = null,
     Object? customBorderColor = null,
   }) {
-    return _then(_$_SubtitleEditSheetState(
+    return _then(_$SubtitleEditSheetStateImpl(
       subtitleText: freezed == subtitleText
           ? _value.subtitleText
           : subtitleText // ignore: cast_nullable_to_non_nullable
@@ -121,8 +123,8 @@ class __$$_SubtitleEditSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
-  const _$_SubtitleEditSheetState(
+class _$SubtitleEditSheetStateImpl implements _SubtitleEditSheetState {
+  const _$SubtitleEditSheetStateImpl(
       {this.subtitleText = null,
       this.customFontColor = Colors.white,
       this.customBorderColor = Colors.white});
@@ -143,10 +145,10 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SubtitleEditSheetState &&
+            other is _$SubtitleEditSheetStateImpl &&
             (identical(other.subtitleText, subtitleText) ||
                 other.subtitleText == subtitleText) &&
             (identical(other.customFontColor, customFontColor) ||
@@ -162,16 +164,16 @@ class _$_SubtitleEditSheetState implements _SubtitleEditSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SubtitleEditSheetStateCopyWith<_$_SubtitleEditSheetState> get copyWith =>
-      __$$_SubtitleEditSheetStateCopyWithImpl<_$_SubtitleEditSheetState>(
-          this, _$identity);
+  _$$SubtitleEditSheetStateImplCopyWith<_$SubtitleEditSheetStateImpl>
+      get copyWith => __$$SubtitleEditSheetStateImplCopyWithImpl<
+          _$SubtitleEditSheetStateImpl>(this, _$identity);
 }
 
 abstract class _SubtitleEditSheetState implements SubtitleEditSheetState {
   const factory _SubtitleEditSheetState(
       {final SubtitleText? subtitleText,
       final Color customFontColor,
-      final Color customBorderColor}) = _$_SubtitleEditSheetState;
+      final Color customBorderColor}) = _$SubtitleEditSheetStateImpl;
 
   @override
   SubtitleText? get subtitleText;
@@ -181,6 +183,6 @@ abstract class _SubtitleEditSheetState implements SubtitleEditSheetState {
   Color get customBorderColor;
   @override
   @JsonKey(ignore: true)
-  _$$_SubtitleEditSheetStateCopyWith<_$_SubtitleEditSheetState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SubtitleEditSheetStateImplCopyWith<_$SubtitleEditSheetStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

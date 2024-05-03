@@ -12,7 +12,7 @@ part of 'artificial_voice_edit_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ArtificialVoiceEditSheetState {
@@ -82,12 +82,12 @@ class _$ArtificialVoiceEditSheetStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ArtificialVoiceEditSheetStateCopyWith<$Res>
+abstract class _$$ArtificialVoiceEditSheetStateImplCopyWith<$Res>
     implements $ArtificialVoiceEditSheetStateCopyWith<$Res> {
-  factory _$$_ArtificialVoiceEditSheetStateCopyWith(
-          _$_ArtificialVoiceEditSheetState value,
-          $Res Function(_$_ArtificialVoiceEditSheetState) then) =
-      __$$_ArtificialVoiceEditSheetStateCopyWithImpl<$Res>;
+  factory _$$ArtificialVoiceEditSheetStateImplCopyWith(
+          _$ArtificialVoiceEditSheetStateImpl value,
+          $Res Function(_$ArtificialVoiceEditSheetStateImpl) then) =
+      __$$ArtificialVoiceEditSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -98,13 +98,13 @@ abstract class _$$_ArtificialVoiceEditSheetStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ArtificialVoiceEditSheetStateCopyWithImpl<$Res>
+class __$$ArtificialVoiceEditSheetStateImplCopyWithImpl<$Res>
     extends _$ArtificialVoiceEditSheetStateCopyWithImpl<$Res,
-        _$_ArtificialVoiceEditSheetState>
-    implements _$$_ArtificialVoiceEditSheetStateCopyWith<$Res> {
-  __$$_ArtificialVoiceEditSheetStateCopyWithImpl(
-      _$_ArtificialVoiceEditSheetState _value,
-      $Res Function(_$_ArtificialVoiceEditSheetState) _then)
+        _$ArtificialVoiceEditSheetStateImpl>
+    implements _$$ArtificialVoiceEditSheetStateImplCopyWith<$Res> {
+  __$$ArtificialVoiceEditSheetStateImplCopyWithImpl(
+      _$ArtificialVoiceEditSheetStateImpl _value,
+      $Res Function(_$ArtificialVoiceEditSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -115,7 +115,7 @@ class __$$_ArtificialVoiceEditSheetStateCopyWithImpl<$Res>
     Object? isMergeTtsAudio = null,
     Object? ttsAudioFilePath = null,
   }) {
-    return _then(_$_ArtificialVoiceEditSheetState(
+    return _then(_$ArtificialVoiceEditSheetStateImpl(
       audioType: null == audioType
           ? _value.audioType
           : audioType // ignore: cast_nullable_to_non_nullable
@@ -138,9 +138,9 @@ class __$$_ArtificialVoiceEditSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ArtificialVoiceEditSheetState
+class _$ArtificialVoiceEditSheetStateImpl
     implements _ArtificialVoiceEditSheetState {
-  const _$_ArtificialVoiceEditSheetState(
+  const _$ArtificialVoiceEditSheetStateImpl(
       {this.audioType = AudioType.original,
       final List<SubtitleText> subtitleTexts = const [],
       this.isMergeTtsAudio = false,
@@ -172,10 +172,10 @@ class _$_ArtificialVoiceEditSheetState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ArtificialVoiceEditSheetState &&
+            other is _$ArtificialVoiceEditSheetStateImpl &&
             (identical(other.audioType, audioType) ||
                 other.audioType == audioType) &&
             const DeepCollectionEquality()
@@ -197,9 +197,10 @@ class _$_ArtificialVoiceEditSheetState
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArtificialVoiceEditSheetStateCopyWith<_$_ArtificialVoiceEditSheetState>
-      get copyWith => __$$_ArtificialVoiceEditSheetStateCopyWithImpl<
-          _$_ArtificialVoiceEditSheetState>(this, _$identity);
+  _$$ArtificialVoiceEditSheetStateImplCopyWith<
+          _$ArtificialVoiceEditSheetStateImpl>
+      get copyWith => __$$ArtificialVoiceEditSheetStateImplCopyWithImpl<
+          _$ArtificialVoiceEditSheetStateImpl>(this, _$identity);
 }
 
 abstract class _ArtificialVoiceEditSheetState
@@ -208,7 +209,7 @@ abstract class _ArtificialVoiceEditSheetState
       {final AudioType audioType,
       final List<SubtitleText> subtitleTexts,
       final bool isMergeTtsAudio,
-      final String ttsAudioFilePath}) = _$_ArtificialVoiceEditSheetState;
+      final String ttsAudioFilePath}) = _$ArtificialVoiceEditSheetStateImpl;
 
   @override
   AudioType get audioType;
@@ -220,6 +221,7 @@ abstract class _ArtificialVoiceEditSheetState
   String get ttsAudioFilePath;
   @override
   @JsonKey(ignore: true)
-  _$$_ArtificialVoiceEditSheetStateCopyWith<_$_ArtificialVoiceEditSheetState>
+  _$$ArtificialVoiceEditSheetStateImplCopyWith<
+          _$ArtificialVoiceEditSheetStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

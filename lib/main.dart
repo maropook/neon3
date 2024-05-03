@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/global/user_controller.dart';
+import 'package:neon3/providers/auth_provider.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -20,7 +21,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    ref.listen(userProvider.select((s) => s.isAnonymous), (_, __) {
+    ref.listen(authProvider.select((s) => s.uid), (_, __) {
       router.refresh();
     });
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/controllers/global/user_controller.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
+import 'package:neon3/providers/auth_provider.dart';
 import 'package:neon3/ui/pages/avatar_detail_page/avatar_detail_page.dart';
 import 'package:neon3/ui/pages/avatar_list_page/avatar_list_page.dart';
 import 'package:neon3/ui/pages/complete_page/complete_page.dart';
@@ -19,8 +19,7 @@ import 'package:neon_video_encoder/subtitle_text.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider((ref) {
-  final bool? isAnonymous =
-      ref.watch(userProvider.select((s) => s.isAnonymous));
+  final String uid = ref.watch(authProvider.select((s) => s.uid));
 
   return GoRouter(
     initialLocation: '/',
@@ -85,7 +84,7 @@ final routerProvider = Provider((ref) {
       ),
     ],
     redirect: (context, state) {
-      if (isAnonymous == null) {
+      if (uid.isEmpty) {
         return state.subloc == '/login' ? null : '/login';
       }
       return null;
