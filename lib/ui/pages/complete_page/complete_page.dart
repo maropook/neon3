@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
@@ -16,23 +18,35 @@ class CompletePage extends StatelessWidget {
         completePageProvider.overrideWith(
             (ref) => CompletePageController(videoFilePath: filePath))
       ],
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              '完成',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+      child: HookConsumer(builder: (context, ref, _) {
+        useEffect(
+          () {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              EasyLoading.showSuccess('動画の保存が\n完了しました');
+            });
+            return null;
+          },
+          [],
+        );
+
+        return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                '完成',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () => context.go('/'),
+                    icon: const Icon(Icons.chevron_right)),
+              ],
+              // leading: IconButton(
+              //     onPressed: () => context.go('/encoding', extra: filePath),
+              //     icon: const Icon(Icons.chevron_left)),
             ),
-            actions: [
-              IconButton(
-                  onPressed: () => context.go('/'),
-                  icon: const Icon(Icons.chevron_right)),
-            ],
-            // leading: IconButton(
-            //     onPressed: () => context.go('/encoding', extra: filePath),
-            //     icon: const Icon(Icons.chevron_left)),
-          ),
-          body: _buildBody()),
+            body: _buildBody());
+      }),
     );
   }
 

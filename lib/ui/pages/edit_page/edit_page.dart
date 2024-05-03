@@ -379,7 +379,7 @@ class EditPage extends StatelessWidget {
             },
             child: _buildShowModalIcon(
               'アバターを変更',
-              Assets.images.changeAvatarIcon,
+              Assets.images.icons.avatarFaceIcon,
               context,
             ),
           ),
@@ -388,7 +388,7 @@ class EditPage extends StatelessWidget {
               ref.read(editPageProvider.notifier).addSubtitle();
             },
             child: _buildShowModalIcon(
-                'テキストを追加', Assets.images.addBgmIcon, context),
+                'テキストを追加', Assets.images.icons.subtitleAddIcon, context),
           ),
           GestureDetector(
             onTap: () async {
@@ -405,7 +405,7 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
-                'テキスト時間編集', Assets.images.textEditIcon, context),
+                'テキスト時間編集', Assets.images.icons.subtitleEditIcon, context),
           ),
 
           // GestureDetector(
@@ -437,7 +437,7 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
-                '人工音声', Assets.images.artificialVoiceIcon, context),
+                '人工音声', Assets.images.icons.artificialVoiceIcon, context),
           ),
         ],
       );
@@ -446,19 +446,36 @@ class EditPage extends StatelessWidget {
 
   Widget _buildShowModalIcon(
       String text, String iconPath, BuildContext context) {
+    final width = MediaQuery.of(context).size.shortestSide / 5.5;
     return SizedBox(
-      width: MediaQuery.of(context).size.shortestSide / 4,
+      width: width + 10,
       child: Column(
         children: [
-          SvgPicture.asset(
-            iconPath,
-            // color: Styles.secondaryColor,
+          Container(
+            width: width,
+            height: width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Opacity(
+              opacity: 0.8,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SvgPicture.asset(
+                  iconPath,
+                  width: width - 25,
+                  height: width - 25,
+                  // color: Styles.secondaryColor,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 3),
           Text(text,
               style: const TextStyle(
                   color: Styles.contentsColor,
-                  fontSize: 11,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold))
         ],
       ),

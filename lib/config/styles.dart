@@ -20,12 +20,13 @@ abstract class Styles {
 
 // #c7de60
 // #f1f7d9 second
-  static const Color primaryColor = Color(0xFFFDD475);
+  static const Color primaryColor = Color.fromARGB(255, 191, 136, 227);
   static const Color primaryColor700 = Color(0xFFF1F7D8);
 
   static const Color accentColor = Color(0xFFf1f7d9);
   static const Color myButtonColor = Color.fromARGB(255, 253, 234, 234);
-  static const Color secondaryColor = Color(0xFF594A31);
+  // static const Color secondaryColor = Color(0xFF594A31);
+  static const Color secondaryColor = Color.fromARGB(255, 32, 32, 32);
 
   static const Color recordingColor = Color.fromARGB(255, 225, 109, 109);
   static const Color secondaryColor900 = Color.fromARGB(130, 89, 74, 49);
