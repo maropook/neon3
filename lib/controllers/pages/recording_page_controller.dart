@@ -52,8 +52,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
-  // final double recordingTimeLimit = 60.0;
-  final double recordingTimeLimit = 3.5; //TODO:仮の値
+  // final double recordingTimeLimit = 60.0; //TODO:仮の値 MEMO:
+  final double recordingTimeLimit = 60;
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();

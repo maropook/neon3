@@ -23,6 +23,9 @@ class SpeechToTextService {
     final List<String> trimmedAudioFilePathList =
         await trimAudio(activeFrames, audioFilePath);
 
+    print('audioFilePath' + audioFilePath);
+    print('activeFrames' + activeFrames.toString());
+
     if (trimmedAudioFilePathList.isEmpty) {
       Logger.log("build_texts", "trimmedAudioFilePathList.isEmpty");
       completeCallBack([]);
@@ -41,7 +44,7 @@ class SpeechToTextService {
         inputFilePathList: trimmedAudioFilePathList,
         completeCallBack: completeCallBack);
 
-    //ここでtextsは返せない。completeCallBackでtextが作られるが作られるが、それを察知して自分でtextを取りに行くしかない
+    //ここでtextsは返せない。completeCallBackでtextが作られるが、それを察知して自分でtextを取りに行くしかない
   }
 
   Future<List<String>> trimAudio(
@@ -80,7 +83,7 @@ class SpeechToTextService {
             id: activeFrames[index].id,
             startTime: activeFrames[index].startTime,
             endTime: activeFrames[index].endTime,
-            word: 'テスト')); //TODO:仮の値
+            word: speechTextsList[index])); //TODO:仮の値
         // word: speechTextsList[index]));
         // Logger.log(
         //     "speechToTexts_complete_call_back", speechTextsList[index]);
