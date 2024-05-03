@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/subtitle_edit_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
@@ -139,7 +140,7 @@ class _SubtitleEditSheet extends StatelessWidget {
             controller: subtitleTextEditController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.black.withOpacity(0),
+              fillColor: Styles.secondaryColor.withOpacity(0),
               border: InputBorder.none,
             ),
           ),

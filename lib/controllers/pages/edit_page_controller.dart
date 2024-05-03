@@ -12,7 +12,6 @@ import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
 import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 import 'package:uuid/uuid.dart';

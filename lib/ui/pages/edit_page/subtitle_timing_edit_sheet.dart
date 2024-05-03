@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/subtitle_timing_edit_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -25,7 +26,7 @@ Future<void> showSubtitleTimingEditSheet(
   SubtitleTimingEditPageArgs subtitleTimingEditPageArgs,
 ) {
   return showModalBottomSheet<void>(
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       isScrollControlled: true,
       context: context,
       isDismissible: true,
@@ -81,9 +82,10 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildPreview(),
+          _buildSubtitleTextsTimeline(),
           _buildThumbnail(),
           _buildTimeline(),
-          _buildSubtitleTextsTimeline(),
+          const SizedBox(),
         ]);
   }
 
@@ -181,7 +183,7 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
                 ),
               for (int i = 0; i < texts.length; i++)
                 Text("${texts[i].startTime}:${texts[i].word}",
-                    style: const TextStyle(color: Colors.black)),
+                    style: const TextStyle(color: Styles.secondaryColor)),
             ],
           ),
         ),

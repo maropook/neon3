@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/controllers/pages/recording_page_controller.dart';
-import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -32,57 +32,11 @@ class RecordingPage extends ConsumerWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('レコーディング'),
-      actions: [
-        Consumer(builder: (context, ref, _) {
-          final activeFrames = ref
-              .read(recordingPageProvider)
-              .activeFrames; //TODO:videoのときactiveFramesが作られない
-          final avatar = ref
-              .watch(recordingPageProvider)
-              .selectedAvatar; //TODO:ref.readだとavatarはnullになる
-          //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
-
-          return IconButton(
-              onPressed: () async {
-                final ImportSheetArg? importSheetArg = await showImportSheet(
-                    context,
-                    ImportSheetArg(recordingType: RecordingType.camera));
-                final recordingType = importSheetArg?.recordingType;
-                ref
-                    .read(recordingPageProvider.notifier)
-                    .setImportSheetArg(importSheetArg);
-
-                if (importSheetArg == null ||
-                    avatar == null ||
-                    recordingType == RecordingType.camera) return;
-                if (recordingType == RecordingType.image) {
-                  ref
-                      .read(recordingPageProvider.notifier)
-                      .getRecordingBackgroundWidth();
-                  return;
-                }
-
-                final editPageArgs = EditPageArgs(
-                    audioFilePath: importSheetArg.importedFilePath,
-                    videoFilePath: importSheetArg.importedFilePath,
-                    //TODO:importedFilePathのときactiveFrames設定できない問題
-                    activeFrames: activeFrames,
-                    // activeFrames: activeFrames,
-                    avatar: avatar,
-                    recordingType: recordingType!);
-                if (recordingType == RecordingType.video) {
-                  context.go('/trim', extra: editPageArgs);
-                  return;
-                }
-                context.go('/edit', extra: editPageArgs);
-              },
-              icon: const Icon(Icons.download_rounded));
-        }),
-      ],
-      leading: IconButton(
-          onPressed: () => context.go('/avatar/list'),
-          icon: const Icon(Icons.face)),
+      title: const Text(
+        'レコーディング',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+      ),
     );
   }
 
@@ -90,6 +44,8 @@ class RecordingPage extends ConsumerWidget {
     return Consumer(builder: (context, ref, _) {
       final cameraService =
           ref.watch(recordingPageProvider.select((s) => s.cameraService));
+      final Size size = MediaQuery.of(context).size;
+      double shortestSide = size.shortestSide;
 
       return cameraService != null
           ? Column(
@@ -97,11 +53,90 @@ class RecordingPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildPreview(),
-                _buildButton(),
-                _buildMemo(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Consumer(builder: (context, ref, _) {
+                      final activeFrames = ref
+                          .read(recordingPageProvider)
+                          .activeFrames; //TODO:videoのときactiveFramesが作られない
+                      final avatar = ref
+                          .watch(recordingPageProvider)
+                          .selectedAvatar; //TODO:ref.readだとavatarはnullになる
+                      //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
+
+                      return InkWell(
+                        onTap: () async {
+                          final ImportSheetArg? importSheetArg =
+                              await showImportSheet(
+                                  context,
+                                  ImportSheetArg(
+                                      recordingType: RecordingType.camera));
+                          final recordingType = importSheetArg?.recordingType;
+                          ref
+                              .read(recordingPageProvider.notifier)
+                              .setImportSheetArg(importSheetArg);
+
+                          if (importSheetArg == null ||
+                              avatar == null ||
+                              recordingType == RecordingType.camera) return;
+                          if (recordingType == RecordingType.image) {
+                            ref
+                                .read(recordingPageProvider.notifier)
+                                .getRecordingBackgroundWidth();
+                            return;
+                          }
+
+                          final editPageArgs = EditPageArgs(
+                              audioFilePath: importSheetArg.importedFilePath,
+                              videoFilePath: importSheetArg.importedFilePath,
+                              //TODO:importedFilePathのときactiveFrames設定できない問題
+                              activeFrames: activeFrames,
+                              // activeFrames: activeFrames,
+                              avatar: avatar,
+                              recordingType: recordingType!);
+                          if (recordingType == RecordingType.video) {
+                            context.go('/trim', extra: editPageArgs);
+                            return;
+                          }
+                          context.go('/edit', extra: editPageArgs);
+                        },
+                        child: _buildShowModalIcon(
+                            'インポート', Icons.download_rounded, shortestSide),
+                      );
+                    }),
+                    _buildButton(),
+                    InkWell(
+                        onTap: () => context.go('/avatar/list'),
+                        child: _buildShowModalIcon(
+                            'アバター', Icons.face, shortestSide)),
+                  ],
+                ),
+                const SizedBox(),
+                // _buildMemo(),
               ],
             )
           : const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  Widget _buildShowModalIcon(
+      String text, IconData iconData, double shortestSide) {
+    return Builder(builder: (context) {
+      return Container(
+        width: 65,
+        height: 65,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Icon(
+          iconData,
+          size: 45,
+          color: Styles.secondaryColor,
+        ),
+      );
     });
   }
 
@@ -141,7 +176,7 @@ class RecordingPage extends ConsumerWidget {
           borderRadius: BorderRadiusGeometry.lerp(
               BorderRadius.zero, BorderRadius.zero, 0),
           border: Border.all(color: Colors.white.withOpacity(0.5), width: 0),
-          progressColor: Colors.black,
+          progressColor: Styles.recordingColor.withOpacity(0.5),
           backgroundColor: Colors.white.withOpacity(0.5),
         ),
       );
@@ -265,7 +300,7 @@ class RecordingPage extends ConsumerWidget {
                 height: 65,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.black,
+                  color: Styles.secondaryColor,
                 ),
               ),
               AnimatedContainer(
@@ -276,7 +311,7 @@ class RecordingPage extends ConsumerWidget {
                   borderRadius: isRecording
                       ? BorderRadius.circular(4)
                       : BorderRadius.circular(25),
-                  color: Colors.red,
+                  color: Styles.recordingColor,
                 ),
                 curve: Curves.linear,
                 duration: const Duration(milliseconds: 100),

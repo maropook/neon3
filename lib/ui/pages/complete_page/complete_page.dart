@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/complete_page_controller.dart';
-import 'package:video_player/video_player.dart';
 
 class CompletePage extends StatelessWidget {
   const CompletePage({required this.filePath, super.key});
@@ -18,15 +18,19 @@ class CompletePage extends StatelessWidget {
       ],
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('コンプリート'),
+            title: const Text(
+              '完成',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+            ),
             actions: [
               IconButton(
                   onPressed: () => context.go('/'),
                   icon: const Icon(Icons.chevron_right)),
             ],
-            leading: IconButton(
-                onPressed: () => context.go('/encoding', extra: filePath),
-                icon: const Icon(Icons.chevron_left)),
+            // leading: IconButton(
+            //     onPressed: () => context.go('/encoding', extra: filePath),
+            //     icon: const Icon(Icons.chevron_left)),
           ),
           body: _buildBody()),
     );
@@ -39,6 +43,7 @@ class CompletePage extends StatelessWidget {
       final completePageController = ref.read(completePageProvider.notifier);
       final isPlaying =
           ref.watch(completePageProvider.select((s) => s.isPlaying));
+      final shortestSide = MediaQuery.of(context).size.shortestSide;
 
       return Center(
         child: Column(
@@ -47,7 +52,8 @@ class CompletePage extends StatelessWidget {
             children: [
               videoPlayerService != null
                   ? SizedBox(
-                      width: 187.5,
+                      // width: 187.5,
+                      width: shortestSide,
                       child: GestureDetector(
                         onTap: () {
                           isPlaying

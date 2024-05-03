@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/services/file_service.dart';
 import 'package:neon3/services/fire_avatar_service.dart';
-import 'package:uuid/uuid.dart';
 
 part 'music_edit_sheet_controller.freezed.dart';
 

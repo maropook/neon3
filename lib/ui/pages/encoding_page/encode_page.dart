@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/encode_page_controller.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 
@@ -30,28 +31,33 @@ class EncodePage extends ConsumerWidget {
       ],
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('エンコーディング'),
-            actions: [
-              IconButton(
-                  onPressed: () => context.go(
-                        '/complete',
-                        extra: encodePageArgs.videoFilePath,
-                      ),
-                  icon: const Icon(Icons.chevron_right)),
-            ],
-            leading: IconButton(
-                onPressed: () => context.go(
-                      '/edit',
-                      extra: EditPageArgs(
-                        audioFilePath: encodePageArgs.audioFilePath,
-                        videoFilePath: encodePageArgs.videoFilePath,
-                        activeFrames: encodePageArgs.activeFrames,
-                        avatar: encodePageArgs.avatar,
-                        recordingType: encodePageArgs.recordingType,
-                      ),
-                    ),
-                icon: const Icon(Icons.chevron_left)),
+            title: const Text(
+              'エンコーディング',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+            ),
           ),
+          //   actions: [
+          //     IconButton(
+          //         onPressed: () => context.go(
+          //               '/complete',
+          //               extra: encodePageArgs.videoFilePath,
+          //             ),
+          //         icon: const Icon(Icons.chevron_right)),
+          //   ],
+          //   leading: IconButton(
+          //       onPressed: () => context.go(
+          //             '/edit',
+          //             extra: EditPageArgs(
+          //               audioFilePath: encodePageArgs.audioFilePath,
+          //               videoFilePath: encodePageArgs.videoFilePath,
+          //               activeFrames: encodePageArgs.activeFrames,
+          //               avatar: encodePageArgs.avatar,
+          //               recordingType: encodePageArgs.recordingType,
+          //             ),
+          //           ),
+          //       icon: const Icon(Icons.chevron_left)),
+          // ),
           body: _buildBody()),
     );
   }
@@ -100,7 +106,7 @@ class EncodePage extends ConsumerWidget {
             BorderRadiusGeometry.lerp(BorderRadius.zero, BorderRadius.zero, 0),
         border: Border.all(color: Colors.white, width: 3),
         backgroundColor: Colors.white,
-        progressColor: Colors.black,
+        progressColor: Styles.secondaryColor,
       ),
     );
   }

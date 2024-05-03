@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 class EditSubtitleTextsPainter extends CustomPainter {
@@ -64,8 +65,8 @@ class EditSubtitleTextsPainter extends CustomPainter {
         text: TextSpan(
             style: TextStyle(
               color: sttText.word.isEmpty
-                  ? Colors.black.withOpacity(0.5)
-                  : Colors.black,
+                  ? Styles.secondaryColor.withOpacity(0.5)
+                  : Styles.secondaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 11,
             ),

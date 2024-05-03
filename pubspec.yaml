@@ -66,6 +66,7 @@ dependencies:
     git:
       url: https://github.com/maropook/neon_speech_to_text.git
       ref: refs/heads/feature/#1/can_speech_to_text
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_gen_runner: ^5.2.0
@@ -79,6 +80,12 @@ dev_dependencies:
 
 dependency_overrides:
   watcher: ^1.1.0
+
+flutter_icons:
+  ios: true
+  image_path: "assets/images/launcher/icon_ios.png"
+  remove_alpha_ios: true
+  android: false
 
 flutter:
   uses-material-design: true

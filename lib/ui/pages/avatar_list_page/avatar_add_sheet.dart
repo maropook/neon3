@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/avatar_add_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
@@ -101,7 +102,7 @@ class _AvatarAddSheet extends StatelessWidget {
                   '追加',
                   style: TextStyle(
                       fontSize: 25,
-                      color: Colors.black,
+                      color: Styles.secondaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),

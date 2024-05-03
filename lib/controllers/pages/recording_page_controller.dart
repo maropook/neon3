@@ -116,7 +116,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
               ? importedFilePath //videoのときはそもそもaudioFilePathいらない
               : audioFilePath,
           videoFilePath: videoFilePath,
-          activeFrames: sampleActiveFrames, //TODO:仮の値
+          activeFrames: activeFrames, //TODO:仮の値
           // activeFrames: activeFrames,
           avatar: avatar,
           recordingType: recordingType);

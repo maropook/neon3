@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
-import 'package:neon3/ui/pages/edit_page/music_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -47,7 +47,11 @@ class EditPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('エディット'),
+      title: const Text(
+        '編集',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+      ),
       actions: [
         Consumer(builder: (context, ref, _) {
           return IconButton(
@@ -91,27 +95,36 @@ class EditPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildPreview(),
-          _buildThumbnail(),
           _buildTimeline(),
-          _subtitleAddButton(),
+          // _subtitleAddButton(),
           _buildEditContentIcons(),
+          const SizedBox(),
         ]);
   }
 
-  Widget _subtitleAddButton() {
-    return Consumer(builder: (context, ref, _) {
-      return GestureDetector(
-        onTap: () {
-          ref.read(editPageProvider.notifier).addSubtitle();
-        },
-        child: Container(
-            color: Colors.grey.withOpacity(0.5),
-            width: 30,
-            height: 30,
-            child: const Icon(Icons.add)),
-      );
-    });
+  Widget _buildTimeline() {
+    return Column(
+      children: [
+        _buildThumbnail(),
+        _buildTimelineBar(),
+      ],
+    );
   }
+
+  // Widget _subtitleAddButton() {
+  //   return Consumer(builder: (context, ref, _) {
+  //     return GestureDetector(
+  //       onTap: () {
+  //         ref.read(editPageProvider.notifier).addSubtitle();
+  //       },
+  //       child: Container(
+  //           color: Styles.contentsColor.withOpacity(0.5),
+  //           width: 30,
+  //           height: 30,
+  //           child: const Icon(Icons.add)),
+  //     );
+  //   });
+  // }
 
   Widget _buildPreview() {
     return Consumer(builder: (context, ref, _) {
@@ -119,6 +132,7 @@ class EditPage extends StatelessWidget {
           ref.watch(editPageProvider.select((s) => s.videoPlayerService));
       final editPageController = ref.read(editPageProvider.notifier);
       final isPlaying = ref.watch(editPageProvider.select((s) => s.isPlaying));
+      final longestSide = MediaQuery.of(context).size.longestSide;
 
       return videoController != null
           ? Stack(
@@ -133,7 +147,7 @@ class EditPage extends StatelessWidget {
                     RepaintBoundary(
                         key: editVideoPlayerKey,
                         child: SizedBox(
-                          height: 250,
+                          height: longestSide / 1.8,
                           child: videoController.buildVideoPlayer(),
                         )),
                     _buildAvatar(),
@@ -285,7 +299,7 @@ class EditPage extends StatelessWidget {
     });
   }
 
-  Widget _buildTimeline() {
+  Widget _buildTimelineBar() {
     return Consumer(builder: (context, ref, _) {
       final Duration videoPosition =
           ref.watch(editPageProvider.select((s) => s.videoPosition));
@@ -371,6 +385,13 @@ class EditPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () async {
+              ref.read(editPageProvider.notifier).addSubtitle();
+            },
+            child: _buildShowModalIcon(
+                'テキストを追加', Assets.images.addBgmIcon, context),
+          ),
+          GestureDetector(
+            onTap: () async {
               if (videoController == null || avatar == null) return;
               await ref.read(editPageProvider.notifier).pause();
               final subtitleTimingEditPageArgs = SubtitleTimingEditPageArgs(
@@ -384,21 +405,22 @@ class EditPage extends StatelessWidget {
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
             child: _buildShowModalIcon(
-                'テキストを編集', Assets.images.textEditIcon, context),
+                'テキスト時間編集', Assets.images.textEditIcon, context),
           ),
-          GestureDetector(
-            onTap: () async {
-              await ref.read(editPageProvider.notifier).showModalCallback();
-              final musicFilePath = await showMusicEditSheet(context) ?? '';
-              await ref
-                  .read(editPageProvider.notifier)
-                  .setMusicFile(musicFilePath);
-              await ref.read(editPageProvider.notifier).closeModalCallback();
-              //''のときはreturnされるので現状維持
-            },
-            child: _buildShowModalIcon(
-                'BGMを追加', Assets.images.addBgmIcon, context),
-          ),
+
+          // GestureDetector(
+          //   onTap: () async {
+          //     await ref.read(editPageProvider.notifier).showModalCallback();
+          //     final musicFilePath = await showMusicEditSheet(context) ?? '';
+          //     await ref
+          //         .read(editPageProvider.notifier)
+          //         .setMusicFile(musicFilePath);
+          //     await ref.read(editPageProvider.notifier).closeModalCallback();
+          //     //''のときはreturnされるので現状維持
+          //   },
+          //   child: _buildShowModalIcon(
+          //       'BGMを追加', Assets.images.addBgmIcon, context),
+          // ),
           GestureDetector(
             onTap: () async {
               await ref.read(editPageProvider.notifier).showModalCallback();
@@ -428,8 +450,16 @@ class EditPage extends StatelessWidget {
       width: MediaQuery.of(context).size.shortestSide / 4,
       child: Column(
         children: [
-          SvgPicture.asset(iconPath),
-          Text(text, style: const TextStyle(color: Colors.black, fontSize: 10))
+          SvgPicture.asset(
+            iconPath,
+            // color: Styles.secondaryColor,
+          ),
+          const SizedBox(height: 3),
+          Text(text,
+              style: const TextStyle(
+                  color: Styles.contentsColor,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold))
         ],
       ),
     );
