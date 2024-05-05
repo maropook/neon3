@@ -68,8 +68,8 @@ class _SubtitleEditSheet extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       _buildCompleteButton(),
       _buildSubtitleFonts(),
-      _buildSubtitleWordColors(false),
-      _buildSubtitleWordColors(true),
+      _buildSubtitleWordColors(isBorder: false),
+      // _buildSubtitleWordColors(isBorder: true),
       _buildSubtitleTextField()
     ]);
   }
@@ -165,7 +165,7 @@ class _SubtitleEditSheet extends StatelessWidget {
     });
   }
 
-  Widget _buildSubtitleWordColors(bool isBorder) {
+  Widget _buildSubtitleWordColors({required bool isBorder}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

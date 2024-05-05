@@ -30,7 +30,11 @@ class TrimPage extends StatelessWidget {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text('トリミング'),
+      title: const Text(
+        'トリミング',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+      ),
       actions: [
         Consumer(builder: (context, ref, _) {
           return IconButton(

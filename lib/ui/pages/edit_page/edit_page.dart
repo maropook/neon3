@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -235,7 +236,9 @@ class EditPage extends StatelessWidget {
           height: videoPlayerWidth / aspectRatio,
           width: videoPlayerWidth,
           child: Padding(
-            padding: EdgeInsets.only(left: leftPadding, bottom: bottomPadding),
+            padding: EdgeInsets.only(
+                left: leftPadding >= 0 ? leftPadding : 0,
+                bottom: bottomPadding >= 0 ? bottomPadding : 0),
             child: _buildSubtitleText(context, index),
           ));
     });
@@ -268,6 +271,21 @@ class EditPage extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             children: [
               Text(
+                //縁取り文字
+                text.word.isEmpty ? '※空白のテキスト' : text.word,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily:
+                        text.fontName == 'systemFont' ? null : text.fontName,
+                    fontSize: fontSize.toDouble(),
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = fontSize * 0.05
+                      ..color = text.word.isEmpty
+                          ? fontBorderColor.withOpacity(0.5)
+                          : fontBorderColor),
+              ),
+              Text(
                 textAlign: TextAlign.center,
                 text.word,
                 style: TextStyle(
@@ -278,21 +296,6 @@ class EditPage extends StatelessWidget {
                       ..color = text.word.isEmpty
                           ? fontBorderColor.withOpacity(0.5)
                           : fontColor),
-              ),
-              Text(
-                text.word.isEmpty ? '※空白のテキスト' : text.word,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily:
-                      text.fontName == 'systemFont' ? null : text.fontName,
-                  fontSize: fontSize.toDouble(),
-                  foreground: Paint()
-                    ..strokeWidth = fontSize * 0.05
-                    ..color = text.word.isEmpty
-                        ? fontBorderColor.withOpacity(0.5)
-                        : fontBorderColor
-                    ..style = PaintingStyle.stroke,
-                ),
               ),
             ],
           ));
@@ -386,6 +389,7 @@ class EditPage extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               ref.read(editPageProvider.notifier).addSubtitle();
+              EasyLoading.showSuccess('字幕が追加されました');
             },
             child: _buildShowModalIcon(
                 'テキストを追加', Assets.images.icons.subtitleAddIcon, context),

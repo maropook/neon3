@@ -115,9 +115,12 @@ class _AvatarAddSheet extends StatelessWidget {
 
   Widget _buildAddIcon({required bool isActive}) {
     return Container(
-      color: Colors.white,
       width: 170,
       height: 170,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(

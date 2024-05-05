@@ -57,55 +57,7 @@ class RecordingPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Consumer(builder: (context, ref, _) {
-                      final activeFrames = ref
-                          .read(recordingPageProvider)
-                          .activeFrames; //TODO:videoのときactiveFramesが作られない
-                      final avatar = ref
-                          .watch(recordingPageProvider)
-                          .selectedAvatar; //TODO:ref.readだとavatarはnullになる
-                      //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
-
-                      return InkWell(
-                        onTap: () async {
-                          final ImportSheetArg? importSheetArg =
-                              await showImportSheet(
-                                  context,
-                                  ImportSheetArg(
-                                      recordingType: RecordingType.camera));
-                          final recordingType = importSheetArg?.recordingType;
-                          ref
-                              .read(recordingPageProvider.notifier)
-                              .setImportSheetArg(importSheetArg);
-
-                          if (importSheetArg == null ||
-                              avatar == null ||
-                              recordingType == RecordingType.camera) return;
-                          if (recordingType == RecordingType.image) {
-                            ref
-                                .read(recordingPageProvider.notifier)
-                                .getRecordingBackgroundWidth();
-                            return;
-                          }
-
-                          final editPageArgs = EditPageArgs(
-                              audioFilePath: importSheetArg.importedFilePath,
-                              videoFilePath: importSheetArg.importedFilePath,
-                              //TODO:importedFilePathのときactiveFrames設定できない問題
-                              activeFrames: activeFrames,
-                              // activeFrames: activeFrames,
-                              avatar: avatar,
-                              recordingType: recordingType!);
-                          if (recordingType == RecordingType.video) {
-                            context.go('/trim', extra: editPageArgs);
-                            return;
-                          }
-                          context.go('/edit', extra: editPageArgs);
-                        },
-                        child: _buildShowModalIcon(
-                            'インポート', Icons.download_rounded, shortestSide),
-                      );
-                    }),
+                    _buildImportButton(),
                     _buildButton(),
                     InkWell(
                         onTap: () => context.go('/avatar/list'),
@@ -114,10 +66,71 @@ class RecordingPage extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(),
-                // _buildMemo(),
+                _buildMemo(),
               ],
             )
-          : const Center(child: CircularProgressIndicator());
+          : Center(
+              child: Column(
+              children: [
+                InkWell(
+                    onTap: () => context.go('/avatar/list'),
+                    child:
+                        _buildShowModalIcon('アバター', Icons.face, shortestSide)),
+                _buildImportButton(),
+                const CircularProgressIndicator(),
+              ],
+            ));
+    });
+  }
+
+  Widget _buildImportButton() {
+    return Consumer(builder: (context, ref, _) {
+      final activeFrames = ref
+          .read(recordingPageProvider)
+          .activeFrames; //TODO:videoのときactiveFramesが作られない
+      final avatar = ref
+          .watch(recordingPageProvider)
+          .selectedAvatar; //TODO:ref.readだとavatarはnullになる
+      //ref.watchじゃないと何故かできない→recordingpageの下にimportPageがあるから、recordingProviderが破棄されて、selectedAvatarがいないままになる
+      final Size size = MediaQuery.of(context).size;
+      double shortestSide = size.shortestSide;
+
+      return InkWell(
+        onTap: () async {
+          final ImportSheetArg? importSheetArg = await showImportSheet(
+              context, ImportSheetArg(recordingType: RecordingType.camera));
+          final recordingType = importSheetArg?.recordingType;
+          ref
+              .read(recordingPageProvider.notifier)
+              .setImportSheetArg(importSheetArg);
+
+          if (importSheetArg == null ||
+              avatar == null ||
+              recordingType == RecordingType.camera) return;
+          if (recordingType == RecordingType.image) {
+            ref
+                .read(recordingPageProvider.notifier)
+                .getRecordingBackgroundWidth();
+            return;
+          }
+
+          final editPageArgs = EditPageArgs(
+              audioFilePath: importSheetArg.importedFilePath,
+              videoFilePath: importSheetArg.importedFilePath,
+              //TODO:importedFilePathのときactiveFrames設定できない問題
+              activeFrames: activeFrames,
+              // activeFrames: activeFrames,
+              avatar: avatar,
+              recordingType: recordingType!);
+          if (recordingType == RecordingType.video) {
+            context.go('/trim', extra: editPageArgs);
+            return;
+          }
+          context.go('/edit', extra: editPageArgs);
+        },
+        child:
+            _buildShowModalIcon('インポート', Icons.download_rounded, shortestSide),
+      );
     });
   }
 

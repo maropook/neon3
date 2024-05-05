@@ -115,7 +115,7 @@ class EditPageController extends StateNotifier<EditPageState> {
           VideoPlayerService(videoFilePath: _editPageProviderArg.videoFilePath);
       await _videoPlayerService!.init(addListenersFunction: () {
         setDisplaySubtitleTextIndex();
-
+        print(currentSeconds);
         state = state.copyWith(
             // isComplete: isVideoComplete(_videoPlayerService!),
             isPlaying: isPlaying,
@@ -142,7 +142,7 @@ class EditPageController extends StateNotifier<EditPageState> {
       });
 
       //playの後だと呼び出されない時があるので
-      Future.delayed(const Duration(milliseconds: 700)).then((_) {
+      await Future.delayed(const Duration(milliseconds: 700)).then((_) {
         getVideoPlayerWidth(editVideoPlayerKey);
       });
       await play();
@@ -313,6 +313,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     );
 
     final newSubtitleText = SubtitleText(
+      borderColorCode: "#000000", //Strokeの描画がうまく行っていないため TODO:
       id: newActiveFrame.id,
       startTime: newActiveFrame.startTime,
       endTime: newActiveFrame.endTime,

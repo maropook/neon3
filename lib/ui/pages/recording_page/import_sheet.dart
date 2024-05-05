@@ -51,7 +51,10 @@ class _ImportSheet extends StatelessWidget {
         children: [
           GestureDetector(
             child: Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
                 width: 170,
                 height: 170,
                 child: FittedBox(
@@ -71,7 +74,10 @@ class _ImportSheet extends StatelessWidget {
           ),
           GestureDetector(
             child: Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
                 width: 170,
                 height: 170,
                 child: FittedBox(

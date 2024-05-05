@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/avatar_list_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
@@ -20,7 +21,11 @@ class AvatarListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('アバター一覧'),
+        title: const Text(
+          'アバター一覧',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+        ),
         leading: IconButton(
             onPressed: () {
               context.go('/');
@@ -37,7 +42,10 @@ class AvatarListPage extends ConsumerWidget {
         ),
         itemBuilder: (context, index) {
           return Container(
-            color: Colors.white,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             child: avatarList.length != index
                 ? GestureDetector(
                     onTap: () async {

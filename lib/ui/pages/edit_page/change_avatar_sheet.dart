@@ -58,7 +58,10 @@ class _ChangeAvatarSheet extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return Container(
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: GestureDetector(
                   onTap: () async {
                     final newSelectAvatar = await ref
@@ -71,11 +74,16 @@ class _ChangeAvatarSheet extends StatelessWidget {
                     fit: StackFit.loose,
                     children: [
                       avatarList[index].stopImageUrl.isNotEmpty
-                          ? AspectRatio(
-                              aspectRatio: 1,
-                              child: UniversalImage(
-                                avatarList[index].stopImageUrl,
-                                fit: BoxFit.cover,
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: UniversalImage(
+                                  avatarList[index].stopImageUrl,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             )
                           : UniversalImage(
