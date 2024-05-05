@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -29,6 +30,9 @@ class SubtitleTimingEditSheetState with _$SubtitleTimingEditSheetState {
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(false) bool isComplete,
+    @Default(0.0) double currentSeconds,
+    @Default([]) List<int> displaySubtitleIndexList,
+    @Default(false) bool isExistSubtitleTextNow,
   }) = _SubtitleTimingEditSheetState;
 }
 
@@ -74,7 +78,6 @@ class SubtitleTimingEditSheetController
   bool get isPlaying => _videoPlayerService?.isPlaying ?? false;
   Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
   Duration get position => _videoPlayerService?.position ?? Duration.zero;
-  double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
   double get videoDurationInMilliseconds =>
       _videoPlayerService?.videoDurationInMilliseconds ?? 0;
@@ -88,6 +91,21 @@ class SubtitleTimingEditSheetController
   double get eachPart => _thumbnailService?.eachPart ?? 0;
   double get shortestSide => _subtitleTimingEditSheetProviderArg.shortestSide;
 
+//animation_avatar
+  Timer? _secondTimer;
+  Timer? _frameTimer;
+  //videoPlayerのaddListenerはfpsが2レベルなのでカクつくので自作のTimerでAvatarや字幕の出現の判定をする
+  double startSeconds = 0.0;
+  int _currentDetailedFrame = 0;
+
+  final double threshold = 10.0;
+  //1秒あたりの画像コマ数 videoPlayerのCallBackは0.485~0.496あたりの間
+  final int fps = 10;
+  int get spf => 1000 ~/ fps;
+
+  double get currentMillSeconds => 0.001 * (_currentDetailedFrame * spf);
+  double get currentSeconds => state.currentSeconds + currentMillSeconds;
+
   Future<void> init() async {
     try {
       state = state.copyWith(
@@ -99,10 +117,11 @@ class SubtitleTimingEditSheetController
       await _videoPlayerService!.init(addListenersFunction: () {
         videoCompleteCallback();
         state = state.copyWith(
-            // isComplete: isVideoComplete(_videoPlayerService!),
-            isPlaying: isPlaying,
-            videoPosition: position,
-            isAvatarActive: isAvatarActive(currentSeconds));
+          // isComplete: isVideoComplete(_videoPlayerService!),
+          isPlaying: isPlaying,
+          videoPosition: position,
+          isAvatarActive: isAvatarActive(currentSeconds),
+        );
       });
 
       // await _audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -141,23 +160,62 @@ class SubtitleTimingEditSheetController
     await _videoPlayerService?.play();
     await _audioPlayer
         .play(UrlSource(_subtitleTimingEditSheetProviderArg.audioFilePath));
+    setTimer();
   }
 
   Future<void> seek({required Duration duration}) async {
     await _audioPlayer.seek(duration);
     await _videoPlayerService?.seek(duration: duration);
+
+    disposeTimer();
+    seekTimer(duration);
   }
 
   Future<void> pause() async {
     await _audioPlayer.pause();
     await _videoPlayerService?.pause();
+
+    disposeTimer();
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose();
     _videoPlayerService?.dispose();
+
+    disposeTimer();
     super.dispose();
+  }
+
+  Future<void> setTimer() async {
+    _frameTimer = Timer.periodic(Duration(milliseconds: spf), (timer) async {
+      _currentDetailedFrame++;
+      print(currentSeconds);
+      // setDisplaySubtitleTextIndex();
+      state = state.copyWith(
+        isAvatarActive: isAvatarActive(currentSeconds),
+      );
+    });
+    _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      state = state.copyWith(currentSeconds: state.currentSeconds + 1.0);
+      _currentDetailedFrame = 0;
+    });
+  }
+
+  void seekTimer(Duration duration) {
+    state = state.copyWith(currentSeconds: duration.inSeconds.toDouble());
+    _currentDetailedFrame = 0;
+  }
+
+  void resetTime() {
+    state = state.copyWith(currentSeconds: 0.0);
+    _currentDetailedFrame = 0;
+  }
+
+  void disposeTimer() {
+    resetTime();
+    _frameTimer?.cancel();
+    _secondTimer?.cancel();
   }
 
   Future<void> videoCompleteCallback() async {
@@ -286,5 +344,24 @@ class SubtitleTimingEditSheetController
         endTimeDragged(index, endPos, id);
       }
     }
+  }
+
+  //subtitle_display
+  void setDisplaySubtitleTextIndex() {
+    final texts = state.subtitleTexts;
+    bool isExistSubtitleTextNow = false;
+    List<int> displaySubtitleIndexList = [];
+
+    for (int i = 0; i < texts.length; ++i) {
+      if (texts[i].startTime <= currentSeconds &&
+          texts[i].endTime >= currentSeconds) {
+        displaySubtitleIndexList.add(i);
+        isExistSubtitleTextNow = true;
+      }
+    }
+
+    state = state.copyWith(
+        isExistSubtitleTextNow: isExistSubtitleTextNow,
+        displaySubtitleIndexList: [...displaySubtitleIndexList]);
   }
 }

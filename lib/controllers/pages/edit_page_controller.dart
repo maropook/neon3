@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -26,7 +27,6 @@ class EditPageState with _$EditPageState {
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
-    @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isAvatarActive,
     @Default(1.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
@@ -37,8 +37,10 @@ class EditPageState with _$EditPageState {
     @Default(Duration.zero) Duration videoPosition,
     @Default(Duration.zero) Duration beforeShowingVideoPosition,
     @Default(false) bool isComplete,
+    @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
+    @Default(0.0) double currentSeconds,
     @Default([]) List<ActiveFrame> activeFrames,
   }) = _EditPageState;
 }
@@ -86,7 +88,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   bool get isPlaying => _videoPlayerService?.isPlaying ?? false;
   Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
   Duration get position => _videoPlayerService?.position ?? Duration.zero;
-  double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
+  // double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
   double get videoDurationInMilliseconds =>
       _videoPlayerService?.videoDurationInMilliseconds ?? 0.0;
@@ -100,6 +102,21 @@ class EditPageController extends StateNotifier<EditPageState> {
       numberOfThumbnails * thumbnailHeight * aspectRatio;
   double get eachPart => _thumbnailService?.eachPart ?? 0;
   double get shortestSide => _editPageProviderArg.shortestSide;
+
+//animation_avatar
+  Timer? _secondTimer;
+  Timer? _frameTimer;
+  //videoPlayerのaddListenerはfpsが2レベルなのでカクつくので自作のTimerでAvatarや字幕の出現の判定をする
+  double startSeconds = 0.0;
+  int _currentDetailedFrame = 0;
+
+  final double threshold = 10.0;
+  //1秒あたりの画像コマ数 videoPlayerのCallBackは0.485~0.496あたりの間
+  final int fps = 10;
+  int get spf => 1000 ~/ fps;
+
+  double get currentMillSeconds => 0.001 * (_currentDetailedFrame * spf);
+  double get currentSeconds => state.currentSeconds + currentMillSeconds;
 
   Future<void> init() async {
     try {
@@ -117,10 +134,11 @@ class EditPageController extends StateNotifier<EditPageState> {
         setDisplaySubtitleTextIndex();
         print(currentSeconds);
         state = state.copyWith(
-            // isComplete: isVideoComplete(_videoPlayerService!),
-            isPlaying: isPlaying,
-            videoPosition: position,
-            isAvatarActive: isAvatarActive(currentSeconds));
+          // isComplete: isVideoComplete(_videoPlayerService!),
+          isPlaying: isPlaying,
+          videoPosition: position,
+          // isAvatarActive: isAvatarActive(currentSeconds)
+        );
         videoCompleteCallback();
       });
       if (recordingType != RecordingType.video) {
@@ -155,6 +173,8 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _videoPlayerService?.play();
     await _audioPlayerService?.play(_editPageProviderArg.audioFilePath);
 
+    setTimer();
+
     await _musicPlayerService?.play(state.musicFilePath);
     await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
@@ -165,6 +185,9 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     await _musicPlayerService?.seek(duration: duration);
     await _ttsAudioPlayerService?.seek(duration: duration);
+
+    disposeTimer();
+    seekTimer(duration);
   }
 
   Future<void> pause() async {
@@ -173,6 +196,40 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     await _musicPlayerService?.pause();
     await _ttsAudioPlayerService?.pause();
+
+    disposeTimer();
+  }
+
+  Future<void> setTimer() async {
+    _frameTimer = Timer.periodic(Duration(milliseconds: spf), (timer) async {
+      _currentDetailedFrame++;
+      print(currentSeconds);
+      setDisplaySubtitleTextIndex();
+      state = state.copyWith(
+        isAvatarActive: isAvatarActive(currentSeconds),
+        // videoPosition: Duration(milliseconds: (currentSeconds * 0.001).toInt()),
+      );
+    });
+    _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      state = state.copyWith(currentSeconds: state.currentSeconds + 1.0);
+      _currentDetailedFrame = 0;
+    });
+  }
+
+  void seekTimer(Duration duration) {
+    state = state.copyWith(currentSeconds: duration.inSeconds.toDouble());
+    _currentDetailedFrame = 0;
+  }
+
+  void resetTime() {
+    state = state.copyWith(currentSeconds: 0.0);
+    _currentDetailedFrame = 0;
+  }
+
+  void disposeTimer() {
+    resetTime();
+    _frameTimer?.cancel();
+    _secondTimer?.cancel();
   }
 
   @override
@@ -182,6 +239,8 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     _musicPlayerService?.pause();
     _ttsAudioPlayerService?.pause();
+
+    disposeTimer();
 
     super.dispose();
   }
@@ -279,7 +338,6 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   //subtitle_display
   void setDisplaySubtitleTextIndex() {
-    //TODO:video_player_listenerよりtimerでやったほうがいい？
     final texts = state.subtitleTexts;
     bool isExistSubtitleTextNow = false;
     List<int> displaySubtitleIndexList = [];

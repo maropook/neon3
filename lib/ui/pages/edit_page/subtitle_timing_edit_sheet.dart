@@ -83,8 +83,12 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
         children: [
           _buildPreview(),
           _buildSubtitleTextsTimeline(),
-          _buildThumbnail(),
-          _buildTimeline(),
+          Column(
+            children: [
+              _buildThumbnail(),
+              _buildTimeline(),
+            ],
+          ),
           const SizedBox(),
         ]);
   }
@@ -181,9 +185,9 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-              for (int i = 0; i < texts.length; i++)
-                Text("${texts[i].startTime}:${texts[i].word}",
-                    style: const TextStyle(color: Styles.secondaryColor)),
+              // for (int i = 0; i < texts.length; i++)//Memo
+              //   Text("${texts[i].startTime}:${texts[i].word}",
+              //       style: const TextStyle(color: Styles.secondaryColor)),
             ],
           ),
         ),
