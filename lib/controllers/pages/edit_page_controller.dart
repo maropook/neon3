@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
@@ -8,8 +10,10 @@ import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
+import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
+import 'package:neon3/services/text_to_speech.dart';
 import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
@@ -26,19 +30,21 @@ class EditPageState with _$EditPageState {
     @Default(null) VideoPlayerService? videoPlayerService,
     @Default(null) ThumbnailService? thumbnailService,
     @Default([]) List<SubtitleText> subtitleTexts,
-    @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isAvatarActive,
     @Default(1.0) double videoPlayerWidth,
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
     @Default('') String ttsAudioFilePath,
+    @Default(false) bool isMergeTtsAudio,
     @Default(AudioType.original) AudioType audioType,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
     @Default(Duration.zero) Duration beforeShowingVideoPosition,
     @Default(false) bool isComplete,
+    @Default([]) List<int> displaySubtitleIndexList,
     @Default(false) bool isExistSubtitleTextNow,
     @Default(0) int focusTextsIndex,
+    @Default(0.0) double currentSeconds,
     @Default([]) List<ActiveFrame> activeFrames,
   }) = _EditPageState;
 }
@@ -86,7 +92,7 @@ class EditPageController extends StateNotifier<EditPageState> {
   bool get isPlaying => _videoPlayerService?.isPlaying ?? false;
   Duration get videoDuration => _videoPlayerService?.duration ?? Duration.zero;
   Duration get position => _videoPlayerService?.position ?? Duration.zero;
-  double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
+  // double get currentSeconds => _videoPlayerService?.currentSeconds ?? 0.0;
   double get aspectRatio => _videoPlayerService?.aspectRatio ?? 1;
   double get videoDurationInMilliseconds =>
       _videoPlayerService?.videoDurationInMilliseconds ?? 0.0;
@@ -100,6 +106,21 @@ class EditPageController extends StateNotifier<EditPageState> {
       numberOfThumbnails * thumbnailHeight * aspectRatio;
   double get eachPart => _thumbnailService?.eachPart ?? 0;
   double get shortestSide => _editPageProviderArg.shortestSide;
+
+//animation_avatar
+  Timer? _secondTimer;
+  Timer? _frameTimer;
+  //videoPlayerのaddListenerはfpsが2レベルなのでカクつくので自作のTimerでAvatarや字幕の出現の判定をする
+  double startSeconds = 0.0;
+  int _currentDetailedFrame = 0;
+
+  final double threshold = 10.0;
+  //1秒あたりの画像コマ数 videoPlayerのCallBackは0.485~0.496あたりの間
+  final int fps = 10;
+  int get spf => 1000 ~/ fps;
+
+  double get currentMillSeconds => 0.001 * (_currentDetailedFrame * spf);
+  double get currentSeconds => state.currentSeconds + currentMillSeconds;
 
   Future<void> init() async {
     try {
@@ -117,10 +138,11 @@ class EditPageController extends StateNotifier<EditPageState> {
         setDisplaySubtitleTextIndex();
         print(currentSeconds);
         state = state.copyWith(
-            // isComplete: isVideoComplete(_videoPlayerService!),
-            isPlaying: isPlaying,
-            videoPosition: position,
-            isAvatarActive: isAvatarActive(currentSeconds));
+          // isComplete: isVideoComplete(_videoPlayerService!),
+          isPlaying: isPlaying,
+          videoPosition: position,
+          // isAvatarActive: isAvatarActive(currentSeconds)
+        );
         videoCompleteCallback();
       });
       if (recordingType != RecordingType.video) {
@@ -155,6 +177,8 @@ class EditPageController extends StateNotifier<EditPageState> {
     await _videoPlayerService?.play();
     await _audioPlayerService?.play(_editPageProviderArg.audioFilePath);
 
+    setTimer();
+
     await _musicPlayerService?.play(state.musicFilePath);
     await _ttsAudioPlayerService?.play(state.ttsAudioFilePath);
   }
@@ -165,6 +189,9 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     await _musicPlayerService?.seek(duration: duration);
     await _ttsAudioPlayerService?.seek(duration: duration);
+
+    disposeTimer();
+    seekTimer(duration);
   }
 
   Future<void> pause() async {
@@ -173,6 +200,40 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     await _musicPlayerService?.pause();
     await _ttsAudioPlayerService?.pause();
+
+    disposeTimer();
+  }
+
+  Future<void> setTimer() async {
+    _frameTimer = Timer.periodic(Duration(milliseconds: spf), (timer) async {
+      _currentDetailedFrame++;
+      print(currentSeconds);
+      setDisplaySubtitleTextIndex();
+      state = state.copyWith(
+        isAvatarActive: isAvatarActive(currentSeconds),
+        // videoPosition: Duration(milliseconds: (currentSeconds * 0.001).toInt()),
+      );
+    });
+    _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      state = state.copyWith(currentSeconds: state.currentSeconds + 1.0);
+      _currentDetailedFrame = 0;
+    });
+  }
+
+  void seekTimer(Duration duration) {
+    state = state.copyWith(currentSeconds: duration.inSeconds.toDouble());
+    _currentDetailedFrame = 0;
+  }
+
+  void resetTime() {
+    state = state.copyWith(currentSeconds: 0.0);
+    _currentDetailedFrame = 0;
+  }
+
+  void disposeTimer() {
+    resetTime();
+    _frameTimer?.cancel();
+    _secondTimer?.cancel();
   }
 
   @override
@@ -182,6 +243,8 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     _musicPlayerService?.pause();
     _ttsAudioPlayerService?.pause();
+
+    disposeTimer();
 
     super.dispose();
   }
@@ -279,7 +342,6 @@ class EditPageController extends StateNotifier<EditPageState> {
 
   //subtitle_display
   void setDisplaySubtitleTextIndex() {
-    //TODO:video_player_listenerよりtimerでやったほうがいい？
     final texts = state.subtitleTexts;
     bool isExistSubtitleTextNow = false;
     List<int> displaySubtitleIndexList = [];
@@ -309,11 +371,10 @@ class EditPageController extends StateNotifier<EditPageState> {
     final newActiveFrame = ActiveFrame(
       id: const Uuid().v4(),
       startTime: currentSeconds,
-      endTime: videoDurationInSeconds,
+      endTime: (currentSeconds + videoDurationInSeconds) / 2,
     );
 
     final newSubtitleText = SubtitleText(
-      borderColorCode: "#000000", //Strokeの描画がうまく行っていないため TODO:
       id: newActiveFrame.id,
       startTime: newActiveFrame.startTime,
       endTime: newActiveFrame.endTime,
@@ -340,5 +401,46 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     state = state.copyWith(
         subtitleTexts: [...subtitleTexts], activeFrames: [...activeFrames]);
+  }
+
+//artificial_voice
+  final TextToSpeechService textToSpeechService = TextToSpeechService();
+  final EncodeService encodeService = EncodeService();
+
+  bool isExistTexts() {
+    for (final SubtitleText text in state.subtitleTexts) {
+      return text.word != '';
+    }
+    return false;
+  }
+
+  Future<String?> switchAudioType(AudioType targetAudioType) async {
+    //というかttsAudioFileをわたせばよいのでは？
+    //あとあと字幕変えた時にこまるのか・・字幕の文字変わってるかもしれないから。
+    //頻繁に押す人いない
+    //ttsAudioTypeだけ渡したらいいんじゃないか？
+    //というかこれ字幕変えてすぐは人工音声アップデートされないね、自分で押しに行かないと
+    //でもgenerate
+    //sheetにisMergeTtsAudioをわたして、arg.isMergeTtsAudioがtrueのときは
+    //generateSpeechFileをしない
+    //sheetから最初にttsFileをもらう、そのあとはtargetAudioTypeをもらう・・
+    if (targetAudioType == AudioType.artificial && isExistTexts()) {
+      state = state.copyWith(audioType: AudioType.artificial);
+      // if (state.isMergeTtsAudio) {
+      //   return state.ttsAudioFilePath;
+      // }//作り直してもいいでしょ。
+      EasyLoading.show(status: '人口音声を作成中・・');
+      final subtitleTexts =
+          await textToSpeechService.generateSpeechFile(state.subtitleTexts);
+      final ttsAudioFilePath = await encodeService.mergeAudio(subtitleTexts);
+      state = state.copyWith(
+          ttsAudioFilePath: ttsAudioFilePath,
+          isMergeTtsAudio: true,
+          subtitleTexts: subtitleTexts);
+      EasyLoading.showSuccess('人口音声が作成されました');
+      return ttsAudioFilePath;
+    }
+    state = state.copyWith(audioType: AudioType.original);
+    return 'delete';
   }
 }

@@ -38,15 +38,15 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires to add file to your camera</string>
+	<string>アプリに表示・使用するための写真や動画を撮影する目的でリクエストします。</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>We need to access to the microphone to record audio file</string>
+	<string>アプリで使用するための音声を撮影する目的でリクエストします。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>撮影した写真を保存します</string>
+	<string>アプリで撮影した写真や動画を保存する目的でリクエストします。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires to access your photo library</string>
+	<string>アプリに表示・使用するための写真や動画をライブラリから選択する目的でリクエストします。</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>This permission is required to use voice analysis.</string>
+	<string>アプリで音声を文字起こしするための音声解析をする目的でリクエストします。</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AkazukiPOP.otf</string>

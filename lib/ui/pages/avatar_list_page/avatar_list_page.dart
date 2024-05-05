@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
@@ -24,7 +25,7 @@ class AvatarListPage extends ConsumerWidget {
         title: const Text(
           'アバター一覧',
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+              fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
         ),
         leading: IconButton(
             onPressed: () {
@@ -69,10 +70,25 @@ class AvatarListPage extends ConsumerWidget {
                                 fit: BoxFit.cover,
                               ),
                         if (avatarList[index].id == selectedAvatar.id)
-                          const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                            size: 30,
+                          // Opacity(
+                          //   opacity: 0.8,
+                          //   child: FittedBox(
+                          //     fit: BoxFit.scaleDown,
+                          //     child: SvgPicture.asset(
+                          //       Assets.images.icons.checkAvatarGleen,
+                          //       width: 30,
+                          //       height: 30,
+                          //       // color: Styles.secondaryColor,
+                          //     ),
+                          //   ),
+                          // ),
+                          const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Styles.pastelGreenColor,
+                              size: 30,
+                            ),
                           ),
                       ],
                     ))

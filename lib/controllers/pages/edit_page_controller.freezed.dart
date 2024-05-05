@@ -22,20 +22,22 @@ mixin _$EditPageState {
       throw _privateConstructorUsedError;
   ThumbnailService? get thumbnailService => throw _privateConstructorUsedError;
   List<SubtitleText> get subtitleTexts => throw _privateConstructorUsedError;
-  List<int> get displaySubtitleIndexList => throw _privateConstructorUsedError;
   bool get isAvatarActive => throw _privateConstructorUsedError;
   double get videoPlayerWidth => throw _privateConstructorUsedError;
   String get thumbnailFilePath => throw _privateConstructorUsedError;
   String get musicFilePath => throw _privateConstructorUsedError;
   String get ttsAudioFilePath => throw _privateConstructorUsedError;
+  bool get isMergeTtsAudio => throw _privateConstructorUsedError;
   AudioType get audioType => throw _privateConstructorUsedError;
   List<Uint8List?> get thumbnailFileDataList =>
       throw _privateConstructorUsedError;
   Duration get videoPosition => throw _privateConstructorUsedError;
   Duration get beforeShowingVideoPosition => throw _privateConstructorUsedError;
   bool get isComplete => throw _privateConstructorUsedError;
+  List<int> get displaySubtitleIndexList => throw _privateConstructorUsedError;
   bool get isExistSubtitleTextNow => throw _privateConstructorUsedError;
   int get focusTextsIndex => throw _privateConstructorUsedError;
+  double get currentSeconds => throw _privateConstructorUsedError;
   List<ActiveFrame> get activeFrames => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -55,19 +57,21 @@ abstract class $EditPageStateCopyWith<$Res> {
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
-      List<int> displaySubtitleIndexList,
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
       String musicFilePath,
       String ttsAudioFilePath,
+      bool isMergeTtsAudio,
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       Duration beforeShowingVideoPosition,
       bool isComplete,
+      List<int> displaySubtitleIndexList,
       bool isExistSubtitleTextNow,
       int focusTextsIndex,
+      double currentSeconds,
       List<ActiveFrame> activeFrames});
 
   $AvatarCopyWith<$Res>? get avatar;
@@ -91,19 +95,21 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
-    Object? displaySubtitleIndexList = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
     Object? musicFilePath = null,
     Object? ttsAudioFilePath = null,
+    Object? isMergeTtsAudio = null,
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? beforeShowingVideoPosition = null,
     Object? isComplete = null,
+    Object? displaySubtitleIndexList = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
+    Object? currentSeconds = null,
     Object? activeFrames = null,
   }) {
     return _then(_value.copyWith(
@@ -127,10 +133,6 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
               as List<SubtitleText>,
-      displaySubtitleIndexList: null == displaySubtitleIndexList
-          ? _value.displaySubtitleIndexList
-          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
-              as List<int>,
       isAvatarActive: null == isAvatarActive
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
@@ -151,6 +153,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.ttsAudioFilePath
           : ttsAudioFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      isMergeTtsAudio: null == isMergeTtsAudio
+          ? _value.isMergeTtsAudio
+          : isMergeTtsAudio // ignore: cast_nullable_to_non_nullable
+              as bool,
       audioType: null == audioType
           ? _value.audioType
           : audioType // ignore: cast_nullable_to_non_nullable
@@ -171,6 +177,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
               as bool,
+      displaySubtitleIndexList: null == displaySubtitleIndexList
+          ? _value.displaySubtitleIndexList
+          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       isExistSubtitleTextNow: null == isExistSubtitleTextNow
           ? _value.isExistSubtitleTextNow
           : isExistSubtitleTextNow // ignore: cast_nullable_to_non_nullable
@@ -179,6 +189,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.focusTextsIndex
           : focusTextsIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      currentSeconds: null == currentSeconds
+          ? _value.currentSeconds
+          : currentSeconds // ignore: cast_nullable_to_non_nullable
+              as double,
       activeFrames: null == activeFrames
           ? _value.activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
@@ -213,19 +227,21 @@ abstract class _$$EditPageStateImplCopyWith<$Res>
       VideoPlayerService? videoPlayerService,
       ThumbnailService? thumbnailService,
       List<SubtitleText> subtitleTexts,
-      List<int> displaySubtitleIndexList,
       bool isAvatarActive,
       double videoPlayerWidth,
       String thumbnailFilePath,
       String musicFilePath,
       String ttsAudioFilePath,
+      bool isMergeTtsAudio,
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
       Duration beforeShowingVideoPosition,
       bool isComplete,
+      List<int> displaySubtitleIndexList,
       bool isExistSubtitleTextNow,
       int focusTextsIndex,
+      double currentSeconds,
       List<ActiveFrame> activeFrames});
 
   @override
@@ -248,19 +264,21 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
     Object? videoPlayerService = freezed,
     Object? thumbnailService = freezed,
     Object? subtitleTexts = null,
-    Object? displaySubtitleIndexList = null,
     Object? isAvatarActive = null,
     Object? videoPlayerWidth = null,
     Object? thumbnailFilePath = null,
     Object? musicFilePath = null,
     Object? ttsAudioFilePath = null,
+    Object? isMergeTtsAudio = null,
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? beforeShowingVideoPosition = null,
     Object? isComplete = null,
+    Object? displaySubtitleIndexList = null,
     Object? isExistSubtitleTextNow = null,
     Object? focusTextsIndex = null,
+    Object? currentSeconds = null,
     Object? activeFrames = null,
   }) {
     return _then(_$EditPageStateImpl(
@@ -284,10 +302,6 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
           ? _value._subtitleTexts
           : subtitleTexts // ignore: cast_nullable_to_non_nullable
               as List<SubtitleText>,
-      displaySubtitleIndexList: null == displaySubtitleIndexList
-          ? _value._displaySubtitleIndexList
-          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
-              as List<int>,
       isAvatarActive: null == isAvatarActive
           ? _value.isAvatarActive
           : isAvatarActive // ignore: cast_nullable_to_non_nullable
@@ -308,6 +322,10 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
           ? _value.ttsAudioFilePath
           : ttsAudioFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      isMergeTtsAudio: null == isMergeTtsAudio
+          ? _value.isMergeTtsAudio
+          : isMergeTtsAudio // ignore: cast_nullable_to_non_nullable
+              as bool,
       audioType: null == audioType
           ? _value.audioType
           : audioType // ignore: cast_nullable_to_non_nullable
@@ -328,6 +346,10 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
               as bool,
+      displaySubtitleIndexList: null == displaySubtitleIndexList
+          ? _value._displaySubtitleIndexList
+          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       isExistSubtitleTextNow: null == isExistSubtitleTextNow
           ? _value.isExistSubtitleTextNow
           : isExistSubtitleTextNow // ignore: cast_nullable_to_non_nullable
@@ -336,6 +358,10 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
           ? _value.focusTextsIndex
           : focusTextsIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      currentSeconds: null == currentSeconds
+          ? _value.currentSeconds
+          : currentSeconds // ignore: cast_nullable_to_non_nullable
+              as double,
       activeFrames: null == activeFrames
           ? _value._activeFrames
           : activeFrames // ignore: cast_nullable_to_non_nullable
@@ -353,23 +379,25 @@ class _$EditPageStateImpl implements _EditPageState {
       this.videoPlayerService = null,
       this.thumbnailService = null,
       final List<SubtitleText> subtitleTexts = const [],
-      final List<int> displaySubtitleIndexList = const [],
       this.isAvatarActive = false,
       this.videoPlayerWidth = 1.0,
       this.thumbnailFilePath = '',
       this.musicFilePath = '',
       this.ttsAudioFilePath = '',
+      this.isMergeTtsAudio = false,
       this.audioType = AudioType.original,
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,
       this.beforeShowingVideoPosition = Duration.zero,
       this.isComplete = false,
+      final List<int> displaySubtitleIndexList = const [],
       this.isExistSubtitleTextNow = false,
       this.focusTextsIndex = 0,
+      this.currentSeconds = 0.0,
       final List<ActiveFrame> activeFrames = const []})
       : _subtitleTexts = subtitleTexts,
-        _displaySubtitleIndexList = displaySubtitleIndexList,
         _thumbnailFileDataList = thumbnailFileDataList,
+        _displaySubtitleIndexList = displaySubtitleIndexList,
         _activeFrames = activeFrames;
 
   @override
@@ -393,16 +421,6 @@ class _$EditPageStateImpl implements _EditPageState {
     return EqualUnmodifiableListView(_subtitleTexts);
   }
 
-  final List<int> _displaySubtitleIndexList;
-  @override
-  @JsonKey()
-  List<int> get displaySubtitleIndexList {
-    if (_displaySubtitleIndexList is EqualUnmodifiableListView)
-      return _displaySubtitleIndexList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_displaySubtitleIndexList);
-  }
-
   @override
   @JsonKey()
   final bool isAvatarActive;
@@ -418,6 +436,9 @@ class _$EditPageStateImpl implements _EditPageState {
   @override
   @JsonKey()
   final String ttsAudioFilePath;
+  @override
+  @JsonKey()
+  final bool isMergeTtsAudio;
   @override
   @JsonKey()
   final AudioType audioType;
@@ -440,12 +461,25 @@ class _$EditPageStateImpl implements _EditPageState {
   @override
   @JsonKey()
   final bool isComplete;
+  final List<int> _displaySubtitleIndexList;
+  @override
+  @JsonKey()
+  List<int> get displaySubtitleIndexList {
+    if (_displaySubtitleIndexList is EqualUnmodifiableListView)
+      return _displaySubtitleIndexList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_displaySubtitleIndexList);
+  }
+
   @override
   @JsonKey()
   final bool isExistSubtitleTextNow;
   @override
   @JsonKey()
   final int focusTextsIndex;
+  @override
+  @JsonKey()
+  final double currentSeconds;
   final List<ActiveFrame> _activeFrames;
   @override
   @JsonKey()
@@ -457,7 +491,7 @@ class _$EditPageStateImpl implements _EditPageState {
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, displaySubtitleIndexList: $displaySubtitleIndexList, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex, activeFrames: $activeFrames)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, isMergeTtsAudio: $isMergeTtsAudio, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, displaySubtitleIndexList: $displaySubtitleIndexList, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex, currentSeconds: $currentSeconds, activeFrames: $activeFrames)';
   }
 
   @override
@@ -474,8 +508,6 @@ class _$EditPageStateImpl implements _EditPageState {
                 other.thumbnailService == thumbnailService) &&
             const DeepCollectionEquality()
                 .equals(other._subtitleTexts, _subtitleTexts) &&
-            const DeepCollectionEquality().equals(
-                other._displaySubtitleIndexList, _displaySubtitleIndexList) &&
             (identical(other.isAvatarActive, isAvatarActive) ||
                 other.isAvatarActive == isAvatarActive) &&
             (identical(other.videoPlayerWidth, videoPlayerWidth) ||
@@ -486,6 +518,8 @@ class _$EditPageStateImpl implements _EditPageState {
                 other.musicFilePath == musicFilePath) &&
             (identical(other.ttsAudioFilePath, ttsAudioFilePath) ||
                 other.ttsAudioFilePath == ttsAudioFilePath) &&
+            (identical(other.isMergeTtsAudio, isMergeTtsAudio) ||
+                other.isMergeTtsAudio == isMergeTtsAudio) &&
             (identical(other.audioType, audioType) ||
                 other.audioType == audioType) &&
             const DeepCollectionEquality()
@@ -498,10 +532,14 @@ class _$EditPageStateImpl implements _EditPageState {
                     beforeShowingVideoPosition) &&
             (identical(other.isComplete, isComplete) ||
                 other.isComplete == isComplete) &&
+            const DeepCollectionEquality().equals(
+                other._displaySubtitleIndexList, _displaySubtitleIndexList) &&
             (identical(other.isExistSubtitleTextNow, isExistSubtitleTextNow) ||
                 other.isExistSubtitleTextNow == isExistSubtitleTextNow) &&
             (identical(other.focusTextsIndex, focusTextsIndex) ||
                 other.focusTextsIndex == focusTextsIndex) &&
+            (identical(other.currentSeconds, currentSeconds) ||
+                other.currentSeconds == currentSeconds) &&
             const DeepCollectionEquality()
                 .equals(other._activeFrames, _activeFrames));
   }
@@ -514,19 +552,21 @@ class _$EditPageStateImpl implements _EditPageState {
         videoPlayerService,
         thumbnailService,
         const DeepCollectionEquality().hash(_subtitleTexts),
-        const DeepCollectionEquality().hash(_displaySubtitleIndexList),
         isAvatarActive,
         videoPlayerWidth,
         thumbnailFilePath,
         musicFilePath,
         ttsAudioFilePath,
+        isMergeTtsAudio,
         audioType,
         const DeepCollectionEquality().hash(_thumbnailFileDataList),
         videoPosition,
         beforeShowingVideoPosition,
         isComplete,
+        const DeepCollectionEquality().hash(_displaySubtitleIndexList),
         isExistSubtitleTextNow,
         focusTextsIndex,
+        currentSeconds,
         const DeepCollectionEquality().hash(_activeFrames)
       ]);
 
@@ -544,19 +584,21 @@ abstract class _EditPageState implements EditPageState {
       final VideoPlayerService? videoPlayerService,
       final ThumbnailService? thumbnailService,
       final List<SubtitleText> subtitleTexts,
-      final List<int> displaySubtitleIndexList,
       final bool isAvatarActive,
       final double videoPlayerWidth,
       final String thumbnailFilePath,
       final String musicFilePath,
       final String ttsAudioFilePath,
+      final bool isMergeTtsAudio,
       final AudioType audioType,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
       final Duration beforeShowingVideoPosition,
       final bool isComplete,
+      final List<int> displaySubtitleIndexList,
       final bool isExistSubtitleTextNow,
       final int focusTextsIndex,
+      final double currentSeconds,
       final List<ActiveFrame> activeFrames}) = _$EditPageStateImpl;
 
   @override
@@ -570,8 +612,6 @@ abstract class _EditPageState implements EditPageState {
   @override
   List<SubtitleText> get subtitleTexts;
   @override
-  List<int> get displaySubtitleIndexList;
-  @override
   bool get isAvatarActive;
   @override
   double get videoPlayerWidth;
@@ -581,6 +621,8 @@ abstract class _EditPageState implements EditPageState {
   String get musicFilePath;
   @override
   String get ttsAudioFilePath;
+  @override
+  bool get isMergeTtsAudio;
   @override
   AudioType get audioType;
   @override
@@ -592,9 +634,13 @@ abstract class _EditPageState implements EditPageState {
   @override
   bool get isComplete;
   @override
+  List<int> get displaySubtitleIndexList;
+  @override
   bool get isExistSubtitleTextNow;
   @override
   int get focusTextsIndex;
+  @override
+  double get currentSeconds;
   @override
   List<ActiveFrame> get activeFrames;
   @override

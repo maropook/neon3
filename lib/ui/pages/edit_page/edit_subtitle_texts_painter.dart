@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:neon3/config/styles.dart';
+import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
 class EditSubtitleTextsPainter extends CustomPainter {
@@ -35,14 +35,20 @@ class EditSubtitleTextsPainter extends CustomPainter {
     }
 
     final Paint timelinePaint = Paint();
+    final Paint timelinePaintBack = Paint();
     if (sttText.word.isEmpty) {
       timelinePaint.color = Colors.grey;
+      timelinePaintBack.color = Colors.grey;
     } else {
-      timelinePaint.color = const Color.fromARGB(255, 212, 212, 212);
+      timelinePaint.color =
+          HexColor.fromHex(sttText.fontColorCode).withOpacity(0.6);
+      timelinePaintBack.color = Color.fromARGB(255, 255, 255, 255);
     }
     final Rect timelineInner = Rect.fromPoints(
         Offset(startRatio * timelineWidth, 0),
         Offset(endRatio * timelineWidth, endPos.dy));
+    canvas.drawRect(timelineInner, timelinePaintBack);
+
     canvas.drawRect(timelineInner, timelinePaint);
 
     const double timelineEdgeWidth = 6.0;
