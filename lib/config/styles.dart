@@ -31,7 +31,7 @@ abstract class Styles {
   static const Color recordingColor = Color.fromARGB(255, 225, 109, 109);
   static const Color secondaryColor900 = Color.fromARGB(130, 89, 74, 49);
   static const Color pageBackground = Color.fromARGB(255, 255, 255, 255);
-  static const Color appBarTitleColor = commonTextColor;
+  static const Color appBarTitleColor = Color.fromARGB(255, 255, 255, 255);
   static const Color commonTextColor = Color(0xFF594A31);
   static const Color contentsColor = Color.fromARGB(255, 255, 255, 255);
 

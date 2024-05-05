@@ -23,7 +23,8 @@ class CompletePage extends StatelessWidget {
               title: const Text(
                 '完成',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+                    fontWeight: FontWeight.bold,
+                    color: Styles.appBarTitleColor),
               ),
               actions: [
                 IconButton(

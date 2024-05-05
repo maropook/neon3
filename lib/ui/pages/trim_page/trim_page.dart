@@ -33,7 +33,7 @@ class TrimPage extends StatelessWidget {
       title: const Text(
         'トリミング',
         style: TextStyle(
-            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+            fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
       ),
       actions: [
         Consumer(builder: (context, ref, _) {

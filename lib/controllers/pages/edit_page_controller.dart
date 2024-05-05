@@ -371,7 +371,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     final newActiveFrame = ActiveFrame(
       id: const Uuid().v4(),
       startTime: currentSeconds,
-      endTime: (currentSeconds + videoDurationInSeconds / 2),
+      endTime: (currentSeconds + videoDurationInSeconds) / 2,
     );
 
     final newSubtitleText = SubtitleText(
@@ -429,7 +429,7 @@ class EditPageController extends StateNotifier<EditPageState> {
       // if (state.isMergeTtsAudio) {
       //   return state.ttsAudioFilePath;
       // }//作り直してもいいでしょ。
-      EasyLoading.show();
+      EasyLoading.show(status: '人口音声を作成中・・');
       final subtitleTexts =
           await textToSpeechService.generateSpeechFile(state.subtitleTexts);
       final ttsAudioFilePath = await encodeService.mergeAudio(subtitleTexts);

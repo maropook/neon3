@@ -72,6 +72,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/face_smile.svg
   String get faceSmile => 'assets/images/face_smile.svg';
 
+  /// File path: assets/images/icon_ios.png
+  AssetGenImage get iconIos =>
+      const AssetGenImage('assets/images/icon_ios.png');
+
   $AssetsImagesIconsGen get icons => const $AssetsImagesIconsGen();
 
   /// File path: assets/images/movie.svg
@@ -114,6 +118,7 @@ class $AssetsImagesGen {
         encoding,
         face,
         faceSmile,
+        iconIos,
         movie,
         note,
         pencil,

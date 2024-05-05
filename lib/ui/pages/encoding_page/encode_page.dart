@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/encode_page_controller.dart';
+import 'package:neon3/gen/assets.gen.dart';
+import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/page_router.dart';
 
 class EncodePage extends ConsumerWidget {
@@ -35,7 +37,7 @@ class EncodePage extends ConsumerWidget {
             title: const Text(
               'エンコーディング',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+                  fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
             ),
           ),
           //   actions: [
@@ -76,6 +78,9 @@ class EncodePage extends ConsumerWidget {
         }
       });
 
+      final Size size = MediaQuery.of(context).size;
+      double shortestSide = size.shortestSide;
+
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -83,12 +88,21 @@ class EncodePage extends ConsumerWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(
-                  height: 310,
+                const SizedBox(height: 100),
+                SizedBox(
+                  width: shortestSide * 0.8,
+                  height: shortestSide * 0.8,
+                  child: UniversalImage(
+                    Assets.images.iconIos.path,
+                  ),
                 ),
+                const SizedBox(height: 20),
                 const Text(
                   'エンコーディング中',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
                 ),
                 _buildProgressBar(progressRate),
               ],
@@ -107,7 +121,7 @@ class EncodePage extends ConsumerWidget {
             BorderRadiusGeometry.lerp(BorderRadius.zero, BorderRadius.zero, 0),
         border: Border.all(color: Colors.white, width: 3),
         backgroundColor: Colors.white,
-        progressColor: Styles.secondaryColor,
+        progressColor: Styles.primaryColor,
       ),
     );
   }

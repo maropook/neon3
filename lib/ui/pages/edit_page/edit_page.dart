@@ -13,7 +13,6 @@ import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
-import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
@@ -52,37 +51,51 @@ class EditPage extends StatelessWidget {
       title: const Text(
         '編集',
         style: TextStyle(
-            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+            fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
       ),
       actions: [
         Consumer(builder: (context, ref, _) {
           return IconButton(
-              onPressed: () async {
-                final List<SubtitleText> subtitleTexts =
-                    ref.read(editPageProvider.select((s) => s.subtitleTexts));
-                final avatar =
-                    ref.read(editPageProvider.select((s) => s.avatar));
-                final musicFilePath =
-                    ref.read(editPageProvider.select((s) => s.musicFilePath));
-                final ttsAudioFilePath = ref
-                    .read(editPageProvider.select((s) => s.ttsAudioFilePath));
-                final activeFrames =
-                    ref.read(editPageProvider.select((s) => s.activeFrames));
-                if (avatar == null) return;
-                final encodePageArgs = EncodePageArgs(
-                  videoFilePath: editPageArgs.videoFilePath,
-                  audioFilePath: editPageArgs.audioFilePath,
-                  musicFilePath: musicFilePath,
-                  ttsAudioFilePath: ttsAudioFilePath,
-                  activeFrames: activeFrames,
-                  subtitleTexts: subtitleTexts,
-                  avatar: avatar,
-                  recordingType: editPageArgs.recordingType,
-                );
+            onPressed: () async {
+              final List<SubtitleText> subtitleTexts =
+                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
+              final avatar = ref.read(editPageProvider.select((s) => s.avatar));
+              final musicFilePath =
+                  ref.read(editPageProvider.select((s) => s.musicFilePath));
+              final ttsAudioFilePath =
+                  ref.read(editPageProvider.select((s) => s.ttsAudioFilePath));
+              final activeFrames =
+                  ref.read(editPageProvider.select((s) => s.activeFrames));
+              if (avatar == null) return;
+              final encodePageArgs = EncodePageArgs(
+                videoFilePath: editPageArgs.videoFilePath,
+                audioFilePath: editPageArgs.audioFilePath,
+                musicFilePath: musicFilePath,
+                ttsAudioFilePath: ttsAudioFilePath,
+                activeFrames: activeFrames,
+                subtitleTexts: subtitleTexts,
+                avatar: avatar,
+                recordingType: editPageArgs.recordingType,
+              );
 
-                context.go('/encoding', extra: encodePageArgs);
-              },
-              icon: const Icon(Icons.chevron_right));
+              context.go('/encoding', extra: encodePageArgs);
+            },
+            icon: Container(
+              padding:
+                  const EdgeInsets.only(right: 7, left: 7, top: 1, bottom: 1),
+              decoration: BoxDecoration(
+                border: Border.all(color: Styles.secondaryColor, width: 2),
+                borderRadius: BorderRadius.circular(3),
+              ),
+              child: const Text(
+                "完成",
+                style: TextStyle(
+                    color: Styles.secondaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+          );
         }),
       ],
       leading: IconButton(

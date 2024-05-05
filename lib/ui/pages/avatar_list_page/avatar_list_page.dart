@@ -25,7 +25,7 @@ class AvatarListPage extends ConsumerWidget {
         title: const Text(
           'アバター一覧',
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+              fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
         ),
         leading: IconButton(
             onPressed: () {

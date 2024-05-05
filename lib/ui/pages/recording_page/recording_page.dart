@@ -36,7 +36,7 @@ class RecordingPage extends ConsumerWidget {
       title: const Text(
         'レコーディング',
         style: TextStyle(
-            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
+            fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
       ),
     );
   }
@@ -67,17 +67,17 @@ class RecordingPage extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(),
-                _buildMemo(),
+                // _buildMemo(),
               ],
             )
           : Center(
               child: Column(
               children: [
-                InkWell(
-                    onTap: () => context.go('/avatar/list'),
-                    child:
-                        _buildShowModalIcon('アバター', Icons.face, shortestSide)),
-                _buildImportButton(),
+                // InkWell(
+                //     onTap: () => context.go('/avatar/list'),
+                //     child:
+                //         _buildShowModalIcon('アバター', Icons.face, shortestSide)),
+                // _buildImportButton(),
                 const CircularProgressIndicator(),
               ],
             ));
@@ -190,7 +190,7 @@ class RecordingPage extends ConsumerWidget {
           borderRadius: BorderRadiusGeometry.lerp(
               BorderRadius.zero, BorderRadius.zero, 0),
           border: Border.all(color: Colors.white.withOpacity(0.5), width: 0),
-          progressColor: Styles.recordingColor.withOpacity(0.5),
+          progressColor: Styles.primaryColor.withOpacity(0.5),
           backgroundColor: Colors.white.withOpacity(0.5),
         ),
       );
