@@ -145,11 +145,17 @@ class $AssetsImagesIconsGen {
   /// File path: assets/images/icons/avatar_face_icon.svg
   String get avatarFaceIcon => 'assets/images/icons/avatar_face_icon.svg';
 
-  /// File path: assets/images/icons/check_avatar_gleen.svg
-  String get checkAvatarGleen => 'assets/images/icons/check_avatar_gleen.svg';
+  /// File path: assets/images/icons/check_avatar_green.svg
+  String get checkAvatarGreen => 'assets/images/icons/check_avatar_green.svg';
 
   /// File path: assets/images/icons/complete_check.svg
   String get completeCheck => 'assets/images/icons/complete_check.svg';
+
+  /// File path: assets/images/icons/movie.svg
+  String get movie => 'assets/images/icons/movie.svg';
+
+  /// File path: assets/images/icons/photo_single.svg
+  String get photoSingle => 'assets/images/icons/photo_single.svg';
 
   /// File path: assets/images/icons/subtitle_add_icon.svg
   String get subtitleAddIcon => 'assets/images/icons/subtitle_add_icon.svg';
@@ -161,8 +167,10 @@ class $AssetsImagesIconsGen {
   List<String> get values => [
         artificialVoiceIcon,
         avatarFaceIcon,
-        checkAvatarGleen,
+        checkAvatarGreen,
         completeCheck,
+        movie,
+        photoSingle,
         subtitleAddIcon,
         subtitleEditIcon
       ];
