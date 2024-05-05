@@ -191,7 +191,7 @@ class SubtitleTimingEditSheetController
     _frameTimer = Timer.periodic(Duration(milliseconds: spf), (timer) async {
       _currentDetailedFrame++;
       print(currentSeconds);
-      // setDisplaySubtitleTextIndex();
+      setDisplaySubtitleTextIndex();
       state = state.copyWith(
         isAvatarActive: isAvatarActive(currentSeconds),
       );

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
@@ -6,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/subtitle_timing_edit_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
+import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
 import 'package:neon3/ui/pages/edit_page/edit_subtitle_texts_painter.dart';
 import 'package:neon3/ui/pages/page_router.dart';
@@ -103,21 +105,26 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
           ref.watch(subtitleTimingEditSheetProvider.select((s) => s.isPlaying));
 
       return videoController != null
-          ? GestureDetector(
-              onTap: () {
-                isPlaying
-                    ? subtitleTimingEditSheetController.pause()
-                    : subtitleTimingEditSheetController.play();
-              },
-              child: Stack(alignment: Alignment.bottomRight, children: [
-                RepaintBoundary(
-                    key: subtitleTimingEditVideoPlayerKey,
-                    child: SizedBox(
-                      height: 250,
-                      child: videoController.buildVideoPlayer(),
-                    )),
-                _buildAvatar(),
-              ]),
+          ? Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    isPlaying
+                        ? subtitleTimingEditSheetController.pause()
+                        : subtitleTimingEditSheetController.play();
+                  },
+                  child: Stack(alignment: Alignment.bottomRight, children: [
+                    RepaintBoundary(
+                        key: subtitleTimingEditVideoPlayerKey,
+                        child: SizedBox(
+                          height: 250,
+                          child: videoController.buildVideoPlayer(),
+                        )),
+                    _buildAvatar(),
+                  ]),
+                ),
+                _buildSubtitleTexts(),
+              ],
             )
           : const CircularProgressIndicator();
     });
@@ -135,6 +142,120 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
         child: UniversalImage(isAvatarActive
             ? subtitleTimingEditPageArgs.avatar.activeImageUrl
             : subtitleTimingEditPageArgs.avatar.stopImageUrl),
+      );
+    });
+  }
+
+  Widget _buildSubtitleTexts() {
+    return Consumer(builder: (context, ref, _) {
+      final List<int> displaySubtitleIndexList = ref.watch(
+          subtitleTimingEditSheetProvider
+              .select((s) => s.displaySubtitleIndexList));
+
+      return Stack(
+        children: [
+          for (int i = 0; i < displaySubtitleIndexList.length; i++)
+            _buildSubtitleTextPosition(displaySubtitleIndexList[i])
+        ],
+      );
+    });
+  }
+
+  double getSubtitleWidth(SubtitleText text, double videoPlayerWidth) {
+    final String word = text.word;
+    final double fontSize = videoPlayerWidth * text.fontSize;
+    if (!word.contains('\n')) {
+      return fontSize * text.word.length;
+    }
+    final words = word.split('\n');
+    final wordLengthList = <int>[];
+    for (String word in words) {
+      wordLengthList.add(word.length);
+    }
+    final wordLength = wordLengthList.reduce(max);
+    return wordLength * fontSize;
+  }
+
+  Widget _buildSubtitleTextPosition(int index) {
+    // final SubtitleFontService subtitleFontService = SubtitleFontService();
+    return Consumer(builder: (context, ref, _) {
+      final videoPlayerWidth = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerWidth));
+      final double aspectRatio = ref.watch(subtitleTimingEditSheetProvider
+              .select((s) => s.videoPlayerService?.aspectRatio)) ??
+          1.0;
+      final List<SubtitleText> texts = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+
+      // final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
+
+      // final fontPadding = videoPlayerWidth *
+      //     subtitleFontService.getFontHeight(text.fontName) *
+      //     text.fontSize;
+
+      final double subtitleWidth = getSubtitleWidth(text, videoPlayerWidth);
+
+      // final bottomPadding = videoPlayerWidth * text.position.y + fontPadding;//TODO:こっちが正しいが、フォントによってpreviewがずれる
+      final bottomPadding = videoPlayerWidth * text.position.y;
+      final leftPadding = (videoPlayerWidth * text.position.x) +
+          (videoPlayerWidth - subtitleWidth) / 2;
+
+      return SizedBox(
+          height: videoPlayerWidth / aspectRatio,
+          width: videoPlayerWidth,
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: leftPadding >= 0 ? leftPadding : 0,
+                bottom: bottomPadding >= 0 ? bottomPadding : 0),
+            child: _buildSubtitleText(context, index),
+          ));
+    });
+  }
+
+  Widget _buildSubtitleText(BuildContext context, int index) {
+    return Consumer(builder: (context, ref, _) {
+      final double videoPlayerWidth = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.videoPlayerWidth));
+      final List<SubtitleText> texts = ref.watch(
+          subtitleTimingEditSheetProvider.select((s) => s.subtitleTexts));
+      final SubtitleText text = texts[index];
+
+      final Color fontColor = HexColor.fromHex(text.fontColorCode);
+      final Color fontBorderColor = HexColor.fromHex(text.borderColorCode);
+      final int fontSize = (videoPlayerWidth * text.fontSize).toInt();
+
+      return Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Text(
+            textAlign: TextAlign.center,
+            text.word,
+            style: TextStyle(
+                fontFamily:
+                    text.fontName == 'systemFont' ? null : text.fontName,
+                fontSize: fontSize.toDouble(),
+                foreground: Paint()
+                  ..color = text.word.isEmpty
+                      ? fontBorderColor.withOpacity(0.5)
+                      : fontColor),
+          ),
+          Text(
+            //縁取り文字
+            text.word.isEmpty ? '※空白のテキスト' : text.word,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily:
+                    text.fontName == 'systemFont' ? null : text.fontName,
+                fontSize: fontSize.toDouble(),
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = fontSize * 0.05
+                  ..color = text.word.isEmpty
+                      ? fontBorderColor.withOpacity(0.5)
+                      : fontBorderColor),
+          ),
+        ],
       );
     });
   }
