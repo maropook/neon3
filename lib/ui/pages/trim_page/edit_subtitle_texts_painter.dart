@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon3/config/styles.dart';
 
 class EditSubtitleTextsPainter extends CustomPainter {
   EditSubtitleTextsPainter(
@@ -41,7 +42,7 @@ class EditSubtitleTextsPainter extends CustomPainter {
     const double timelineEdgeWidth = 6.0;
     const double timelineEdgeHalfWidth = 3.0;
     final Paint timelineEdgePaint = Paint()
-      ..color = Colors.yellow
+      ..color = Styles.primaryColor
       ..strokeWidth = timelineEdgeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

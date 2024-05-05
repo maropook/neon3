@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/subtitle_edit_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
@@ -67,8 +68,8 @@ class _SubtitleEditSheet extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       _buildCompleteButton(),
       _buildSubtitleFonts(),
-      _buildSubtitleWordColors(false),
-      _buildSubtitleWordColors(true),
+      _buildSubtitleWordColors(isBorder: false),
+      // _buildSubtitleWordColors(isBorder: true),
       _buildSubtitleTextField()
     ]);
   }
@@ -139,7 +140,7 @@ class _SubtitleEditSheet extends StatelessWidget {
             controller: subtitleTextEditController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.black.withOpacity(0),
+              fillColor: Styles.secondaryColor.withOpacity(0),
               border: InputBorder.none,
             ),
           ),
@@ -164,7 +165,7 @@ class _SubtitleEditSheet extends StatelessWidget {
     });
   }
 
-  Widget _buildSubtitleWordColors(bool isBorder) {
+  Widget _buildSubtitleWordColors({required bool isBorder}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -12,7 +12,7 @@ part of 'music_edit_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$MusicEditSheetState {
@@ -57,22 +57,22 @@ class _$MusicEditSheetStateCopyWithImpl<$Res, $Val extends MusicEditSheetState>
 }
 
 /// @nodoc
-abstract class _$$_MusicEditSheetStateCopyWith<$Res>
+abstract class _$$MusicEditSheetStateImplCopyWith<$Res>
     implements $MusicEditSheetStateCopyWith<$Res> {
-  factory _$$_MusicEditSheetStateCopyWith(_$_MusicEditSheetState value,
-          $Res Function(_$_MusicEditSheetState) then) =
-      __$$_MusicEditSheetStateCopyWithImpl<$Res>;
+  factory _$$MusicEditSheetStateImplCopyWith(_$MusicEditSheetStateImpl value,
+          $Res Function(_$MusicEditSheetStateImpl) then) =
+      __$$MusicEditSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String musicFilePath});
 }
 
 /// @nodoc
-class __$$_MusicEditSheetStateCopyWithImpl<$Res>
-    extends _$MusicEditSheetStateCopyWithImpl<$Res, _$_MusicEditSheetState>
-    implements _$$_MusicEditSheetStateCopyWith<$Res> {
-  __$$_MusicEditSheetStateCopyWithImpl(_$_MusicEditSheetState _value,
-      $Res Function(_$_MusicEditSheetState) _then)
+class __$$MusicEditSheetStateImplCopyWithImpl<$Res>
+    extends _$MusicEditSheetStateCopyWithImpl<$Res, _$MusicEditSheetStateImpl>
+    implements _$$MusicEditSheetStateImplCopyWith<$Res> {
+  __$$MusicEditSheetStateImplCopyWithImpl(_$MusicEditSheetStateImpl _value,
+      $Res Function(_$MusicEditSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_MusicEditSheetStateCopyWithImpl<$Res>
   $Res call({
     Object? musicFilePath = null,
   }) {
-    return _then(_$_MusicEditSheetState(
+    return _then(_$MusicEditSheetStateImpl(
       musicFilePath: null == musicFilePath
           ? _value.musicFilePath
           : musicFilePath // ignore: cast_nullable_to_non_nullable
@@ -91,8 +91,8 @@ class __$$_MusicEditSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_MusicEditSheetState implements _MusicEditSheetState {
-  const _$_MusicEditSheetState({this.musicFilePath = ''});
+class _$MusicEditSheetStateImpl implements _MusicEditSheetState {
+  const _$MusicEditSheetStateImpl({this.musicFilePath = ''});
 
   @override
   @JsonKey()
@@ -104,10 +104,10 @@ class _$_MusicEditSheetState implements _MusicEditSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_MusicEditSheetState &&
+            other is _$MusicEditSheetStateImpl &&
             (identical(other.musicFilePath, musicFilePath) ||
                 other.musicFilePath == musicFilePath));
   }
@@ -118,19 +118,19 @@ class _$_MusicEditSheetState implements _MusicEditSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_MusicEditSheetStateCopyWith<_$_MusicEditSheetState> get copyWith =>
-      __$$_MusicEditSheetStateCopyWithImpl<_$_MusicEditSheetState>(
+  _$$MusicEditSheetStateImplCopyWith<_$MusicEditSheetStateImpl> get copyWith =>
+      __$$MusicEditSheetStateImplCopyWithImpl<_$MusicEditSheetStateImpl>(
           this, _$identity);
 }
 
 abstract class _MusicEditSheetState implements MusicEditSheetState {
   const factory _MusicEditSheetState({final String musicFilePath}) =
-      _$_MusicEditSheetState;
+      _$MusicEditSheetStateImpl;
 
   @override
   String get musicFilePath;
   @override
   @JsonKey(ignore: true)
-  _$$_MusicEditSheetStateCopyWith<_$_MusicEditSheetState> get copyWith =>
+  _$$MusicEditSheetStateImplCopyWith<_$MusicEditSheetStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

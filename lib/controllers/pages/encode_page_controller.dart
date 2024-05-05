@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/encode_service.dart';
@@ -24,6 +25,7 @@ class EncodePageProviderArg {
       required this.musicFilePath,
       required this.ttsAudioFilePath,
       required this.avatar,
+      required this.recordingType,
       required this.subtitleTexts,
       required this.activeFrames});
 
@@ -32,6 +34,7 @@ class EncodePageProviderArg {
   final String musicFilePath;
   final String ttsAudioFilePath;
   final Avatar avatar;
+  final RecordingType recordingType;
   final List<SubtitleText> subtitleTexts;
   final List<ActiveFrame> activeFrames;
 }
@@ -58,6 +61,7 @@ class EncodePageController extends StateNotifier<EncodePageState> {
         addListenersFunction: (dynamic value) {
           state = state.copyWith(progressRate: value as double);
         },
+        recordingType: _encodePageProviderArg.recordingType,
         audioFilePath: _encodePageProviderArg.audioFilePath,
         musicFilePath: _encodePageProviderArg.musicFilePath,
         ttsAudioFilePath: _encodePageProviderArg.ttsAudioFilePath,

@@ -52,8 +52,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   final CameraService _cameraService = CameraService();
   final AudioRecordService _audioRecordService = AudioRecordService();
   final FireAvatarService _fireAvatarService = FireAvatarService();
-  // final double recordingTimeLimit = 60.0;
-  final double recordingTimeLimit = 3.5; //TODO:仮の値
+  // final double recordingTimeLimit = 60.0; //TODO:仮の値 MEMO:
+  final double recordingTimeLimit = 60;
   Future<void> init() async {
     try {
       await fetchSelectedAvatarFromId();
@@ -116,7 +116,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
               ? importedFilePath //videoのときはそもそもaudioFilePathいらない
               : audioFilePath,
           videoFilePath: videoFilePath,
-          activeFrames: sampleActiveFrames, //TODO:仮の値
+          activeFrames: activeFrames, //TODO:仮の値
           // activeFrames: activeFrames,
           avatar: avatar,
           recordingType: recordingType);
@@ -175,7 +175,8 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   int _currentDetailedFrame = 0;
 
   final double threshold = 10.0;
-  final int fps = 60;
+  //1秒あたりの画像コマ数 videoPlayerのCallBackは0.485~0.496あたりの間
+  final int fps = 20;
   int get spf => 1000 ~/ fps;
 
   double get currentMillSeconds => 0.001 * (_currentDetailedFrame * spf);
@@ -192,6 +193,7 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     state = state.copyWith(currentSeconds: 0.0);
     _frameTimer = Timer.periodic(Duration(milliseconds: spf), (timer) async {
       _currentDetailedFrame++;
+      print(currentSeconds);
       await setActiveFrames();
     });
     _secondTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
@@ -209,19 +211,20 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
     if (state.isAvatarActive == isAvatarActive) return;
 
     state = state.copyWith(isAvatarActive: isAvatarActive);
+    const lag = 0.3; //動画編集の際遅れが生じるためlagの文startTimeから引く
 
     if (isAvatarActive) {
       startSeconds = currentSeconds;
     } else {
-      state = state.copyWith(activeFrames: [
-        ...state.activeFrames,
-        ActiveFrame(
-          startTime: startSeconds,
-          endTime: currentSeconds,
-          id: const Uuid().v4(),
-        )
-      ]);
-      Logger.log("setActiveFrames", state.activeFrames.toString());
+      final newActiveFrame = ActiveFrame(
+        startTime: startSeconds >= lag ? startSeconds - lag : startSeconds,
+        endTime: currentSeconds - lag,
+        id: const Uuid().v4(),
+      );
+      state =
+          state.copyWith(activeFrames: [...state.activeFrames, newActiveFrame]);
+      Logger.log("setActiveFrames",
+          ActiveFrame.listToMap(state.activeFrames).toString());
     }
   }
 

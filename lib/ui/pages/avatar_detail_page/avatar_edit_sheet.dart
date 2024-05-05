@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/avatar_edit_sheet_controller.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
@@ -109,7 +110,7 @@ class _AvatarEditSheet extends StatelessWidget {
                   '完了',
                   style: TextStyle(
                       fontSize: 25,
-                      color: Colors.black,
+                      color: Styles.secondaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),

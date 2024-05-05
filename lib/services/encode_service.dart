@@ -1,5 +1,6 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
+import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/download_image_service.dart';
@@ -71,6 +72,7 @@ class EncodeService {
 
   //TODO:現在、recording_pageから渡されたaudio_fileとactive_framesが仮の値になっている
   Future<String> encode({
+    required RecordingType recordingType,
     required String videoFilePath,
     required String audioFilePath,
     required String musicFilePath,
@@ -102,7 +104,10 @@ class EncodeService {
     AudioType audioType =
         ttsAudioFilePath.isEmpty ? AudioType.original : AudioType.artificial;
     AudioSetting audioSetting = AudioSetting(
-        defaultAudioPath: audioType == AudioType.original ? audioFilePath : '',
+        defaultAudioPath: audioType == AudioType.original ||
+                !(recordingType == RecordingType.video)
+            ? audioFilePath
+            : '',
         isMutedDefaultAudio: audioType == AudioType.original ? false : true,
         backgroundAudioPath: musicFilePath.isNotEmpty ? musicFilePath : null,
         backgroundAudioVolume: 0.1);

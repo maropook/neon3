@@ -72,6 +72,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/face_smile.svg
   String get faceSmile => 'assets/images/face_smile.svg';
 
+  $AssetsImagesIconsGen get icons => const $AssetsImagesIconsGen();
+
   /// File path: assets/images/movie.svg
   String get movie => 'assets/images/movie.svg';
 
@@ -131,6 +133,27 @@ class $AssetsMoviesGen {
 
   /// List of all assets
   List<String> get values => [sample];
+}
+
+class $AssetsImagesIconsGen {
+  const $AssetsImagesIconsGen();
+
+  /// File path: assets/images/icons/artificial_voice_icon.svg
+  String get artificialVoiceIcon =>
+      'assets/images/icons/artificial_voice_icon.svg';
+
+  /// File path: assets/images/icons/avatar_face_icon.svg
+  String get avatarFaceIcon => 'assets/images/icons/avatar_face_icon.svg';
+
+  /// File path: assets/images/icons/subtitle_add_icon.svg
+  String get subtitleAddIcon => 'assets/images/icons/subtitle_add_icon.svg';
+
+  /// File path: assets/images/icons/subtitle_edit_icon .svg
+  String get subtitleEditIcon => 'assets/images/icons/subtitle_edit_icon .svg';
+
+  /// List of all assets
+  List<String> get values =>
+      [artificialVoiceIcon, avatarFaceIcon, subtitleAddIcon, subtitleEditIcon];
 }
 
 class Assets {

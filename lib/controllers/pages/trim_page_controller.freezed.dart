@@ -12,7 +12,7 @@ part of 'trim_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$TrimPageState {
@@ -123,11 +123,11 @@ class _$TrimPageStateCopyWithImpl<$Res, $Val extends TrimPageState>
 }
 
 /// @nodoc
-abstract class _$$_TrimPageStateCopyWith<$Res>
+abstract class _$$TrimPageStateImplCopyWith<$Res>
     implements $TrimPageStateCopyWith<$Res> {
-  factory _$$_TrimPageStateCopyWith(
-          _$_TrimPageState value, $Res Function(_$_TrimPageState) then) =
-      __$$_TrimPageStateCopyWithImpl<$Res>;
+  factory _$$TrimPageStateImplCopyWith(
+          _$TrimPageStateImpl value, $Res Function(_$TrimPageStateImpl) then) =
+      __$$TrimPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -144,11 +144,11 @@ abstract class _$$_TrimPageStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_TrimPageStateCopyWithImpl<$Res>
-    extends _$TrimPageStateCopyWithImpl<$Res, _$_TrimPageState>
-    implements _$$_TrimPageStateCopyWith<$Res> {
-  __$$_TrimPageStateCopyWithImpl(
-      _$_TrimPageState _value, $Res Function(_$_TrimPageState) _then)
+class __$$TrimPageStateImplCopyWithImpl<$Res>
+    extends _$TrimPageStateCopyWithImpl<$Res, _$TrimPageStateImpl>
+    implements _$$TrimPageStateImplCopyWith<$Res> {
+  __$$TrimPageStateImplCopyWithImpl(
+      _$TrimPageStateImpl _value, $Res Function(_$TrimPageStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -165,7 +165,7 @@ class __$$_TrimPageStateCopyWithImpl<$Res>
     Object? endTimeInMilliseconds = null,
     Object? isPlayingBeforeDrag = null,
   }) {
-    return _then(_$_TrimPageState(
+    return _then(_$TrimPageStateImpl(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -212,8 +212,8 @@ class __$$_TrimPageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_TrimPageState implements _TrimPageState {
-  const _$_TrimPageState(
+class _$TrimPageStateImpl implements _TrimPageState {
+  const _$TrimPageStateImpl(
       {this.isPlaying = false,
       this.videoPlayerService = null,
       this.thumbnailService = null,
@@ -270,10 +270,10 @@ class _$_TrimPageState implements _TrimPageState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TrimPageState &&
+            other is _$TrimPageStateImpl &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             (identical(other.videoPlayerService, videoPlayerService) ||
@@ -317,8 +317,8 @@ class _$_TrimPageState implements _TrimPageState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TrimPageStateCopyWith<_$_TrimPageState> get copyWith =>
-      __$$_TrimPageStateCopyWithImpl<_$_TrimPageState>(this, _$identity);
+  _$$TrimPageStateImplCopyWith<_$TrimPageStateImpl> get copyWith =>
+      __$$TrimPageStateImplCopyWithImpl<_$TrimPageStateImpl>(this, _$identity);
 }
 
 abstract class _TrimPageState implements TrimPageState {
@@ -332,7 +332,7 @@ abstract class _TrimPageState implements TrimPageState {
       final double testSeekBarsLeftPadding,
       final double startTimeInMilliseconds,
       final double endTimeInMilliseconds,
-      final bool isPlayingBeforeDrag}) = _$_TrimPageState;
+      final bool isPlayingBeforeDrag}) = _$TrimPageStateImpl;
 
   @override
   bool get isPlaying;
@@ -356,6 +356,6 @@ abstract class _TrimPageState implements TrimPageState {
   bool get isPlayingBeforeDrag;
   @override
   @JsonKey(ignore: true)
-  _$$_TrimPageStateCopyWith<_$_TrimPageState> get copyWith =>
+  _$$TrimPageStateImplCopyWith<_$TrimPageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

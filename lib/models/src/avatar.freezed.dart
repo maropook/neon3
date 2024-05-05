@@ -12,7 +12,7 @@ part of 'avatar.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Avatar _$AvatarFromJson(Map<String, dynamic> json) {
   return _Avatar.fromJson(json);
@@ -98,9 +98,10 @@ class _$AvatarCopyWithImpl<$Res, $Val extends Avatar>
 }
 
 /// @nodoc
-abstract class _$$_AvatarCopyWith<$Res> implements $AvatarCopyWith<$Res> {
-  factory _$$_AvatarCopyWith(_$_Avatar value, $Res Function(_$_Avatar) then) =
-      __$$_AvatarCopyWithImpl<$Res>;
+abstract class _$$AvatarImplCopyWith<$Res> implements $AvatarCopyWith<$Res> {
+  factory _$$AvatarImplCopyWith(
+          _$AvatarImpl value, $Res Function(_$AvatarImpl) then) =
+      __$$AvatarImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -113,10 +114,11 @@ abstract class _$$_AvatarCopyWith<$Res> implements $AvatarCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AvatarCopyWithImpl<$Res>
-    extends _$AvatarCopyWithImpl<$Res, _$_Avatar>
-    implements _$$_AvatarCopyWith<$Res> {
-  __$$_AvatarCopyWithImpl(_$_Avatar _value, $Res Function(_$_Avatar) _then)
+class __$$AvatarImplCopyWithImpl<$Res>
+    extends _$AvatarCopyWithImpl<$Res, _$AvatarImpl>
+    implements _$$AvatarImplCopyWith<$Res> {
+  __$$AvatarImplCopyWithImpl(
+      _$AvatarImpl _value, $Res Function(_$AvatarImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -129,7 +131,7 @@ class __$$_AvatarCopyWithImpl<$Res>
     Object? created = null,
     Object? updated = null,
   }) {
-    return _then(_$_Avatar(
+    return _then(_$AvatarImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -161,8 +163,8 @@ class __$$_AvatarCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$_Avatar implements _Avatar {
-  const _$_Avatar(
+class _$AvatarImpl implements _Avatar {
+  const _$AvatarImpl(
       {this.id = '',
       this.activeImageUrl = '',
       this.stopImageUrl = '',
@@ -170,8 +172,8 @@ class _$_Avatar implements _Avatar {
       @FireTimestampConverterNonNull() required this.created,
       @FireTimestampConverterNonNull() required this.updated});
 
-  factory _$_Avatar.fromJson(Map<String, dynamic> json) =>
-      _$$_AvatarFromJson(json);
+  factory _$AvatarImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AvatarImplFromJson(json);
 
   @override
   @JsonKey()
@@ -198,10 +200,10 @@ class _$_Avatar implements _Avatar {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Avatar &&
+            other is _$AvatarImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.activeImageUrl, activeImageUrl) ||
                 other.activeImageUrl == activeImageUrl) &&
@@ -221,12 +223,12 @@ class _$_Avatar implements _Avatar {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AvatarCopyWith<_$_Avatar> get copyWith =>
-      __$$_AvatarCopyWithImpl<_$_Avatar>(this, _$identity);
+  _$$AvatarImplCopyWith<_$AvatarImpl> get copyWith =>
+      __$$AvatarImplCopyWithImpl<_$AvatarImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AvatarToJson(
+    return _$$AvatarImplToJson(
       this,
     );
   }
@@ -240,9 +242,9 @@ abstract class _Avatar implements Avatar {
           final bool isDefault,
           @FireTimestampConverterNonNull() required final DateTime created,
           @FireTimestampConverterNonNull() required final DateTime updated}) =
-      _$_Avatar;
+      _$AvatarImpl;
 
-  factory _Avatar.fromJson(Map<String, dynamic> json) = _$_Avatar.fromJson;
+  factory _Avatar.fromJson(Map<String, dynamic> json) = _$AvatarImpl.fromJson;
 
   @override
   String get id;
@@ -260,6 +262,6 @@ abstract class _Avatar implements Avatar {
   DateTime get updated;
   @override
   @JsonKey(ignore: true)
-  _$$_AvatarCopyWith<_$_Avatar> get copyWith =>
+  _$$AvatarImplCopyWith<_$AvatarImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

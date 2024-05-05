@@ -12,7 +12,7 @@ part of 'import_sheet_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ImportSheetState {
@@ -72,11 +72,11 @@ class _$ImportSheetStateCopyWithImpl<$Res, $Val extends ImportSheetState>
 }
 
 /// @nodoc
-abstract class _$$_ImportSheetStateCopyWith<$Res>
+abstract class _$$ImportSheetStateImplCopyWith<$Res>
     implements $ImportSheetStateCopyWith<$Res> {
-  factory _$$_ImportSheetStateCopyWith(
-          _$_ImportSheetState value, $Res Function(_$_ImportSheetState) then) =
-      __$$_ImportSheetStateCopyWithImpl<$Res>;
+  factory _$$ImportSheetStateImplCopyWith(_$ImportSheetStateImpl value,
+          $Res Function(_$ImportSheetStateImpl) then) =
+      __$$ImportSheetStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -86,11 +86,11 @@ abstract class _$$_ImportSheetStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ImportSheetStateCopyWithImpl<$Res>
-    extends _$ImportSheetStateCopyWithImpl<$Res, _$_ImportSheetState>
-    implements _$$_ImportSheetStateCopyWith<$Res> {
-  __$$_ImportSheetStateCopyWithImpl(
-      _$_ImportSheetState _value, $Res Function(_$_ImportSheetState) _then)
+class __$$ImportSheetStateImplCopyWithImpl<$Res>
+    extends _$ImportSheetStateCopyWithImpl<$Res, _$ImportSheetStateImpl>
+    implements _$$ImportSheetStateImplCopyWith<$Res> {
+  __$$ImportSheetStateImplCopyWithImpl(_$ImportSheetStateImpl _value,
+      $Res Function(_$ImportSheetStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -100,7 +100,7 @@ class __$$_ImportSheetStateCopyWithImpl<$Res>
     Object? imageFilePath = null,
     Object? recordingType = null,
   }) {
-    return _then(_$_ImportSheetState(
+    return _then(_$ImportSheetStateImpl(
       videoFilePath: null == videoFilePath
           ? _value.videoFilePath
           : videoFilePath // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,8 @@ class __$$_ImportSheetStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ImportSheetState implements _ImportSheetState {
-  const _$_ImportSheetState(
+class _$ImportSheetStateImpl implements _ImportSheetState {
+  const _$ImportSheetStateImpl(
       {this.videoFilePath = '',
       this.imageFilePath = '',
       this.recordingType = RecordingType.camera});
@@ -141,10 +141,10 @@ class _$_ImportSheetState implements _ImportSheetState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ImportSheetState &&
+            other is _$ImportSheetStateImpl &&
             (identical(other.videoFilePath, videoFilePath) ||
                 other.videoFilePath == videoFilePath) &&
             (identical(other.imageFilePath, imageFilePath) ||
@@ -160,15 +160,16 @@ class _$_ImportSheetState implements _ImportSheetState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ImportSheetStateCopyWith<_$_ImportSheetState> get copyWith =>
-      __$$_ImportSheetStateCopyWithImpl<_$_ImportSheetState>(this, _$identity);
+  _$$ImportSheetStateImplCopyWith<_$ImportSheetStateImpl> get copyWith =>
+      __$$ImportSheetStateImplCopyWithImpl<_$ImportSheetStateImpl>(
+          this, _$identity);
 }
 
 abstract class _ImportSheetState implements ImportSheetState {
   const factory _ImportSheetState(
       {final String videoFilePath,
       final String imageFilePath,
-      final RecordingType recordingType}) = _$_ImportSheetState;
+      final RecordingType recordingType}) = _$ImportSheetStateImpl;
 
   @override
   String get videoFilePath;
@@ -178,6 +179,6 @@ abstract class _ImportSheetState implements ImportSheetState {
   RecordingType get recordingType;
   @override
   @JsonKey(ignore: true)
-  _$$_ImportSheetStateCopyWith<_$_ImportSheetState> get copyWith =>
+  _$$ImportSheetStateImplCopyWith<_$ImportSheetStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

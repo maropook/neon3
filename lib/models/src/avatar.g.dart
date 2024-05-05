@@ -6,7 +6,7 @@ part of 'avatar.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Avatar _$$_AvatarFromJson(Map<String, dynamic> json) => _$_Avatar(
+_$AvatarImpl _$$AvatarImplFromJson(Map<String, dynamic> json) => _$AvatarImpl(
       id: json['id'] as String? ?? '',
       activeImageUrl: json['activeImageUrl'] as String? ?? '',
       stopImageUrl: json['stopImageUrl'] as String? ?? '',
@@ -15,7 +15,8 @@ _$_Avatar _$$_AvatarFromJson(Map<String, dynamic> json) => _$_Avatar(
       updated: const FireTimestampConverterNonNull().fromJson(json['updated']),
     );
 
-Map<String, dynamic> _$$_AvatarToJson(_$_Avatar instance) => <String, dynamic>{
+Map<String, dynamic> _$$AvatarImplToJson(_$AvatarImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'activeImageUrl': instance.activeImageUrl,
       'stopImageUrl': instance.stopImageUrl,

@@ -67,6 +67,8 @@ class SubtitleEditSheetController
     final subtitleText = state.subtitleText;
     if (!isBorder) {
       subtitleText?.fontColorCode = fontColorCode;
+      subtitleText?.borderColorCode =
+          fontColorCode; //strokeを設定するときはこれは要らない、今はstrokeも内部の色もどっちも編集されるようにしている
     } else {
       subtitleText?.borderColorCode = fontColorCode;
     }
@@ -76,6 +78,9 @@ class SubtitleEditSheetController
   void onChangeCustomFonColor(Color fontColor, bool isBorder) {
     if (!isBorder) {
       state = state.copyWith(customFontColor: fontColor);
+      state = state.copyWith(
+          customBorderColor:
+              fontColor); //strokeを設定するときはこれは要らない、今はstrokeも内部の色もどっちも編集されるようにしている
     } else {
       state = state.copyWith(customBorderColor: fontColor);
     }

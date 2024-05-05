@@ -1,11 +1,8 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:neon3/services/file_service.dart';
-import 'package:neon3/services/fire_avatar_service.dart';
 
 part 'import_sheet_controller.freezed.dart';
 

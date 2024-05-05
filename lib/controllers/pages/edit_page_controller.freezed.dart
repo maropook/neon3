@@ -12,7 +12,7 @@ part of 'edit_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EditPageState {
@@ -200,11 +200,11 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
 }
 
 /// @nodoc
-abstract class _$$_EditPageStateCopyWith<$Res>
+abstract class _$$EditPageStateImplCopyWith<$Res>
     implements $EditPageStateCopyWith<$Res> {
-  factory _$$_EditPageStateCopyWith(
-          _$_EditPageState value, $Res Function(_$_EditPageState) then) =
-      __$$_EditPageStateCopyWithImpl<$Res>;
+  factory _$$EditPageStateImplCopyWith(
+          _$EditPageStateImpl value, $Res Function(_$EditPageStateImpl) then) =
+      __$$EditPageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -233,11 +233,11 @@ abstract class _$$_EditPageStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EditPageStateCopyWithImpl<$Res>
-    extends _$EditPageStateCopyWithImpl<$Res, _$_EditPageState>
-    implements _$$_EditPageStateCopyWith<$Res> {
-  __$$_EditPageStateCopyWithImpl(
-      _$_EditPageState _value, $Res Function(_$_EditPageState) _then)
+class __$$EditPageStateImplCopyWithImpl<$Res>
+    extends _$EditPageStateCopyWithImpl<$Res, _$EditPageStateImpl>
+    implements _$$EditPageStateImplCopyWith<$Res> {
+  __$$EditPageStateImplCopyWithImpl(
+      _$EditPageStateImpl _value, $Res Function(_$EditPageStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -263,7 +263,7 @@ class __$$_EditPageStateCopyWithImpl<$Res>
     Object? focusTextsIndex = null,
     Object? activeFrames = null,
   }) {
-    return _then(_$_EditPageState(
+    return _then(_$EditPageStateImpl(
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -346,8 +346,8 @@ class __$$_EditPageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EditPageState implements _EditPageState {
-  const _$_EditPageState(
+class _$EditPageStateImpl implements _EditPageState {
+  const _$EditPageStateImpl(
       {this.isPlaying = false,
       this.avatar = null,
       this.videoPlayerService = null,
@@ -461,10 +461,10 @@ class _$_EditPageState implements _EditPageState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EditPageState &&
+            other is _$EditPageStateImpl &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
@@ -533,8 +533,8 @@ class _$_EditPageState implements _EditPageState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>
-      __$$_EditPageStateCopyWithImpl<_$_EditPageState>(this, _$identity);
+  _$$EditPageStateImplCopyWith<_$EditPageStateImpl> get copyWith =>
+      __$$EditPageStateImplCopyWithImpl<_$EditPageStateImpl>(this, _$identity);
 }
 
 abstract class _EditPageState implements EditPageState {
@@ -557,7 +557,7 @@ abstract class _EditPageState implements EditPageState {
       final bool isComplete,
       final bool isExistSubtitleTextNow,
       final int focusTextsIndex,
-      final List<ActiveFrame> activeFrames}) = _$_EditPageState;
+      final List<ActiveFrame> activeFrames}) = _$EditPageStateImpl;
 
   @override
   bool get isPlaying;
@@ -599,6 +599,6 @@ abstract class _EditPageState implements EditPageState {
   List<ActiveFrame> get activeFrames;
   @override
   @JsonKey(ignore: true)
-  _$$_EditPageStateCopyWith<_$_EditPageState> get copyWith =>
+  _$$EditPageStateImplCopyWith<_$EditPageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

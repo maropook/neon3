@@ -12,7 +12,7 @@ part of 'encode_page_controller.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EncodePageState {
@@ -63,22 +63,22 @@ class _$EncodePageStateCopyWithImpl<$Res, $Val extends EncodePageState>
 }
 
 /// @nodoc
-abstract class _$$_EncodePageStateCopyWith<$Res>
+abstract class _$$EncodePageStateImplCopyWith<$Res>
     implements $EncodePageStateCopyWith<$Res> {
-  factory _$$_EncodePageStateCopyWith(
-          _$_EncodePageState value, $Res Function(_$_EncodePageState) then) =
-      __$$_EncodePageStateCopyWithImpl<$Res>;
+  factory _$$EncodePageStateImplCopyWith(_$EncodePageStateImpl value,
+          $Res Function(_$EncodePageStateImpl) then) =
+      __$$EncodePageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double progressRate, String encodedVideoFilePath});
 }
 
 /// @nodoc
-class __$$_EncodePageStateCopyWithImpl<$Res>
-    extends _$EncodePageStateCopyWithImpl<$Res, _$_EncodePageState>
-    implements _$$_EncodePageStateCopyWith<$Res> {
-  __$$_EncodePageStateCopyWithImpl(
-      _$_EncodePageState _value, $Res Function(_$_EncodePageState) _then)
+class __$$EncodePageStateImplCopyWithImpl<$Res>
+    extends _$EncodePageStateCopyWithImpl<$Res, _$EncodePageStateImpl>
+    implements _$$EncodePageStateImplCopyWith<$Res> {
+  __$$EncodePageStateImplCopyWithImpl(
+      _$EncodePageStateImpl _value, $Res Function(_$EncodePageStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$_EncodePageStateCopyWithImpl<$Res>
     Object? progressRate = null,
     Object? encodedVideoFilePath = null,
   }) {
-    return _then(_$_EncodePageState(
+    return _then(_$EncodePageStateImpl(
       progressRate: null == progressRate
           ? _value.progressRate
           : progressRate // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$_EncodePageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EncodePageState implements _EncodePageState {
-  const _$_EncodePageState(
+class _$EncodePageStateImpl implements _EncodePageState {
+  const _$EncodePageStateImpl(
       {this.progressRate = 0.0, this.encodedVideoFilePath = ''});
 
   @override
@@ -119,10 +119,10 @@ class _$_EncodePageState implements _EncodePageState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EncodePageState &&
+            other is _$EncodePageStateImpl &&
             (identical(other.progressRate, progressRate) ||
                 other.progressRate == progressRate) &&
             (identical(other.encodedVideoFilePath, encodedVideoFilePath) ||
@@ -136,14 +136,15 @@ class _$_EncodePageState implements _EncodePageState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EncodePageStateCopyWith<_$_EncodePageState> get copyWith =>
-      __$$_EncodePageStateCopyWithImpl<_$_EncodePageState>(this, _$identity);
+  _$$EncodePageStateImplCopyWith<_$EncodePageStateImpl> get copyWith =>
+      __$$EncodePageStateImplCopyWithImpl<_$EncodePageStateImpl>(
+          this, _$identity);
 }
 
 abstract class _EncodePageState implements EncodePageState {
   const factory _EncodePageState(
       {final double progressRate,
-      final String encodedVideoFilePath}) = _$_EncodePageState;
+      final String encodedVideoFilePath}) = _$EncodePageStateImpl;
 
   @override
   double get progressRate;
@@ -151,6 +152,6 @@ abstract class _EncodePageState implements EncodePageState {
   String get encodedVideoFilePath;
   @override
   @JsonKey(ignore: true)
-  _$$_EncodePageStateCopyWith<_$_EncodePageState> get copyWith =>
+  _$$EncodePageStateImplCopyWith<_$EncodePageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
