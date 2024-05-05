@@ -271,6 +271,18 @@ class EditPage extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             children: [
               Text(
+                textAlign: TextAlign.center,
+                text.word,
+                style: TextStyle(
+                    fontFamily:
+                        text.fontName == 'systemFont' ? null : text.fontName,
+                    fontSize: fontSize.toDouble(),
+                    foreground: Paint()
+                      ..color = text.word.isEmpty
+                          ? fontBorderColor.withOpacity(0.5)
+                          : fontColor),
+              ),
+              Text(
                 //縁取り文字
                 text.word.isEmpty ? '※空白のテキスト' : text.word,
                 textAlign: TextAlign.center,
@@ -284,18 +296,6 @@ class EditPage extends StatelessWidget {
                       ..color = text.word.isEmpty
                           ? fontBorderColor.withOpacity(0.5)
                           : fontBorderColor),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                text.word,
-                style: TextStyle(
-                    fontFamily:
-                        text.fontName == 'systemFont' ? null : text.fontName,
-                    fontSize: fontSize.toDouble(),
-                    foreground: Paint()
-                      ..color = text.word.isEmpty
-                          ? fontBorderColor.withOpacity(0.5)
-                          : fontColor),
               ),
             ],
           ));

@@ -69,7 +69,7 @@ class _SubtitleEditSheet extends StatelessWidget {
       _buildCompleteButton(),
       _buildSubtitleFonts(),
       _buildSubtitleWordColors(isBorder: false),
-      // _buildSubtitleWordColors(isBorder: true),
+      _buildSubtitleWordColors(isBorder: true), //TODO:Border
       _buildSubtitleTextField()
     ]);
   }

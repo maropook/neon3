@@ -313,7 +313,6 @@ class EditPageController extends StateNotifier<EditPageState> {
     );
 
     final newSubtitleText = SubtitleText(
-      borderColorCode: "#000000", //Strokeの描画がうまく行っていないため TODO:
       id: newActiveFrame.id,
       startTime: newActiveFrame.startTime,
       endTime: newActiveFrame.endTime,

@@ -11,6 +11,7 @@ import 'package:neon3/ui/pages/page_router.dart';
 import 'package:neon3/ui/pages/recording_page/import_sheet.dart';
 
 final GlobalKey recordingBackgroundKey = GlobalKey();
+const isSimulator = false;
 
 class RecordingPage extends ConsumerWidget {
   const RecordingPage({super.key});
@@ -58,7 +59,7 @@ class RecordingPage extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildImportButton(),
-                    _buildButton(),
+                    _buildRecordingButton(),
                     InkWell(
                         onTap: () => context.go('/avatar/list'),
                         child: _buildShowModalIcon(
@@ -249,7 +250,7 @@ class RecordingPage extends ConsumerWidget {
     });
   }
 
-  Widget _buildButton() {
+  Widget _buildRecordingButton() {
     return Consumer(builder: (context, ref, _) {
       final bool isRecording =
           ref.watch(recordingPageProvider.select((s) => s.isRecordingVideo));
