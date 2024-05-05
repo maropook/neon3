@@ -8,11 +8,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
-import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon3/ui/components/src/universal_image.dart';
+import 'package:neon3/ui/pages/edit_page/artificial_voice_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/change_avatar_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_edit_sheet.dart';
 import 'package:neon3/ui/pages/edit_page/subtitle_timing_edit_sheet.dart';
@@ -51,51 +51,37 @@ class EditPage extends StatelessWidget {
       title: const Text(
         '編集',
         style: TextStyle(
-            fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
+            fontWeight: FontWeight.bold, color: Styles.secondaryColor),
       ),
       actions: [
         Consumer(builder: (context, ref, _) {
           return IconButton(
-            onPressed: () async {
-              final List<SubtitleText> subtitleTexts =
-                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
-              final avatar = ref.read(editPageProvider.select((s) => s.avatar));
-              final musicFilePath =
-                  ref.read(editPageProvider.select((s) => s.musicFilePath));
-              final ttsAudioFilePath =
-                  ref.read(editPageProvider.select((s) => s.ttsAudioFilePath));
-              final activeFrames =
-                  ref.read(editPageProvider.select((s) => s.activeFrames));
-              if (avatar == null) return;
-              final encodePageArgs = EncodePageArgs(
-                videoFilePath: editPageArgs.videoFilePath,
-                audioFilePath: editPageArgs.audioFilePath,
-                musicFilePath: musicFilePath,
-                ttsAudioFilePath: ttsAudioFilePath,
-                activeFrames: activeFrames,
-                subtitleTexts: subtitleTexts,
-                avatar: avatar,
-                recordingType: editPageArgs.recordingType,
-              );
+              onPressed: () async {
+                final List<SubtitleText> subtitleTexts =
+                    ref.read(editPageProvider.select((s) => s.subtitleTexts));
+                final avatar =
+                    ref.read(editPageProvider.select((s) => s.avatar));
+                final musicFilePath =
+                    ref.read(editPageProvider.select((s) => s.musicFilePath));
+                final ttsAudioFilePath = ref
+                    .read(editPageProvider.select((s) => s.ttsAudioFilePath));
+                final activeFrames =
+                    ref.read(editPageProvider.select((s) => s.activeFrames));
+                if (avatar == null) return;
+                final encodePageArgs = EncodePageArgs(
+                  videoFilePath: editPageArgs.videoFilePath,
+                  audioFilePath: editPageArgs.audioFilePath,
+                  musicFilePath: musicFilePath,
+                  ttsAudioFilePath: ttsAudioFilePath,
+                  activeFrames: activeFrames,
+                  subtitleTexts: subtitleTexts,
+                  avatar: avatar,
+                  recordingType: editPageArgs.recordingType,
+                );
 
-              context.go('/encoding', extra: encodePageArgs);
-            },
-            icon: Container(
-              padding:
-                  const EdgeInsets.only(right: 7, left: 7, top: 1, bottom: 1),
-              decoration: BoxDecoration(
-                border: Border.all(color: Styles.secondaryColor, width: 2),
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: const Text(
-                "完成",
-                style: TextStyle(
-                    color: Styles.secondaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            ),
-          );
+                context.go('/encoding', extra: encodePageArgs);
+              },
+              icon: const Icon(Icons.chevron_right));
         }),
       ],
       leading: IconButton(
@@ -285,18 +271,6 @@ class EditPage extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             children: [
               Text(
-                textAlign: TextAlign.center,
-                text.word,
-                style: TextStyle(
-                    fontFamily:
-                        text.fontName == 'systemFont' ? null : text.fontName,
-                    fontSize: fontSize.toDouble(),
-                    foreground: Paint()
-                      ..color = text.word.isEmpty
-                          ? fontBorderColor.withOpacity(0.5)
-                          : fontColor),
-              ),
-              Text(
                 //縁取り文字
                 text.word.isEmpty ? '※空白のテキスト' : text.word,
                 textAlign: TextAlign.center,
@@ -310,6 +284,18 @@ class EditPage extends StatelessWidget {
                       ..color = text.word.isEmpty
                           ? fontBorderColor.withOpacity(0.5)
                           : fontBorderColor),
+              ),
+              Text(
+                textAlign: TextAlign.center,
+                text.word,
+                style: TextStyle(
+                    fontFamily:
+                        text.fontName == 'systemFont' ? null : text.fontName,
+                    fontSize: fontSize.toDouble(),
+                    foreground: Paint()
+                      ..color = text.word.isEmpty
+                          ? fontBorderColor.withOpacity(0.5)
+                          : fontColor),
               ),
             ],
           ));
@@ -398,7 +384,6 @@ class EditPage extends StatelessWidget {
               'アバターを変更',
               Assets.images.icons.avatarFaceIcon,
               context,
-              false,
             ),
           ),
           GestureDetector(
@@ -407,7 +392,7 @@ class EditPage extends StatelessWidget {
               EasyLoading.showSuccess('字幕が追加されました');
             },
             child: _buildShowModalIcon(
-                'テキストを追加', Assets.images.icons.subtitleAddIcon, context, false),
+                'テキストを追加', Assets.images.icons.subtitleAddIcon, context),
           ),
           GestureDetector(
             onTap: () async {
@@ -423,8 +408,8 @@ class EditPage extends StatelessWidget {
                   context, subtitleTimingEditPageArgs);
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
-            child: _buildShowModalIcon('テキスト時間編集',
-                Assets.images.icons.subtitleEditIcon, context, false),
+            child: _buildShowModalIcon(
+                'テキスト時間編集', Assets.images.icons.subtitleEditIcon, context),
           ),
 
           // GestureDetector(
@@ -440,48 +425,32 @@ class EditPage extends StatelessWidget {
           //   child: _buildShowModalIcon(
           //       'BGMを追加', Assets.images.addBgmIcon, context),
           // ),
-          Consumer(builder: (context, ref, _) {
-            final audioType =
-                ref.watch(editPageProvider.select((s) => s.audioType));
-            return GestureDetector(
-              onTap: () async {
-                final ttsAudioFile = await ref
-                    .read(editPageProvider.notifier)
-                    .switchAudioType(audioType == AudioType.artificial
-                        ? AudioType.original
-                        : AudioType.artificial);
-                if (ttsAudioFile == null) return;
-                await ref
-                    .read(editPageProvider.notifier)
-                    .setTtsAudioFile(ttsAudioFile);
-
-                // final subtitleTexts =
-                //               ref.read(editPageProvider.select((s) => s.subtitleTexts));
-                // await ref.read(editPageProvider.notifier).showModalCallback();
-
-                // final ttsAudioFile = await showArtificialVoiceEditSheet(
-                //         context, subtitleTexts, audioType) ??
-                //     '';
-                // await ref
-                //     .read(editPageProvider.notifier)
-                //     .setTtsAudioFile(ttsAudioFile);
-                // await ref.read(editPageProvider.notifier).closeModalCallback();
-              },
-              child: _buildShowModalIcon(
-                  audioType == AudioType.artificial ? '人工音声使用中' : '人工音声未使用',
-                  Assets.images.icons.artificialVoiceIcon,
-                  context,
-                  audioType == AudioType.artificial),
-            );
-          }),
+          GestureDetector(
+            onTap: () async {
+              await ref.read(editPageProvider.notifier).showModalCallback();
+              final subtitleTexts =
+                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
+              final audioType =
+                  ref.read(editPageProvider.select((s) => s.audioType));
+              final ttsAudioFile = await showArtificialVoiceEditSheet(
+                      context, subtitleTexts, audioType) ??
+                  '';
+              await ref
+                  .read(editPageProvider.notifier)
+                  .setTtsAudioFile(ttsAudioFile);
+              await ref.read(editPageProvider.notifier).closeModalCallback();
+            },
+            child: _buildShowModalIcon(
+                '人工音声', Assets.images.icons.artificialVoiceIcon, context),
+          ),
         ],
       );
     });
   }
 
   Widget _buildShowModalIcon(
-      String text, String iconPath, BuildContext context, bool isBorder) {
-    final width = MediaQuery.of(context).size.shortestSide / 5.6;
+      String text, String iconPath, BuildContext context) {
+    final width = MediaQuery.of(context).size.shortestSide / 5.5;
     return SizedBox(
       width: width + 10,
       child: Column(
@@ -492,9 +461,6 @@ class EditPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12.0),
-              border: Border.all(
-                  color: isBorder ? Styles.primaryColor : Colors.white,
-                  width: 3),
             ),
             child: Opacity(
               opacity: 0.8,

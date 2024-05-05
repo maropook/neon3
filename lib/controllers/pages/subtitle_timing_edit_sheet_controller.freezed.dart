@@ -29,9 +29,6 @@ mixin _$SubtitleTimingEditSheetState {
       throw _privateConstructorUsedError;
   Duration get videoPosition => throw _privateConstructorUsedError;
   bool get isComplete => throw _privateConstructorUsedError;
-  double get currentSeconds => throw _privateConstructorUsedError;
-  List<int> get displaySubtitleIndexList => throw _privateConstructorUsedError;
-  bool get isExistSubtitleTextNow => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SubtitleTimingEditSheetStateCopyWith<SubtitleTimingEditSheetState>
@@ -57,10 +54,7 @@ abstract class $SubtitleTimingEditSheetStateCopyWith<$Res> {
       String thumbnailFilePath,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
-      bool isComplete,
-      double currentSeconds,
-      List<int> displaySubtitleIndexList,
-      bool isExistSubtitleTextNow});
+      bool isComplete});
 }
 
 /// @nodoc
@@ -88,9 +82,6 @@ class _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? isComplete = null,
-    Object? currentSeconds = null,
-    Object? displaySubtitleIndexList = null,
-    Object? isExistSubtitleTextNow = null,
   }) {
     return _then(_value.copyWith(
       isPlaying: null == isPlaying
@@ -137,18 +128,6 @@ class _$SubtitleTimingEditSheetStateCopyWithImpl<$Res,
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentSeconds: null == currentSeconds
-          ? _value.currentSeconds
-          : currentSeconds // ignore: cast_nullable_to_non_nullable
-              as double,
-      displaySubtitleIndexList: null == displaySubtitleIndexList
-          ? _value.displaySubtitleIndexList
-          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      isExistSubtitleTextNow: null == isExistSubtitleTextNow
-          ? _value.isExistSubtitleTextNow
-          : isExistSubtitleTextNow // ignore: cast_nullable_to_non_nullable
-              as bool,
     ) as $Val);
   }
 }
@@ -173,10 +152,7 @@ abstract class _$$SubtitleTimingEditSheetStateImplCopyWith<$Res>
       String thumbnailFilePath,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
-      bool isComplete,
-      double currentSeconds,
-      List<int> displaySubtitleIndexList,
-      bool isExistSubtitleTextNow});
+      bool isComplete});
 }
 
 /// @nodoc
@@ -203,9 +179,6 @@ class __$$SubtitleTimingEditSheetStateImplCopyWithImpl<$Res>
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
     Object? isComplete = null,
-    Object? currentSeconds = null,
-    Object? displaySubtitleIndexList = null,
-    Object? isExistSubtitleTextNow = null,
   }) {
     return _then(_$SubtitleTimingEditSheetStateImpl(
       isPlaying: null == isPlaying
@@ -252,18 +225,6 @@ class __$$SubtitleTimingEditSheetStateImplCopyWithImpl<$Res>
           ? _value.isComplete
           : isComplete // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentSeconds: null == currentSeconds
-          ? _value.currentSeconds
-          : currentSeconds // ignore: cast_nullable_to_non_nullable
-              as double,
-      displaySubtitleIndexList: null == displaySubtitleIndexList
-          ? _value._displaySubtitleIndexList
-          : displaySubtitleIndexList // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      isExistSubtitleTextNow: null == isExistSubtitleTextNow
-          ? _value.isExistSubtitleTextNow
-          : isExistSubtitleTextNow // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -283,14 +244,10 @@ class _$SubtitleTimingEditSheetStateImpl
       this.thumbnailFilePath = '',
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,
-      this.isComplete = false,
-      this.currentSeconds = 0.0,
-      final List<int> displaySubtitleIndexList = const [],
-      this.isExistSubtitleTextNow = false})
+      this.isComplete = false})
       : _subtitleTexts = subtitleTexts,
         _activeFrames = activeFrames,
-        _thumbnailFileDataList = thumbnailFileDataList,
-        _displaySubtitleIndexList = displaySubtitleIndexList;
+        _thumbnailFileDataList = thumbnailFileDataList;
 
   @override
   @JsonKey()
@@ -344,26 +301,10 @@ class _$SubtitleTimingEditSheetStateImpl
   @override
   @JsonKey()
   final bool isComplete;
-  @override
-  @JsonKey()
-  final double currentSeconds;
-  final List<int> _displaySubtitleIndexList;
-  @override
-  @JsonKey()
-  List<int> get displaySubtitleIndexList {
-    if (_displaySubtitleIndexList is EqualUnmodifiableListView)
-      return _displaySubtitleIndexList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_displaySubtitleIndexList);
-  }
-
-  @override
-  @JsonKey()
-  final bool isExistSubtitleTextNow;
 
   @override
   String toString() {
-    return 'SubtitleTimingEditSheetState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, activeFrames: $activeFrames, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete, currentSeconds: $currentSeconds, displaySubtitleIndexList: $displaySubtitleIndexList, isExistSubtitleTextNow: $isExistSubtitleTextNow)';
+    return 'SubtitleTimingEditSheetState(isPlaying: $isPlaying, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, activeFrames: $activeFrames, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, isComplete: $isComplete)';
   }
 
   @override
@@ -392,13 +333,7 @@ class _$SubtitleTimingEditSheetStateImpl
             (identical(other.videoPosition, videoPosition) ||
                 other.videoPosition == videoPosition) &&
             (identical(other.isComplete, isComplete) ||
-                other.isComplete == isComplete) &&
-            (identical(other.currentSeconds, currentSeconds) ||
-                other.currentSeconds == currentSeconds) &&
-            const DeepCollectionEquality().equals(
-                other._displaySubtitleIndexList, _displaySubtitleIndexList) &&
-            (identical(other.isExistSubtitleTextNow, isExistSubtitleTextNow) ||
-                other.isExistSubtitleTextNow == isExistSubtitleTextNow));
+                other.isComplete == isComplete));
   }
 
   @override
@@ -414,10 +349,7 @@ class _$SubtitleTimingEditSheetStateImpl
       thumbnailFilePath,
       const DeepCollectionEquality().hash(_thumbnailFileDataList),
       videoPosition,
-      isComplete,
-      currentSeconds,
-      const DeepCollectionEquality().hash(_displaySubtitleIndexList),
-      isExistSubtitleTextNow);
+      isComplete);
 
   @JsonKey(ignore: true)
   @override
@@ -441,10 +373,7 @@ abstract class _SubtitleTimingEditSheetState
       final String thumbnailFilePath,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
-      final bool isComplete,
-      final double currentSeconds,
-      final List<int> displaySubtitleIndexList,
-      final bool isExistSubtitleTextNow}) = _$SubtitleTimingEditSheetStateImpl;
+      final bool isComplete}) = _$SubtitleTimingEditSheetStateImpl;
 
   @override
   bool get isPlaying;
@@ -468,12 +397,6 @@ abstract class _SubtitleTimingEditSheetState
   Duration get videoPosition;
   @override
   bool get isComplete;
-  @override
-  double get currentSeconds;
-  @override
-  List<int> get displaySubtitleIndexList;
-  @override
-  bool get isExistSubtitleTextNow;
   @override
   @JsonKey(ignore: true)
   _$$SubtitleTimingEditSheetStateImplCopyWith<

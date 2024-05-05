@@ -70,6 +70,9 @@ class EncodePageController extends StateNotifier<EncodePageState> {
         subtitleTexts: _encodePageProviderArg.subtitleTexts,
         avatar: _encodePageProviderArg.avatar);
 
+    final bool? success = await GallerySaver.saveVideo(encodedVideoFilePath);
+    Logger.log('encode_page_controller', '[init save_video] $success');
+
     state = state.copyWith(encodedVideoFilePath: encodedVideoFilePath);
   }
 }

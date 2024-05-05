@@ -12,7 +12,7 @@ class ImportPage extends StatelessWidget {
         title: const Text(
           'インポート',
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
+              fontWeight: FontWeight.bold, color: Styles.secondaryColor),
         ),
         leading: IconButton(
             onPressed: () => context.go('/'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
@@ -18,13 +19,22 @@ class CompletePage extends StatelessWidget {
             (ref) => CompletePageController(videoFilePath: filePath))
       ],
       child: HookConsumer(builder: (context, ref, _) {
+        useEffect(
+          () {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              EasyLoading.showSuccess('動画の保存が\n完了しました');
+            });
+            return null;
+          },
+          [],
+        );
+
         return Scaffold(
             appBar: AppBar(
               title: const Text(
                 '完成',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Styles.appBarTitleColor),
+                    fontWeight: FontWeight.bold, color: Styles.secondaryColor),
               ),
               actions: [
                 IconButton(
@@ -51,20 +61,9 @@ class CompletePage extends StatelessWidget {
 
       return Center(
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(height: 4),
-              InkWell(
-                onTap: () async {
-                  EasyLoading.show();
-                  ref.read(completePageProvider.notifier).downloadVideo();
-                  EasyLoading.showSuccess('動画の保存が\n完了しました');
-                },
-                child: _buildShowModalIcon(
-                    '動画を保存', Icons.download_rounded, shortestSide),
-              ),
-              const SizedBox(height: 4),
               videoPlayerService != null
                   ? SizedBox(
                       // width: 187.5,
@@ -80,25 +79,6 @@ class CompletePage extends StatelessWidget {
                     )
                   : const CircularProgressIndicator(),
             ]),
-      );
-    });
-  }
-
-  Widget _buildShowModalIcon(
-      String text, IconData iconData, double shortestSide) {
-    return Builder(builder: (context) {
-      return Container(
-        width: 65,
-        height: 65,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Icon(
-          iconData,
-          size: 45,
-          color: Styles.secondaryColor,
-        ),
       );
     });
   }

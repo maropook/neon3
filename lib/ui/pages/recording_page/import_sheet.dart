@@ -59,7 +59,7 @@ class _ImportSheet extends StatelessWidget {
                 height: 170,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: SvgPicture.asset(Assets.images.icons.movie,
+                  child: SvgPicture.asset(Assets.images.movie,
                       width: 90, height: 90),
                 )),
             onTap: () async {
@@ -82,7 +82,7 @@ class _ImportSheet extends StatelessWidget {
                 height: 170,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: SvgPicture.asset(Assets.images.icons.photoSingle,
+                  child: SvgPicture.asset(Assets.images.photo,
                       width: 90, height: 90),
                 )),
             onTap: () async {

@@ -80,6 +80,7 @@ class SpeechToTextService {
       for (int index = 0; index < activeFrames.length; ++index) {
         //completeしてからじゃなくて、addListenersCallBackでtexts.addしたほうがいいのか？
         texts.add(SubtitleText(
+            borderColorCode: "#000000", //Strokeの描画がうまく行っていないため TODO:
             id: activeFrames[index].id,
             startTime: activeFrames[index].startTime,
             endTime: activeFrames[index].endTime,

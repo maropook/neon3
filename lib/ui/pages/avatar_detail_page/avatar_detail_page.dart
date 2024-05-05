@@ -25,7 +25,7 @@ class AvatarDetailPage extends ConsumerWidget {
             title: const Text(
               'アバター詳細',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Styles.appBarTitleColor),
+                  fontWeight: FontWeight.bold, color: Styles.secondaryColor),
             ),
             leading: IconButton(
                 onPressed: () async {
@@ -51,17 +51,17 @@ class AvatarDetailPage extends ConsumerWidget {
           ref.watch(avatarDetailPageProvider.select((s) => s.selectedAvatarId));
       return avatar != null
           ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
                   onTap: () async {
                     ref.read(avatarDetailPageProvider.notifier).selectAvatar();
                   },
                   child: Icon(
-                    Icons.check_circle,
+                    Icons.star,
                     color: avatar.id == selectedAvatarId
-                        ? Color.fromARGB(255, 78, 232, 64)
-                        : Color.fromARGB(255, 148, 147, 147),
+                        ? Colors.yellow
+                        : Colors.white,
                   ),
                 ),
                 Row(

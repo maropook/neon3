@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/config/styles.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -68,6 +67,8 @@ class SubtitleEditSheetController
     final subtitleText = state.subtitleText;
     if (!isBorder) {
       subtitleText?.fontColorCode = fontColorCode;
+      subtitleText?.borderColorCode =
+          fontColorCode; //strokeを設定するときはこれは要らない、今はstrokeも内部の色もどっちも編集されるようにしている
     } else {
       subtitleText?.borderColorCode = fontColorCode;
     }
@@ -91,16 +92,15 @@ class SubtitleEditSheetController
       case 'white':
         return Colors.white.toHexTriplet();
       case 'blue':
-        // return Colors.blue.toHexTriplet();
-        return Styles.pastelBlueColor.toHexTriplet();
+        return Colors.blue.toHexTriplet();
       case 'black':
         return Colors.black.toHexTriplet();
       case 'red':
-        return Styles.pasterPinkColor.toHexTriplet();
+        return Colors.red.toHexTriplet();
       case 'green':
-        return Styles.pastelGreenColor.toHexTriplet();
+        return Colors.green.toHexTriplet();
       case 'yellow':
-        return Styles.pastelYellowColor.toHexTriplet();
+        return Colors.yellow.toHexTriplet();
       case 'customFontColor':
         return state.customFontColor.toHexTriplet();
       case 'customBorderColor':

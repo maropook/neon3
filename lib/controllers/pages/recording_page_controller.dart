@@ -55,7 +55,6 @@ class RecordingPageController extends StateNotifier<RecordingPageState> {
   // final double recordingTimeLimit = 60.0; //TODO:仮の値 MEMO:
   final double recordingTimeLimit = 60;
   Future<void> init() async {
-    if (isSimulator) return;
     try {
       await fetchSelectedAvatarFromId();
       await _cameraService.init(addListenersFunction: () {

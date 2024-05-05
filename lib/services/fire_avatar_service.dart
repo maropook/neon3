@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/common/field_name.dart';
+import 'package:uuid/uuid.dart';
 
 class FireAvatarService {
   FireAvatarService();

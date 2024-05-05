@@ -31,7 +31,7 @@ abstract class Styles {
   static const Color recordingColor = Color.fromARGB(255, 225, 109, 109);
   static const Color secondaryColor900 = Color.fromARGB(130, 89, 74, 49);
   static const Color pageBackground = Color.fromARGB(255, 255, 255, 255);
-  static const Color appBarTitleColor = Color.fromARGB(255, 255, 255, 255);
+  static const Color appBarTitleColor = commonTextColor;
   static const Color commonTextColor = Color(0xFF594A31);
   static const Color contentsColor = Color.fromARGB(255, 255, 255, 255);
 
@@ -40,13 +40,6 @@ abstract class Styles {
   static const Color taskYellowColor = Color(0xFFFFEB94);
   static const Color taskSkyColor = Color(0xFFFFC1E1DC);
   static const Color taskPinkColor = Color(0xFFFFCCAC);
-
-  static const Color pasterPinkColor = Color(0xFFFFCCAC);
-  static const Color pastelBlueColor = Color(0xFFFFC1E1DC);
-  static const Color pastelYellowColor = Color(0xFFFFEB94);
-  static const Color pastelGreenColor = Color(0xFFC7DE60);
-  static const Color pastelPurpleColor = Color(0xFFBFA8E8);
-  static const Color pastelOrangeColor = Color(0xFFFFD8B1);
 
   static AppBarTheme appBarTheme = const AppBarTheme(
     centerTitle: true,

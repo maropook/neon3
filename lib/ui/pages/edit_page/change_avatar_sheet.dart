@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:neon3/config/styles.dart';
 import 'package:neon3/controllers/pages/change_avatar_sheet_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/models/src/avatar.dart';
@@ -29,10 +28,10 @@ class _ChangeAvatarSheet extends StatelessWidget {
 
   Widget _buildModal(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.longestSide - 400,
-        margin: const EdgeInsets.only(top: 400),
+        height: MediaQuery.of(context).size.longestSide - 64,
+        margin: const EdgeInsets.only(top: 64),
         decoration: const BoxDecoration(
-          color: Styles.secondaryColor,
+          color: Color.fromARGB(109, 0, 0, 0),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -93,8 +92,9 @@ class _ChangeAvatarSheet extends StatelessWidget {
                             ),
                       if (avatarList[index].id == selectedAvatar.id)
                         const Icon(
-                          Icons.check_circle,
-                          color: Styles.pastelGreenColor,
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: 30,
                         ),
                     ],
                   )));

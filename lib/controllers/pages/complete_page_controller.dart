@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/video_player_service.dart';
@@ -48,11 +47,6 @@ class CompletePageController extends StateNotifier<CompletePageState> {
 
   Future<void> pause() async {
     await _videoPlayerService!.pause();
-  }
-
-  Future<void> downloadVideo() async {
-    final bool? success = await GallerySaver.saveVideo(_videoFilePath);
-    Logger.log('encode_page_controller', '[init save_video] $success');
   }
 
   @override
