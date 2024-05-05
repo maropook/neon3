@@ -145,6 +145,12 @@ class $AssetsImagesIconsGen {
   /// File path: assets/images/icons/avatar_face_icon.svg
   String get avatarFaceIcon => 'assets/images/icons/avatar_face_icon.svg';
 
+  /// File path: assets/images/icons/check_avatar_gleen.svg
+  String get checkAvatarGleen => 'assets/images/icons/check_avatar_gleen.svg';
+
+  /// File path: assets/images/icons/complete_check.svg
+  String get completeCheck => 'assets/images/icons/complete_check.svg';
+
   /// File path: assets/images/icons/subtitle_add_icon.svg
   String get subtitleAddIcon => 'assets/images/icons/subtitle_add_icon.svg';
 
@@ -152,8 +158,14 @@ class $AssetsImagesIconsGen {
   String get subtitleEditIcon => 'assets/images/icons/subtitle_edit_icon .svg';
 
   /// List of all assets
-  List<String> get values =>
-      [artificialVoiceIcon, avatarFaceIcon, subtitleAddIcon, subtitleEditIcon];
+  List<String> get values => [
+        artificialVoiceIcon,
+        avatarFaceIcon,
+        checkAvatarGleen,
+        completeCheck,
+        subtitleAddIcon,
+        subtitleEditIcon
+      ];
 }
 
 class Assets {

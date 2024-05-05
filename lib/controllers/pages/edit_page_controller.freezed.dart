@@ -27,6 +27,7 @@ mixin _$EditPageState {
   String get thumbnailFilePath => throw _privateConstructorUsedError;
   String get musicFilePath => throw _privateConstructorUsedError;
   String get ttsAudioFilePath => throw _privateConstructorUsedError;
+  bool get isMergeTtsAudio => throw _privateConstructorUsedError;
   AudioType get audioType => throw _privateConstructorUsedError;
   List<Uint8List?> get thumbnailFileDataList =>
       throw _privateConstructorUsedError;
@@ -61,6 +62,7 @@ abstract class $EditPageStateCopyWith<$Res> {
       String thumbnailFilePath,
       String musicFilePath,
       String ttsAudioFilePath,
+      bool isMergeTtsAudio,
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
@@ -98,6 +100,7 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
     Object? thumbnailFilePath = null,
     Object? musicFilePath = null,
     Object? ttsAudioFilePath = null,
+    Object? isMergeTtsAudio = null,
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
@@ -150,6 +153,10 @@ class _$EditPageStateCopyWithImpl<$Res, $Val extends EditPageState>
           ? _value.ttsAudioFilePath
           : ttsAudioFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      isMergeTtsAudio: null == isMergeTtsAudio
+          ? _value.isMergeTtsAudio
+          : isMergeTtsAudio // ignore: cast_nullable_to_non_nullable
+              as bool,
       audioType: null == audioType
           ? _value.audioType
           : audioType // ignore: cast_nullable_to_non_nullable
@@ -225,6 +232,7 @@ abstract class _$$EditPageStateImplCopyWith<$Res>
       String thumbnailFilePath,
       String musicFilePath,
       String ttsAudioFilePath,
+      bool isMergeTtsAudio,
       AudioType audioType,
       List<Uint8List?> thumbnailFileDataList,
       Duration videoPosition,
@@ -261,6 +269,7 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
     Object? thumbnailFilePath = null,
     Object? musicFilePath = null,
     Object? ttsAudioFilePath = null,
+    Object? isMergeTtsAudio = null,
     Object? audioType = null,
     Object? thumbnailFileDataList = null,
     Object? videoPosition = null,
@@ -313,6 +322,10 @@ class __$$EditPageStateImplCopyWithImpl<$Res>
           ? _value.ttsAudioFilePath
           : ttsAudioFilePath // ignore: cast_nullable_to_non_nullable
               as String,
+      isMergeTtsAudio: null == isMergeTtsAudio
+          ? _value.isMergeTtsAudio
+          : isMergeTtsAudio // ignore: cast_nullable_to_non_nullable
+              as bool,
       audioType: null == audioType
           ? _value.audioType
           : audioType // ignore: cast_nullable_to_non_nullable
@@ -371,6 +384,7 @@ class _$EditPageStateImpl implements _EditPageState {
       this.thumbnailFilePath = '',
       this.musicFilePath = '',
       this.ttsAudioFilePath = '',
+      this.isMergeTtsAudio = false,
       this.audioType = AudioType.original,
       final List<Uint8List?> thumbnailFileDataList = const [],
       this.videoPosition = Duration.zero,
@@ -424,6 +438,9 @@ class _$EditPageStateImpl implements _EditPageState {
   final String ttsAudioFilePath;
   @override
   @JsonKey()
+  final bool isMergeTtsAudio;
+  @override
+  @JsonKey()
   final AudioType audioType;
   final List<Uint8List?> _thumbnailFileDataList;
   @override
@@ -474,7 +491,7 @@ class _$EditPageStateImpl implements _EditPageState {
 
   @override
   String toString() {
-    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, displaySubtitleIndexList: $displaySubtitleIndexList, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex, currentSeconds: $currentSeconds, activeFrames: $activeFrames)';
+    return 'EditPageState(isPlaying: $isPlaying, avatar: $avatar, videoPlayerService: $videoPlayerService, thumbnailService: $thumbnailService, subtitleTexts: $subtitleTexts, isAvatarActive: $isAvatarActive, videoPlayerWidth: $videoPlayerWidth, thumbnailFilePath: $thumbnailFilePath, musicFilePath: $musicFilePath, ttsAudioFilePath: $ttsAudioFilePath, isMergeTtsAudio: $isMergeTtsAudio, audioType: $audioType, thumbnailFileDataList: $thumbnailFileDataList, videoPosition: $videoPosition, beforeShowingVideoPosition: $beforeShowingVideoPosition, isComplete: $isComplete, displaySubtitleIndexList: $displaySubtitleIndexList, isExistSubtitleTextNow: $isExistSubtitleTextNow, focusTextsIndex: $focusTextsIndex, currentSeconds: $currentSeconds, activeFrames: $activeFrames)';
   }
 
   @override
@@ -501,6 +518,8 @@ class _$EditPageStateImpl implements _EditPageState {
                 other.musicFilePath == musicFilePath) &&
             (identical(other.ttsAudioFilePath, ttsAudioFilePath) ||
                 other.ttsAudioFilePath == ttsAudioFilePath) &&
+            (identical(other.isMergeTtsAudio, isMergeTtsAudio) ||
+                other.isMergeTtsAudio == isMergeTtsAudio) &&
             (identical(other.audioType, audioType) ||
                 other.audioType == audioType) &&
             const DeepCollectionEquality()
@@ -538,6 +557,7 @@ class _$EditPageStateImpl implements _EditPageState {
         thumbnailFilePath,
         musicFilePath,
         ttsAudioFilePath,
+        isMergeTtsAudio,
         audioType,
         const DeepCollectionEquality().hash(_thumbnailFileDataList),
         videoPosition,
@@ -569,6 +589,7 @@ abstract class _EditPageState implements EditPageState {
       final String thumbnailFilePath,
       final String musicFilePath,
       final String ttsAudioFilePath,
+      final bool isMergeTtsAudio,
       final AudioType audioType,
       final List<Uint8List?> thumbnailFileDataList,
       final Duration videoPosition,
@@ -600,6 +621,8 @@ abstract class _EditPageState implements EditPageState {
   String get musicFilePath;
   @override
   String get ttsAudioFilePath;
+  @override
+  bool get isMergeTtsAudio;
   @override
   AudioType get audioType;
   @override

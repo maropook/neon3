@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
@@ -9,8 +10,10 @@ import 'package:neon3/controllers/pages/import_sheet_controller.dart';
 import 'package:neon3/models/src/active_frame.dart';
 import 'package:neon3/models/src/avatar.dart';
 import 'package:neon3/services/audio_player_service.dart';
+import 'package:neon3/services/encode_service.dart';
 import 'package:neon3/services/logger.dart';
 import 'package:neon3/services/speech_to_text_service.dart';
+import 'package:neon3/services/text_to_speech.dart';
 import 'package:neon3/services/thumbnail_service.dart';
 import 'package:neon3/services/video_player_service.dart';
 import 'package:neon3/ui/pages/edit_page/edit_page.dart';
@@ -32,6 +35,7 @@ class EditPageState with _$EditPageState {
     @Default('') String thumbnailFilePath,
     @Default('') String musicFilePath,
     @Default('') String ttsAudioFilePath,
+    @Default(false) bool isMergeTtsAudio,
     @Default(AudioType.original) AudioType audioType,
     @Default([]) List<Uint8List?> thumbnailFileDataList,
     @Default(Duration.zero) Duration videoPosition,
@@ -367,7 +371,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     final newActiveFrame = ActiveFrame(
       id: const Uuid().v4(),
       startTime: currentSeconds,
-      endTime: videoDurationInSeconds,
+      endTime: (currentSeconds + videoDurationInSeconds / 2),
     );
 
     final newSubtitleText = SubtitleText(
@@ -397,5 +401,46 @@ class EditPageController extends StateNotifier<EditPageState> {
 
     state = state.copyWith(
         subtitleTexts: [...subtitleTexts], activeFrames: [...activeFrames]);
+  }
+
+//artificial_voice
+  final TextToSpeechService textToSpeechService = TextToSpeechService();
+  final EncodeService encodeService = EncodeService();
+
+  bool isExistTexts() {
+    for (final SubtitleText text in state.subtitleTexts) {
+      return text.word != '';
+    }
+    return false;
+  }
+
+  Future<String?> switchAudioType(AudioType targetAudioType) async {
+    //というかttsAudioFileをわたせばよいのでは？
+    //あとあと字幕変えた時にこまるのか・・字幕の文字変わってるかもしれないから。
+    //頻繁に押す人いない
+    //ttsAudioTypeだけ渡したらいいんじゃないか？
+    //というかこれ字幕変えてすぐは人工音声アップデートされないね、自分で押しに行かないと
+    //でもgenerate
+    //sheetにisMergeTtsAudioをわたして、arg.isMergeTtsAudioがtrueのときは
+    //generateSpeechFileをしない
+    //sheetから最初にttsFileをもらう、そのあとはtargetAudioTypeをもらう・・
+    if (targetAudioType == AudioType.artificial && isExistTexts()) {
+      state = state.copyWith(audioType: AudioType.artificial);
+      // if (state.isMergeTtsAudio) {
+      //   return state.ttsAudioFilePath;
+      // }//作り直してもいいでしょ。
+      EasyLoading.show();
+      final subtitleTexts =
+          await textToSpeechService.generateSpeechFile(state.subtitleTexts);
+      final ttsAudioFilePath = await encodeService.mergeAudio(subtitleTexts);
+      state = state.copyWith(
+          ttsAudioFilePath: ttsAudioFilePath,
+          isMergeTtsAudio: true,
+          subtitleTexts: subtitleTexts);
+      EasyLoading.showSuccess('人口音声が作成されました');
+      return ttsAudioFilePath;
+    }
+    state = state.copyWith(audioType: AudioType.original);
+    return 'delete';
   }
 }

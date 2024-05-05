@@ -93,9 +93,8 @@ class _ChangeAvatarSheet extends StatelessWidget {
                             ),
                       if (avatarList[index].id == selectedAvatar.id)
                         const Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                          size: 30,
+                          Icons.check_circle,
+                          color: Styles.pastelGreenColor,
                         ),
                     ],
                   )));

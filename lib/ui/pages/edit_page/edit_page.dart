@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neon3/config/styles.dart';
+import 'package:neon3/controllers/pages/artificial_voice_edit_sheet_controller.dart';
 import 'package:neon3/controllers/pages/edit_page_controller.dart';
 import 'package:neon3/gen/assets.gen.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
@@ -384,6 +385,7 @@ class EditPage extends StatelessWidget {
               'アバターを変更',
               Assets.images.icons.avatarFaceIcon,
               context,
+              false,
             ),
           ),
           GestureDetector(
@@ -392,7 +394,7 @@ class EditPage extends StatelessWidget {
               EasyLoading.showSuccess('字幕が追加されました');
             },
             child: _buildShowModalIcon(
-                'テキストを追加', Assets.images.icons.subtitleAddIcon, context),
+                'テキストを追加', Assets.images.icons.subtitleAddIcon, context, false),
           ),
           GestureDetector(
             onTap: () async {
@@ -408,8 +410,8 @@ class EditPage extends StatelessWidget {
                   context, subtitleTimingEditPageArgs);
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
-            child: _buildShowModalIcon(
-                'テキスト時間編集', Assets.images.icons.subtitleEditIcon, context),
+            child: _buildShowModalIcon('テキスト時間編集',
+                Assets.images.icons.subtitleEditIcon, context, false),
           ),
 
           // GestureDetector(
@@ -425,32 +427,48 @@ class EditPage extends StatelessWidget {
           //   child: _buildShowModalIcon(
           //       'BGMを追加', Assets.images.addBgmIcon, context),
           // ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     await ref.read(editPageProvider.notifier).showModalCallback();
-          //     final subtitleTexts =
-          //         ref.read(editPageProvider.select((s) => s.subtitleTexts));
-          //     final audioType =
-          //         ref.read(editPageProvider.select((s) => s.audioType));
-          //     final ttsAudioFile = await showArtificialVoiceEditSheet(
-          //             context, subtitleTexts, audioType) ??
-          //         '';
-          //     await ref
-          //         .read(editPageProvider.notifier)
-          //         .setTtsAudioFile(ttsAudioFile);
-          //     await ref.read(editPageProvider.notifier).closeModalCallback();
-          //   },
-          //   child: _buildShowModalIcon(
-          //       '人工音声', Assets.images.icons.artificialVoiceIcon, context),
-          // ),
+          Consumer(builder: (context, ref, _) {
+            final audioType =
+                ref.watch(editPageProvider.select((s) => s.audioType));
+            return GestureDetector(
+              onTap: () async {
+                final ttsAudioFile = await ref
+                    .read(editPageProvider.notifier)
+                    .switchAudioType(audioType == AudioType.artificial
+                        ? AudioType.original
+                        : AudioType.artificial);
+                if (ttsAudioFile == null) return;
+                await ref
+                    .read(editPageProvider.notifier)
+                    .setTtsAudioFile(ttsAudioFile);
+
+                // final subtitleTexts =
+                //               ref.read(editPageProvider.select((s) => s.subtitleTexts));
+                // await ref.read(editPageProvider.notifier).showModalCallback();
+
+                // final ttsAudioFile = await showArtificialVoiceEditSheet(
+                //         context, subtitleTexts, audioType) ??
+                //     '';
+                // await ref
+                //     .read(editPageProvider.notifier)
+                //     .setTtsAudioFile(ttsAudioFile);
+                // await ref.read(editPageProvider.notifier).closeModalCallback();
+              },
+              child: _buildShowModalIcon(
+                  audioType == AudioType.artificial ? '人工音声使用中' : '人工音声未使用',
+                  Assets.images.icons.artificialVoiceIcon,
+                  context,
+                  audioType == AudioType.artificial),
+            );
+          }),
         ],
       );
     });
   }
 
   Widget _buildShowModalIcon(
-      String text, String iconPath, BuildContext context) {
-    final width = MediaQuery.of(context).size.shortestSide / 5.5;
+      String text, String iconPath, BuildContext context, bool isBorder) {
+    final width = MediaQuery.of(context).size.shortestSide / 5.6;
     return SizedBox(
       width: width + 10,
       child: Column(
@@ -461,6 +479,9 @@ class EditPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12.0),
+              border: Border.all(
+                  color: isBorder ? Styles.primaryColor : Colors.white,
+                  width: 3),
             ),
             child: Opacity(
               opacity: 0.8,

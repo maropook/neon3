@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:neon3/config/styles.dart';
 import 'package:neon3/services/subtitle_font_service.dart';
 import 'package:neon_video_encoder/subtitle_text.dart';
 
@@ -90,15 +91,16 @@ class SubtitleEditSheetController
       case 'white':
         return Colors.white.toHexTriplet();
       case 'blue':
-        return Colors.blue.toHexTriplet();
+        // return Colors.blue.toHexTriplet();
+        return Styles.pastelBlueColor.toHexTriplet();
       case 'black':
         return Colors.black.toHexTriplet();
       case 'red':
-        return Colors.red.toHexTriplet();
+        return Styles.pasterPinkColor.toHexTriplet();
       case 'green':
-        return Colors.green.toHexTriplet();
+        return Styles.pastelGreenColor.toHexTriplet();
       case 'yellow':
-        return Colors.yellow.toHexTriplet();
+        return Styles.pastelYellowColor.toHexTriplet();
       case 'customFontColor':
         return state.customFontColor.toHexTriplet();
       case 'customBorderColor':
