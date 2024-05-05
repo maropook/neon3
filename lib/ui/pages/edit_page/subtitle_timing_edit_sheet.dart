@@ -28,7 +28,7 @@ Future<void> showSubtitleTimingEditSheet(
   SubtitleTimingEditPageArgs subtitleTimingEditPageArgs,
 ) {
   return showModalBottomSheet<void>(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       context: context,
       isDismissible: true,
@@ -69,7 +69,7 @@ class _SubtitleTimingEditSheet extends StatelessWidget {
         height: MediaQuery.of(context).size.longestSide - 64,
         margin: const EdgeInsets.only(top: 64),
         decoration: const BoxDecoration(
-          color: Color.fromARGB(109, 0, 0, 0),
+          color: Styles.secondaryColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),

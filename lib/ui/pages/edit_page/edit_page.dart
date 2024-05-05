@@ -425,24 +425,24 @@ class EditPage extends StatelessWidget {
           //   child: _buildShowModalIcon(
           //       'BGMを追加', Assets.images.addBgmIcon, context),
           // ),
-          GestureDetector(
-            onTap: () async {
-              await ref.read(editPageProvider.notifier).showModalCallback();
-              final subtitleTexts =
-                  ref.read(editPageProvider.select((s) => s.subtitleTexts));
-              final audioType =
-                  ref.read(editPageProvider.select((s) => s.audioType));
-              final ttsAudioFile = await showArtificialVoiceEditSheet(
-                      context, subtitleTexts, audioType) ??
-                  '';
-              await ref
-                  .read(editPageProvider.notifier)
-                  .setTtsAudioFile(ttsAudioFile);
-              await ref.read(editPageProvider.notifier).closeModalCallback();
-            },
-            child: _buildShowModalIcon(
-                '人工音声', Assets.images.icons.artificialVoiceIcon, context),
-          ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     await ref.read(editPageProvider.notifier).showModalCallback();
+          //     final subtitleTexts =
+          //         ref.read(editPageProvider.select((s) => s.subtitleTexts));
+          //     final audioType =
+          //         ref.read(editPageProvider.select((s) => s.audioType));
+          //     final ttsAudioFile = await showArtificialVoiceEditSheet(
+          //             context, subtitleTexts, audioType) ??
+          //         '';
+          //     await ref
+          //         .read(editPageProvider.notifier)
+          //         .setTtsAudioFile(ttsAudioFile);
+          //     await ref.read(editPageProvider.notifier).closeModalCallback();
+          //   },
+          //   child: _buildShowModalIcon(
+          //       '人工音声', Assets.images.icons.artificialVoiceIcon, context),
+          // ),
         ],
       );
     });
