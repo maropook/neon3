@@ -38,24 +38,39 @@ class TrimPage extends StatelessWidget {
       actions: [
         Consumer(builder: (context, ref, _) {
           return IconButton(
-              onPressed: () async {
-                final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
+            onPressed: () async {
+              final NeonVideoEncoder neonVideoEncoder = NeonVideoEncoder();
 
-                final startTimeInSeconds = ref.watch(trimPageProvider
-                        .select((s) => s.startTimeInMilliseconds)) *
-                    0.001;
-                final endTimeInSeconds = ref.watch(trimPageProvider
-                        .select((s) => s.endTimeInMilliseconds)) *
-                    0.001;
-                final trimmedVideoFilePath = await neonVideoEncoder.trimVideo(
-                    inputFilePath: editPageArgs.videoFilePath,
-                    outputFilePath: await getTempFilePath('trimmed-video.mp4'),
-                    startTime: startTimeInSeconds,
-                    endTime: endTimeInSeconds);
-                editPageArgs.videoFilePath = trimmedVideoFilePath;
-                context.go('/edit', extra: editPageArgs);
-              },
-              icon: const Icon(Icons.chevron_right));
+              final startTimeInSeconds = ref.watch(trimPageProvider
+                      .select((s) => s.startTimeInMilliseconds)) *
+                  0.001;
+              final endTimeInSeconds = ref.watch(
+                      trimPageProvider.select((s) => s.endTimeInMilliseconds)) *
+                  0.001;
+              final trimmedVideoFilePath = await neonVideoEncoder.trimVideo(
+                  inputFilePath: editPageArgs.videoFilePath,
+                  outputFilePath: await getTempFilePath('trimmed-video.mp4'),
+                  startTime: startTimeInSeconds,
+                  endTime: endTimeInSeconds);
+              editPageArgs.videoFilePath = trimmedVideoFilePath;
+              context.go('/edit', extra: editPageArgs);
+            },
+            icon: Container(
+              padding:
+                  const EdgeInsets.only(right: 7, left: 7, top: 1, bottom: 1),
+              decoration: BoxDecoration(
+                border: Border.all(color: Styles.secondaryColor, width: 2),
+                borderRadius: BorderRadius.circular(3),
+              ),
+              child: const Text(
+                "完成",
+                style: TextStyle(
+                    color: Styles.secondaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+          );
         }),
       ],
     );
