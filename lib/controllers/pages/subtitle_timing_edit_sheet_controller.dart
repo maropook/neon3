@@ -207,13 +207,7 @@ class SubtitleTimingEditSheetController
     _currentDetailedFrame = 0;
   }
 
-  void resetTime() {
-    state = state.copyWith(currentSeconds: 0.0);
-    _currentDetailedFrame = 0;
-  }
-
   void disposeTimer() {
-    resetTime();
     _frameTimer?.cancel();
     _secondTimer?.cancel();
   }

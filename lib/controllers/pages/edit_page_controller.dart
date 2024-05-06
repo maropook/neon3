@@ -225,13 +225,7 @@ class EditPageController extends StateNotifier<EditPageState> {
     _currentDetailedFrame = 0;
   }
 
-  void resetTime() {
-    state = state.copyWith(currentSeconds: 0.0);
-    _currentDetailedFrame = 0;
-  }
-
   void disposeTimer() {
-    resetTime();
     _frameTimer?.cancel();
     _secondTimer?.cancel();
   }
@@ -407,9 +401,9 @@ class EditPageController extends StateNotifier<EditPageState> {
   final TextToSpeechService textToSpeechService = TextToSpeechService();
   final EncodeService encodeService = EncodeService();
 
-  bool isExistTexts() {
+  bool hasEmptyWord() {
     for (final SubtitleText text in state.subtitleTexts) {
-      return text.word != '';
+      if (text.word.isEmpty) return true;
     }
     return false;
   }
@@ -424,7 +418,11 @@ class EditPageController extends StateNotifier<EditPageState> {
     //sheetにisMergeTtsAudioをわたして、arg.isMergeTtsAudioがtrueのときは
     //generateSpeechFileをしない
     //sheetから最初にttsFileをもらう、そのあとはtargetAudioTypeをもらう・・
-    if (targetAudioType == AudioType.artificial && isExistTexts()) {
+    if (targetAudioType == AudioType.artificial) {
+      if (hasEmptyWord()) {
+        EasyLoading.showError('空の文字があるので\n人口音声を作成できません');
+        return null;
+      }
       state = state.copyWith(audioType: AudioType.artificial);
       // if (state.isMergeTtsAudio) {
       //   return state.ttsAudioFilePath;

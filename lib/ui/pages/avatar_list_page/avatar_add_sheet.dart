@@ -83,8 +83,8 @@ class _AvatarAddSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
-              width: 100,
-              height: 100,
+              width: 80,
+              height: 80,
               child: ElevatedButton(
                 onPressed: () async {
                   EasyLoading.show();
@@ -100,8 +100,9 @@ class _AvatarAddSheet extends StatelessWidget {
                 ),
                 child: const Text(
                   '追加',
+                  maxLines: 1,
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 15,
                       color: Styles.secondaryColor,
                       fontWeight: FontWeight.bold),
                 ),
@@ -129,17 +130,17 @@ class _AvatarAddSheet extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: SizedBox(
-                  width: 70,
-                  height: 70,
+                  width: 65,
+                  height: 65,
                   child: UniversalImage(
                       isActive ? Assets.images.face : Assets.images.faceSmile)),
             ),
             Align(
               alignment: Alignment.bottomLeft,
               child: SizedBox(
-                  width: 70,
-                  height: 70,
-                  child: UniversalImage(Assets.images.photos)),
+                  width: 100,
+                  height: 100,
+                  child: UniversalImage(Assets.images.icons.photoSingle)),
             ),
           ],
         ),
