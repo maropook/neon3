@@ -407,7 +407,7 @@ class EditPage extends StatelessWidget {
               EasyLoading.showSuccess('字幕が追加されました');
             },
             child: _buildShowModalIcon(
-                'テキストを追加', Assets.images.icons.subtitleAddIcon, context, false),
+                '文字を追加', Assets.images.icons.subtitleAddIcon, context, false),
           ),
           GestureDetector(
             onTap: () async {
@@ -423,8 +423,8 @@ class EditPage extends StatelessWidget {
                   context, subtitleTimingEditPageArgs);
               await ref.read(editPageProvider.notifier).closeModalCallback();
             },
-            child: _buildShowModalIcon('テキスト時間編集',
-                Assets.images.icons.subtitleEditIcon, context, false),
+            child: _buildShowModalIcon(
+                '文字時間編集', Assets.images.icons.subtitleEditIcon, context, false),
           ),
 
           // GestureDetector(
